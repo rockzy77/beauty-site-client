@@ -1,0 +1,142 @@
+.login{
+    width: 100%;
+    height: 100vh;
+}
+
+.login-row{
+    display: flex;
+}
+
+.login-image{
+    background-image:  linear-gradient(to bottom, #777fa841, #777fa841),
+    url('/public/bg.jpg');
+    background-position: center;
+    background-size: cover;
+    width: calc(100% - 450px);
+    height: 100vh;
+}
+
+
+.login-form{
+    width: 450px;
+    height: 100vh;
+    background-color: #777fa8ad;
+}
+
+.login-form-container{
+    text-align: center;
+    position: relative;
+    top: 20%;
+    margin: 15px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 0 8px #5967aa85;
+    background-color: rgb(255, 255, 255);
+}
+
+.login-form-container h1{
+    text-align: center;
+    font-weight: 700;
+    font-size: 2em;
+    color: #777fa8;
+}
+
+.login-form-container form input{
+    height: 50px;
+    width: 95%;
+    margin: 15px 0;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0 8px #777fa863 inset;
+    outline: none;
+}
+
+.login-form-container form input[type='button']{
+    background-color: #777fa8;
+    color: white;
+    font-weight: 500;
+}
+
+
+.login-form span{
+    color: #777fa8;
+    font-weight: 300;
+}
+
+.singuplink{
+    color: #777fa8;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.singuplink:hover{
+    color: #777fa8;
+}
+
+.signup{
+    width: 100%;
+    height: 100vh;
+}
+
+.signup-row{
+    display: flex;
+}
+
+.signup-image{
+    background-image:  linear-gradient(to bottom, #777fa841, #777fa841),
+    url('/public/bg.jpg');
+    background-position: center;
+    background-size: cover;
+    width: calc(100% - 450px);
+    height: 100vh;
+}
+
+
+.signup-form{
+    width: 450px;
+    height: 100vh;
+    background-color: #777fa8c4;
+}
+
+.signup-form-container{
+    text-align: center;
+    position: relative;
+    top: 10%;
+    margin: 15px;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 0 8px #5764a354;
+    background-color: rgb(255, 255, 255);
+}
+
+.signup-form-container h1{
+    text-align: center;
+    font-weight: 700;
+    font-size: 2em;
+    color: #777fa8;
+}
+
+.signup-form-container form input{
+    height: 50px;
+    width: 95%;
+    margin: 15px 0;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 0 8px #777fa863 inset;
+    outline: none;
+}
+
+.signup-form-container form input[type='button']{
+    background-color: #777fa8;
+    color: white;
+    font-weight: 500;
+}
+
+
+.signup-form span{
+    color: #777fa8;
+    font-weight: 300;
+}
+
