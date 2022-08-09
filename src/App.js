@@ -16,7 +16,6 @@ import AdminPanel from "./presentation/adminPanel/adminPanel";
 import ErrorScreen from "./presentation/404/404";
 import ProtectedRoute from "./presentation/protectedRoute/protectedRoute";
 import ShopPage from "./presentation/shop/ShopPage";
-import ShopFilter from "./presentation/shop/ShopFilter";
 
 
 function App() {
@@ -25,7 +24,7 @@ function App() {
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/shop" element={<Shop />} />
-    <Route path="/filter_shop/:filter" element={<ShopFilter />} />
+    <Route path="/filter_shop/:filter" element={<Shop />} />
     <Route path="/product/:productId" element={<Product />} />
     <Route path="/login" element={<ProtectedRoute protectMethod='ISLOGIN'>
       <LoginScreen />

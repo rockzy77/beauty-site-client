@@ -2,6 +2,10 @@ import { Component } from "react";
 import { Outlet } from "react-router-dom";
 import AllProducts from "./admin_panel_sections/AllProducts";
 import Dashboard from "./admin_panel_sections/Dashboard";
+import {MdOutlineDashboard} from 'react-icons/md';
+import {FaBoxOpen} from 'react-icons/fa';
+import {ImBoxAdd} from 'react-icons/im';
+import {MdLocalOffer} from 'react-icons/md';
 
 class AdminPanel extends Component{
     constructor(props){

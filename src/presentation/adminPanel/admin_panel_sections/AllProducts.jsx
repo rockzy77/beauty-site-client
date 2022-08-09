@@ -2,7 +2,7 @@ import { Component } from "react";
 import { GoLinkExternal } from "react-icons/go";
 import {IoMdArrowRoundBack} from "react-icons/io";
 import { createProduct, updateProduct } from "../../../js/adminAuth";
-import AdminProductDet from "../compo/AdminProductDet";
+import AdminProductDet from "../compo/AdminProductEdit";
 
 class AllProducts extends Component {
     constructor(props){
@@ -94,12 +94,12 @@ class AllProducts extends Component {
 
 
        <div>
-            <input id='simg' type="file" name="ss" />
+            {/* <input id='simg' type="file" name="ss" />
             <button onClick={()=>{
                 var img = document.getElementById('simg');
                 createProduct(img.files[0])
             }}>Upload</button>
-        
+         */}
         <div className="s_mini_nav">
         <IoMdArrowRoundBack className="s_back" onClick={()=>{
            this.sectionType = 'all';
@@ -107,10 +107,10 @@ class AllProducts extends Component {
            this.setState({});
        }}/>
 
-       <h6>Glow Restore Serum</h6>
+       <h6>Edit Product</h6>
        
         </div>
-        <AdminProductDet />
+        <AdminProductDet productId='123'/>
    </div>}
       </div>
     );

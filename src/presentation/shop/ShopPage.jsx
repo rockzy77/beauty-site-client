@@ -18,7 +18,6 @@ class ShopPage extends Component {
     var data = await getUserDetail();
     this.isLoggedIn = data["success"];
     this.setState({});
-    console.log(this.props.filter)
     if (this.props.filter == undefined) {
       this.data = await getAllProducts();
       $(".shop-products").empty();

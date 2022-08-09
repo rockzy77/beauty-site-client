@@ -13,6 +13,7 @@
 .adminPanelSideNav img{
     margin-left: 15px;
     height: 30px;
+    transition: 0.5s ease-in-out;
     margin-top: 18px;
 }
 
@@ -33,6 +34,12 @@
     background-color: rgb(37, 43, 59);
 }
 
+.admin_btn_icon{
+    position: relative;
+    bottom: 3px;
+    font-size: 1.2em;
+}
+
 .admin_panel_btn:hover{
     background-color: #777fa888;
 }
@@ -43,6 +50,7 @@
 
 .adminPanelContent{
     position: absolute;
+    transition: 0.5s ease-in-out;
     right: 0;
     float: right;
     width: calc(100% - 250px);
@@ -171,4 +179,113 @@
     right: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.185);
     border-radius: 5px;
+}
+
+.adminProductEdit p{
+    font-size: 1.3em;
+    font-weight: 400;
+}
+
+.ad-edit-img-cont{
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+    cursor: pointer;
+    background-color: #777fa83f;
+}
+
+.ad-edit-img-cont:hover{
+    background-color: #777fa857;
+}
+
+
+.ad-edit-img-cont img{
+    width: 20%;
+}
+
+.adminProductEdit input{
+    height: 50px;
+    width: 100%;
+    padding-left: 5px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+.adminProductEdit textarea{
+    width: 100%;
+    padding-left: 5px;
+    height: 100px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+#adminPimgEditBtn{
+    padding: 12px 26px;
+    border: none;
+    background-color: #777fa8;
+    color: white;
+    font-weight: 500;
+    border-radius: 5px;
+    display: none;
+}
+
+.plant-extract-edit{
+    text-align: center;
+}
+
+.plantextracts-img-cont{
+    display: grid;
+    justify-content: center;
+    grid-gap: 20px;
+}
+
+.plantextracts-img-cont img{
+    height: 100px;
+    width: 100px;
+}
+
+
+#plantextspan1{
+    width: 70%;
+    height: 40px;
+    text-align: center;
+}
+
+
+@media screen and (min-width: 380px) {
+    .plantextracts-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (min-width: 773px) {
+    .plantextracts-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 915px) {
+    .adminPanelSideNav{
+       width: 0;
+    }
+
+    .adminPanelSideNav > *{
+        display: none;
+    }
+
+    .adminPanelContent{
+        width: 100%
+    }
+}
+
+
+@media screen and (min-width: 1100px) {
+    .plantextracts-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
