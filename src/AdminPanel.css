@@ -1,0 +1,174 @@
+.adminPanel{
+    height: 100vh;
+    display: flex;
+}
+
+.adminPanelSideNav{
+    position: fixed;
+    height: 100vh;
+    width: 250px;
+    background-color: rgb(37, 43, 59);
+}
+
+.adminPanelSideNav img{
+    margin-left: 15px;
+    height: 30px;
+    margin-top: 18px;
+}
+
+
+.admin-img-head{
+    height: 60px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.315);
+}
+
+.admin_panel_btn{
+    text-align: left;
+    padding-left:25px;
+    width:100%;
+    height: 50px;
+    border: none;
+    color: #bebebe;
+    font-weight: 400;
+    background-color: rgb(37, 43, 59);
+}
+
+.admin_panel_btn:hover{
+    background-color: #777fa888;
+}
+
+.active{
+    background-color: #777fa888;
+}
+
+.adminPanelContent{
+    position: absolute;
+    right: 0;
+    float: right;
+    width: calc(100% - 250px);
+    background-color: rgba(221, 221, 221, 0.61);
+}
+
+.section-title{
+    font-size: 2em;
+    padding: 15px;
+}
+
+
+.dashboard-head-grid{
+    padding: 15px;
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.d-grid-item{
+    width: 100%;
+    height: 130px;
+    position: relative;
+    color: rgb(37, 43, 59);
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.24);
+}
+
+.d-grid-item h6{
+    font-size: 1.2em;
+    
+    padding: 15px;
+}
+
+.d-grid-item p{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-decoration: underline;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    font-weight: 500;
+    color: #777fa8;
+}
+
+
+/* All Products */
+
+#allproductssearch{
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    padding: 5px;
+    outline: none;
+}
+
+.all-products{
+    padding: 15px;
+    overflow: auto;
+}
+
+.all-products table{
+    width: 100%;
+}
+
+.all-products table th{
+    padding: 8px;
+    background-color: #777fa86b;
+    color: black;
+    font-weight: 400;
+}
+
+.all-products table td{
+    padding: 8px;
+    color: black;
+    font-weight: 400;
+}
+
+
+.all-products table td img{
+    margin: 5px;
+    width: 50px;
+}
+
+
+.allproductredirect{
+    cursor: pointer;
+    color: #777fa8;
+    font-size: 18px;
+}
+
+.s_mini_nav{
+    display: flex;
+    background-color: #777fa86b;
+    font-size: 22px;
+    padding: 8px;
+    position: relative;
+}
+
+.s_back{
+    position: relative;
+    top: 4px;
+    cursor: pointer;
+}
+
+.s_mini_nav h6{
+    font-size: 20px;
+    position: relative;
+    top: 5px;
+    left: 15px;
+}
+
+.s_update_button{
+    background-color: #777fa8;
+    color: white;
+    font-weight: 500;
+    z-index: 5;
+    width: 150px;
+    height: 50px;
+    border: none;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.185);
+    border-radius: 5px;
+}

@@ -1,0 +1,129 @@
+.shop{
+    background:  linear-gradient(to right, rgba(255, 255, 255, 0.363), rgba(255, 255, 255, 0.219)),url('/public/products/shopbg.jpg');
+    background-position: center;
+    background-size: cover;background-attachment: fixed;
+}
+
+.shop-header{
+    background-color: rgb(162, 167, 195);
+    text-align: center;
+    color: white;
+}
+
+.shop-header h1{
+    padding-top: 65px;
+    padding-bottom: 15px;
+    font-weight: 600;
+    font-size: calc(1.325rem + .9vw);
+}
+
+.avaih1{
+    font-size: 2em;
+    padding: 5px 35px;
+    color: rgba(20, 20, 20, 0.712);
+    font-weight: 800;
+}
+
+.shop-products{
+    padding: 25px;
+    display: grid;
+    grid-gap: 20px;
+}
+
+.shop-product{
+    width: 100%;
+    border-radius: 10px;
+    background-color: #d4d6e0ce;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.295);
+    transition: 0.5s ease-in-out;
+    height: auto;
+}
+
+.shop-product-image{
+    padding: 15px;
+}
+
+.shop-product-image-cont{
+    height: 250px;
+}
+
+
+.shop-product-image-cont img{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.shop-product-info{
+    padding: 5px 10px;
+}
+
+.shop-product-info h3{
+    padding: 5px 5px 0 5px;
+}
+
+.shop-product-info p{
+    padding: 0 5px;
+    position: relative;
+    font-size: 1.2em;
+    bottom: 5px;
+    font-weight: 500;
+}
+
+
+.shop-product-info button{
+    height: 40px;
+    width: 97%;
+    position: relative;
+    bottom: 8px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    background-color: #777fa8;
+    transition: 0.5s ease-in-out;
+}
+
+@media screen and (min-width: 550px) {
+    .shop-products{
+        display: grid;
+        grid-gap: 20px;
+        padding: 25px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+
+@media screen and (min-width: 810px) {
+    .shop-products{
+        display: grid;
+        grid-gap: 20px;
+        padding: 25px;
+        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+@media screen and (min-width: 1200px){
+    .shop-product{
+        width: 270px;
+    }
+
+    .shop-product-footer h3{
+        margin-top: 55px;
+    }
+
+    .shop-products{
+        display: grid;
+        justify-content: center;
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .shop-product{
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}

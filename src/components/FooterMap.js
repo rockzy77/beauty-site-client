@@ -9,7 +9,7 @@ class FooterMap extends Component {
           width="100%"
           height="450"
           className="map"
-          allowfullscreen=""
+          allowFullScreen=""
           loading="lazy"
         ></iframe>
     );

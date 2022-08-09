@@ -3,6 +3,7 @@ import { MdOutlineShoppingCart } from "react-icons/md"
 import {GrMenu} from 'react-icons/gr';
 import $ from 'jquery';
 import {getUserDetail} from "../js/auth";
+import { NavLink } from "react-router-dom";
 
 class NavBar extends Component {
 
@@ -27,23 +28,23 @@ class NavBar extends Component {
         />
         <ul className="side-nav-content">
           <li>
-            {this.props.isLoggedIn ? <a href="/" className="acc-text">
+            {this.props.isLoggedIn ? <NavLink to="/account" className="acc-text">
               Account
-            </a> : <a href="/login" className="acc-text">
+            </NavLink> : <NavLink id="loginglink" to="/login" className="acc-text">
               LogIn
-            </a>}
-            {this.props.isLoggedIn ? <a  onClick={getUserDetail}>
+            </NavLink>}
+            {this.props.isLoggedIn ? <NavLink  to='/'>
               <MdOutlineShoppingCart className="cart-icon" />
-            </a> : <div></div>}
+            </NavLink> : <div></div>}
           </li>
         </ul>
 
         <ul className="centre-nav-content">
           <li>
-            <a href="/">Home</a>
-            <a href="/#about">About</a>
-           <a href="/shop">Shop</a>
-            <a href="/learn">Learn</a>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/#about">About</NavLink>
+           <NavLink to="/shop">Shop</NavLink>
+            <NavLink to="/learn">Learn</NavLink>
           </li>
         </ul>
       </nav>
