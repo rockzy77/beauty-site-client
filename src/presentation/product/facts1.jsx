@@ -1,4 +1,5 @@
 import { Component } from "react";
+import public_url from "../../js/publicurl";
 
 class Facts1 extends Component {
   render() {
@@ -33,7 +34,7 @@ class Facts1 extends Component {
             <div className="plant-ext-header">
               <div className="container">
                 <img
-                  src={process.env.PUBLIC_URL + "watermelon.png"}
+                  src={public_url + "watermelon.png"}
                   alt="Vegan"
                 />
               </div>
@@ -47,7 +48,7 @@ class Facts1 extends Component {
             <div className="plant-ext-header">
               <div className="container">
                 <img
-                  src={process.env.PUBLIC_URL + "bamboowater.jpg"}
+                  src={public_url + "bamboowater.jpg"}
                   alt="Vegan"
                 />
               </div>
@@ -60,7 +61,7 @@ class Facts1 extends Component {
           <div className="plant-ext-item">
             <div className="plant-ext-header">
               <div className="container">
-                <img src={process.env.PUBLIC_URL + "plum.png"} alt="Vegan" />
+                <img src={public_url + "plum.png"} alt="Vegan" />
               </div>
               <span className="plant-ext-title">Kakadu Plum</span>
               <br />
@@ -72,7 +73,7 @@ class Facts1 extends Component {
             <div className="plant-ext-header">
               <div className="container">
                 <img
-                  src={process.env.PUBLIC_URL + "licorice.jpg"}
+                  src={public_url + "licorice.jpg"}
                   alt="Vegan"
                 />
               </div>
@@ -88,7 +89,7 @@ class Facts1 extends Component {
         <div className="scienceback-row">
           <div className="sb-image-cont">
             <img
-              src={process.env.PUBLIC_URL + "serumback.jpg"}
+              src={public_url + "serumback.jpg"}
               alt="Serum Science Back"
             />
           </div>

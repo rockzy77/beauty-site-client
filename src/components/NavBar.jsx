@@ -4,6 +4,7 @@ import {GrMenu} from 'react-icons/gr';
 import $ from 'jquery';
 import {getUserDetail} from "../js/auth";
 import { NavLink } from "react-router-dom";
+import public_url from "../js/publicurl";
 
 class NavBar extends Component {
 
@@ -23,7 +24,7 @@ class NavBar extends Component {
         <nav className="navBar">
         <img
           className="navTitle"
-          src={process.env.PUBLIC_URL + "logo.png"}
+          src={public_url + "logo.png"}
           alt=""
         />
         <ul className="side-nav-content">

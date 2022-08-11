@@ -6,6 +6,7 @@ import {MdOutlineDashboard} from 'react-icons/md';
 import {FaBoxOpen} from 'react-icons/fa';
 import {ImBoxAdd} from 'react-icons/im';
 import {MdLocalOffer} from 'react-icons/md';
+import CreateProducts from "./admin_panel_sections/CreateProducts";
 
 class AdminPanel extends Component{
     constructor(props){
@@ -57,7 +58,7 @@ class AdminPanel extends Component{
                 <div className="adminPanelContent">
                     <br />
                     <h1 className="section-title">Admin Panel/ {this.section}</h1>
-                    {this.section == 'Dashboard' ? <Dashboard/> : this.section == 'All Products' ? <AllProducts /> : <div></div>}
+                    {this.section == 'Dashboard' ? <Dashboard/> : this.section == 'All Products' ? <AllProducts /> : this.section=='Create Product' ? <CreateProducts /> : <div></div>}
                 </div>
             </section>
         )

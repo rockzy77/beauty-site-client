@@ -145,6 +145,13 @@
     font-size: 18px;
 }
 
+.allproductdlt{
+    cursor: pointer;
+    color: #e60000;
+    margin-left: 15px;
+    font-size: 18px;
+}
+
 .s_mini_nav{
     display: flex;
     background-color: #777fa86b;
@@ -231,38 +238,134 @@
     display: none;
 }
 
-.plant-extract-edit{
+.product-tag-edit{
     text-align: center;
 }
 
-.plantextracts-img-cont{
+.product-tag-img-cont{
     display: grid;
     justify-content: center;
     grid-gap: 20px;
 }
 
-.plantextracts-img-cont img{
+.product-tag-img-cont img{
     height: 100px;
     width: 100px;
+    cursor: pointer;
 }
 
 
-#plantextspan1{
-    width: 70%;
-    height: 40px;
+.producttagimg{
+    display: none;
+}
+
+.producttagspan{
+    margin-top: 5px ;
+    width: 70% !important;
+    height: 40px !important;
+    text-align: center !important;
+}
+
+
+
+.plantext-edit{
     text-align: center;
 }
 
+.plantext-img-cont{
+    display: grid;
+    justify-content: center;
+    grid-gap: 20px;
+}
 
-@media screen and (min-width: 380px) {
-    .plantextracts-img-cont{
+.plantext-img-cont img{
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+}
+
+
+.plantextimg{
+    display: none;
+}
+
+.plantextspan{
+    margin-top: 5px ;
+    width: 70% !important;
+    height: 40px !important;
+    text-align: center !important;
+}
+
+.plansubtextspan{
+    margin-top: 5px ;
+    width: 70% !important;
+    font-size: 1em !important;
+    height: 40px !important;
+    text-align: center !important;
+}
+
+.scienceb_img_cont{
+    display: grid;
+    justify-content: center;
+}
+
+.scienceb_img_cont img{
+    width: 250px;
+    border-radius: 50%;
+    height: auto;
+    cursor: pointer;
+}
+
+#sciencebimginput{
+    display: none;
+}
+
+.adminAddProduct{
+    padding: 15px;
+}
+
+.adminAddProduct p{
+    font-size: 1.3em;
+    font-weight: 400;
+}
+.adminAddProduct input{
+    height: 50px;
+    width: 100%;
+    padding-left: 5px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+.adminAddProduct textarea{
+    width: 100%;
+    padding-left: 5px;
+    height: 100px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+
+@media screen and (min-width: 300px) {
+    .product-tag-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .plantext-img-cont{
         justify-content: center;
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media screen and (min-width: 773px) {
-    .plantextracts-img-cont{
+    .product-tag-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .plantext-img-cont{
         justify-content: center;
         grid-template-columns: repeat(3, 1fr);
     }
@@ -284,7 +387,12 @@
 
 
 @media screen and (min-width: 1100px) {
-    .plantextracts-img-cont{
+    .product-tag-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .plantext-img-cont{
         justify-content: center;
         grid-template-columns: repeat(4, 1fr);
     }

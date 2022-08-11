@@ -1,13 +1,14 @@
 import { Component } from "react";
 import { GoLinkExternal } from "react-icons/go";
 import {IoMdArrowRoundBack} from "react-icons/io";
-import { createProduct, updateProduct } from "../../../js/adminAuth";
+import {MdDelete, MdModeEdit} from 'react-icons/md';
+import { createProduct, deleteProduct, updateProduct } from "../../../js/adminProduct";
 import AdminProductDet from "../compo/AdminProductEdit";
 
 class AllProducts extends Component {
     constructor(props){
         super(props);
-        this.sectionType = 'single';
+        this.sectionType = 'all';
         this.productId = '';
     }
 
@@ -40,11 +41,22 @@ class AllProducts extends Component {
             <td>Rs 550</td>
             <td>50</td>
             <td>
-              <GoLinkExternal className="allproductredirect" onClick={()=>{
+              
+              <MdModeEdit className="allproductredirect" onClick={()=>{
                 this.sectionType = 'single';
                 this.productId = 123;
                 this.setState({});
               }} />
+              <MdDelete onClick={()=>{
+                var made = deleteProduct('123');
+                if(made){
+                  alert('Product was deleted')
+                  this.setState({});
+                }
+                else{
+                  alert('Something went wrong')
+                }
+              }} className="allproductdlt"/>
             </td>
           </tr>
           <tr>
@@ -57,7 +69,21 @@ class AllProducts extends Component {
             <td>Rs 550</td>
             <td>50</td>
             <td>
-              <GoLinkExternal className="allproductredirect"/>
+            <MdModeEdit className="allproductredirect" onClick={()=>{
+                this.sectionType = 'single';
+                this.productId = 123;
+                this.setState({});
+              }} />
+              <MdDelete onClick={()=>{
+                var made = deleteProduct('123');
+                if(made){
+                  alert('Product was deleted')
+                  this.setState({});
+                }
+                else{
+                  alert('Something went wrong')
+                }
+              }} className="allproductdlt"/>
             </td>
           </tr>
           <tr>
@@ -70,7 +96,21 @@ class AllProducts extends Component {
             <td>Rs 550</td>
             <td>50</td>
             <td>
-              <GoLinkExternal className="allproductredirect"/>
+            <MdModeEdit className="allproductredirect" onClick={()=>{
+                this.sectionType = 'single';
+                this.productId = 123;
+                this.setState({});
+              }} />
+              <MdDelete onClick={()=>{
+                var made = deleteProduct('123');
+                if(made){
+                  alert('Product was deleted')
+                  this.setState({});
+                }
+                else{
+                  alert('Something went wrong')
+                }
+              }} className="allproductdlt"/>
             </td>
           </tr>
           <tr>
@@ -86,7 +126,21 @@ class AllProducts extends Component {
             <td>Rs 550</td>
             <td>50</td>
             <td>
-              <GoLinkExternal className="allproductredirect"/>
+            <MdModeEdit className="allproductredirect" onClick={()=>{
+                this.sectionType = 'single';
+                this.productId = 123;
+                this.setState({});
+              }} />
+              <MdDelete onClick={()=>{
+                var made = deleteProduct('123');
+                if(made){
+                  alert('Product was deleted')
+                  this.setState({});
+                }
+                else{
+                  alert('Something went wrong')
+                }
+              }} className="allproductdlt"/>
             </td>
           </tr>
         </table>

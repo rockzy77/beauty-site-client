@@ -1,4 +1,4 @@
-var url_head = "https://ecommerce-backend-0.herokuapp.com/api/v2/";
+var url_head = "http://localhost:4000/api/v2/";
 
 const axios = require("axios");
 

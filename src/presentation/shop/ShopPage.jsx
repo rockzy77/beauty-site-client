@@ -23,11 +23,12 @@ class ShopPage extends Component {
       $(".shop-products").empty();
       for (var i = 0; i < this.data.length; i++) {
         var product = this.data[i];
+        var id = product['_id'];
         var img = "products/cleanser.JPG";
         var name = product["name"];
         var price = "Rs " + product["price"];
         this.products.push(
-          <ShopProductCard key={i} imgurl={img} title={name} price={price} />
+          <ShopProductCard key={i} pid={id} imgurl={img} title={name} price={price} />
         );
         this.setState({});
       }

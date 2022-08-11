@@ -9,10 +9,10 @@ import { getUserDetail } from "../../js/auth";
 import queryString from 'query-string';
 import { getQuery } from "../../js/products";
 import { NavLink, useParams } from "react-router-dom";
+import public_url from "../../js/publicurl";
 
 const Product =()=>{
   var {productId} = useParams();
-  console.log(productId);
   return <ProductDet productId={productId}/>
 }
 
@@ -50,7 +50,6 @@ class ProductDet extends Component {
     });
     var udet = await getUserDetail();
     this.isLoggedIn = udet["success"];
-    // this.product = await getPR
     this.setState({});
   }
 
@@ -63,7 +62,7 @@ class ProductDet extends Component {
     </div>
 
     <div className="prow">
-      <img src={process.env.PUBLIC_URL + "bg.jpg"} alt="ss" />
+      <img src={public_url + "bg.jpg"} alt="ss" />
 
       <div className="prdctinfo">
         <h1 className="prdctinfo-header">GLOW RESTORE SERUM</h1>
@@ -81,22 +80,22 @@ class ProductDet extends Component {
         </p>
         <div className="tag-row-desk">
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Science-Backed</p>
           </div>
 
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Non-Spriting</p>
           </div>
 
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Cruelty Free</p>
           </div>
 
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Plant Extracts and Vegan</p>
           </div>
         </div>
@@ -110,22 +109,22 @@ class ProductDet extends Component {
 
     <div className="tag-row-mob">
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Science-Backed</p>
           </div>
 
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Non-Spriting</p>
           </div>
 
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Cruelty Free</p>
           </div>
 
           <div className="tag">
-            <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="" />
+            <img src={public_url+'cruelty.png'} alt="" />
             <p>Plant Extracts and Vegan</p>
           </div>
 
@@ -169,7 +168,7 @@ class ProductDet extends Component {
         <NavLink className="navlinks" to='/product'>
         <div className="productcard-top">
         <div className="productcard-header">
-          <img src={process.env.PUBLIC_URL+'products/cleanser.jpg'} alt="productImage" />
+          <img src={public_url+'products/cleanser.jpg'} alt="productImage" />
         </div>
         
         <div className="productcard-det">
@@ -189,7 +188,7 @@ class ProductDet extends Component {
         <NavLink className="navlinks" to='/product'>
         <div className="productcard-top">
         <div className="productcard-header">
-          <img src={process.env.PUBLIC_URL+'products/cleanser.jpg'} alt="productImage" />
+          <img src={public_url+'products/cleanser.jpg'} alt="productImage" />
         </div>
         
         <div className="productcard-det">
@@ -209,7 +208,7 @@ class ProductDet extends Component {
         <NavLink className="navlinks" to='/product'>
         <div className="productcard-top">
         <div className="productcard-header">
-          <img src={process.env.PUBLIC_URL+'products/cleanser.jpg'} alt="productImage" />
+          <img src={public_url+'products/cleanser.jpg'} alt="productImage" />
         </div>
         
         <div className="productcard-det">
