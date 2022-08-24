@@ -39,6 +39,7 @@ class AboutUs extends Component{
                 </div>
                 <br />
                 <span>Vegas</span>
+                
               </div>
             </div>
 
