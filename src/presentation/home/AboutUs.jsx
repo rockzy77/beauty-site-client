@@ -3,13 +3,13 @@ import React, {Component} from "react";
 class AboutUs extends Component{
     render(){
         return <section className="about" id="about">
-        <div className="about-row">
-          <div className="acontainer">
+        <div id="about-row" className="about-row">
+          <div data-aos='fade-up' className="acontainer">
             <div className="acontent">
               <img src={process.env.PUBLIC_URL+'products/about.jpg'} alt="About Image" />
             </div>
           </div>
-         <div className="atextcon">
+         <div data-aos='fade-up' className="atextcon">
          <div className="about-texts">
             <h1>About Us</h1>
             <p>
@@ -28,14 +28,14 @@ class AboutUs extends Component{
           </div>
          </div>
         </div>
-        <div className="conscious">
+        <div data-aos='fade-up' id="conscious" className="conscious">
           <h1>What we're consious about</h1>
           <br />
           <div className="conscious-row">
             <div className="conscious-item">
               <div className="conscious-header">
                 <div className="container">
-                  <img src={process.env.PUBLIC_URL+'vegan.png'} alt="Vegan" />
+                  <img src={process.env.PUBLIC_URL+'vegans.png'} alt="Vegan" />
                 </div>
                 <br />
                 <span>Vegas</span>
@@ -45,7 +45,7 @@ class AboutUs extends Component{
             <div className="conscious-item">
               <div className="conscious-header">
                 <div className="container">
-                <img src={process.env.PUBLIC_URL+'cruelty.png'} alt="Cruelty Free" />
+                <img src={process.env.PUBLIC_URL+'crueltys.png'} alt="Cruelty Free" />
                 </div>
                 <br />
                 <span>Cruelty Free</span>
@@ -55,7 +55,7 @@ class AboutUs extends Component{
             <div className="conscious-item">
               <div className="conscious-header">
                 <div className="container">
-                <img src={process.env.PUBLIC_URL+'fragrance.png'} alt="Fragrance Free" />
+                <img src={process.env.PUBLIC_URL+'fragrances.png'} alt="Fragrance Free" />
                 </div>
                 <br />
                 <span>Fragrance Free</span>
@@ -65,7 +65,7 @@ class AboutUs extends Component{
             <div className="conscious-item">
               <div className="conscious-header">
                 <div className="container">
-                <img src={process.env.PUBLIC_URL+'fat.png'} alt="Essential Oil Free" />
+                <img src={process.env.PUBLIC_URL+'fats.png'} alt="Essential Oil Free" />
                 </div>
                 <br />
                 <span>Essential Oil Free</span>

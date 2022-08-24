@@ -1,0 +1,533 @@
+.adminPanel{
+    height: 100vh;
+    display: flex;
+    font-family: "Medium";
+}
+
+.adminPanel *{
+    font-family: "Medium";
+}
+
+.adminPanelSideNav{
+    position: fixed;
+    height: 100vh;
+    width: 250px;
+    background-color: rgb(37, 43, 59);
+}
+
+.adminPanelSideNav img{
+    margin-left: 15px;
+    height: 30px;
+    transition: 0.5s ease-in-out;
+    margin-top: 18px;
+}
+
+
+.admin-img-head{
+    height: 60px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.315);
+}
+
+.admin_panel_btn{
+    text-align: left;
+    padding-left:25px;
+    width:100%;
+    height: 50px;
+    border: none;
+    color: #bebebe;
+    font-weight: 400;
+    background-color: rgb(37, 43, 59);
+}
+
+.admin_btn_icon{
+    position: relative;
+    bottom: 3px;
+    font-size: 1.2em;
+}
+
+.admin_panel_btn:hover{
+    background-color: #777fa888;
+}
+
+.adminPanel .active{
+    background-color: #777fa888;
+}
+
+.adminPanelContent{
+    position: absolute;
+    transition: 0.5s ease-in-out;
+    right: 0;
+    min-height: 100vh;
+    float: right;
+    width: calc(100% - 250px);
+    background-color: rgba(221, 221, 221, 0.61);
+}
+
+.section-title{
+    font-size: 2em;
+    padding: 15px;
+}
+
+
+.dashboard-head-grid{
+    padding: 15px;
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.d-grid-item{
+    width: 100%;
+    height: 130px;
+    position: relative;
+    color: rgb(37, 43, 59);
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.24);
+}
+
+.d-grid-item h6{
+    font-size: 1.2em;
+    
+    padding: 15px;
+}
+
+.d-grid-item p{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-decoration: underline;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    font-weight: 500;
+    color: #777fa8;
+}
+
+.checkbox-line{
+    margin-left: 15px;
+   
+}
+
+.checkbox-line span{
+    font-weight: 400;
+    padding-left: 5px;
+}
+
+.targettitle{
+    padding-left: 15px;
+}
+
+
+/* All Products */
+
+#allproductssearch{
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    padding: 5px;
+    outline: none;
+}
+
+.all-products{
+    padding: 15px;
+}
+
+.all-p-table{
+    overflow-x: auto;
+}
+
+.all-products table{
+    width: 100%;
+}
+
+.all-products table th{
+    padding: 8px;
+    background-color: #777fa86b;
+    color: black;
+    font-weight: 400;
+}
+
+.all-products table td{
+    padding: 8px;
+    color: black;
+    font-weight: 400;
+}
+
+
+.all-products table td img{
+    margin: 5px;
+    width: 50px;
+}
+
+
+.allproductredirect{
+    cursor: pointer;
+    color: #777fa8;
+    font-size: 18px;
+}
+
+.allproductdlt{
+    cursor: pointer;
+    color: #e60000;
+    margin-left: 15px;
+    font-size: 18px;
+}
+
+.s_mini_nav{
+    display: flex;
+    background-color: #777fa86b;
+    font-size: 22px;
+    padding: 8px;
+    position: relative;
+}
+
+.s_back{
+    position: relative;
+    top: 4px;
+    cursor: pointer;
+}
+
+.s_mini_nav h6{
+    font-size: 20px;
+    position: relative;
+    top: 5px;
+    left: 15px;
+}
+
+.s_update_button{
+    background-color: #777fa8;
+    color: white;
+    font-weight: 500;
+    z-index: 5;
+    width: 150px;
+    height: 50px;
+    border: none;
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.185);
+    border-radius: 5px;
+}
+
+.adminProductEdit{
+    padding: 15px;
+}
+
+.adminProductEdit p{
+    font-size: 1.3em;
+    font-weight: 400;
+}
+
+.ad-edit-img-cont{
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+    cursor: pointer;
+    background-color: #777fa83f;
+}
+
+.ad-edit-img-cont:hover{
+    background-color: #777fa857;
+}
+
+
+.ad-edit-img-cont img{
+    width: 20%;
+}
+
+.adminProductEdit input{
+    height: 50px;
+    width: 100%;
+    padding-left: 5px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+.adminProductEdit textarea{
+    width: 100%;
+    padding-left: 5px;
+    height: 100px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+#adminPimgEditBtn{
+    padding: 12px 26px;
+    border: none;
+    background-color: #777fa8;
+    color: white;
+    font-weight: 500;
+    border-radius: 5px;
+    display: none;
+}
+
+.product-tag-edit{
+    text-align: center;
+}
+
+.product-tag-img-cont{
+    display: grid;
+    justify-content: center;
+    grid-gap: 20px;
+}
+
+.product-tag-img-cont img{
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+}
+
+
+.producttagimg{
+    display: none;
+}
+
+.producttagspan{
+    margin-top: 5px ;
+    width: 70% !important;
+    height: 40px !important;
+    text-align: center !important;
+}
+
+
+
+.plantext-edit{
+    text-align: center;
+}
+
+.plantext-img-cont{
+    display: grid;
+    justify-content: center;
+    grid-gap: 20px;
+}
+
+.plantext-img-cont img{
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+}
+
+
+.plantextimg{
+    display: none;
+}
+
+.plantextspan{
+    margin-top: 5px ;
+    width: 70% !important;
+    height: 40px !important;
+    text-align: center !important;
+}
+
+.plansubtextspan{
+    margin-top: 5px ;
+    width: 70% !important;
+    font-size: 1em !important;
+    height: 40px !important;
+    text-align: center !important;
+}
+
+.scienceb_img_cont{
+    display: grid;
+    justify-content: center;
+}
+
+.scienceb_img_cont img{
+    width: 250px;
+    border-radius: 50%;
+    height: auto;
+    cursor: pointer;
+}
+
+#sciencebimginput{
+    display: none;
+}
+
+.adminAddProduct{
+    padding: 15px;
+}
+
+.adminAddProduct p{
+    font-size: 1.3em;
+    font-weight: 400;
+}
+.adminAddProduct input{
+    height: 50px;
+    width: 100%;
+    padding-left: 5px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+.adminAddProduct textarea{
+    width: 100%;
+    padding-left: 5px;
+    height: 100px;
+    font-weight: 400;
+    font-size: 1.2em;
+    outline: none;
+}
+
+
+/* All users */
+
+/* All Products */
+
+#alluserssearch{
+    height: 50px;
+    border-radius: 5px;
+    border: none;
+    width: 100%;
+    padding: 5px;
+    outline: none;
+}
+
+.all-users{
+    padding: 15px;
+}
+
+.all-u-table{
+    overflow-x: auto;
+}
+
+.all-users table{
+    width: 100%;
+}
+
+.all-users table th{
+    padding: 8px;
+    background-color: #777fa86b;
+    color: black;
+    font-weight: 400;
+}
+
+.all-users table td{
+    padding: 8px;
+    color: black;
+    font-weight: 400;
+}
+
+
+.all-users table td img{
+    margin: 5px;
+    width: 50px;
+}
+
+
+.allusersredirect{
+    cursor: pointer;
+    color: #777fa8;
+    font-size: 18px;
+}
+
+.alluserdlt{
+    cursor: pointer;
+    color: #e60000;
+    margin-left: 15px;
+    font-size: 18px;
+}
+
+#alluserssearch{
+    margin-bottom: 5px;
+}
+
+.checkbox-span{
+    font-weight: 400;
+    padding-left: 5px
+}
+
+#searchusing{
+    padding: 5px 10px;
+}
+
+.editUser{
+    padding: 15px;
+}
+#editrole{
+    height: 50px;
+    width: 200px;
+    margin-left: 15px;
+    font-weight: 400;
+    border-radius: 5px;
+}
+
+
+/* Disocunt */
+
+.createDiscount{
+    padding: 15px;
+    
+}
+
+.createDiscount p{
+    font-size:1.3em;
+    font-weight: 400;
+}
+
+.createDiscount span{
+    margin-left: 5px;
+    font-weight: 400;
+}
+
+.createDiscount input[type=text], .createDiscount input[type=number]{
+    width: 100%; 
+    font-weight: 400;
+    height: 50px;
+    padding: 5px;
+}
+
+@media screen and (min-width: 300px) {
+    .product-tag-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .plantext-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (min-width: 773px) {
+    .product-tag-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .plantext-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 915px) {
+    .adminPanelSideNav{
+       width: 0;
+    }
+
+    .adminPanelSideNav > *{
+        display: none;
+    }
+
+    .adminPanelContent{
+        width: 100%
+    }
+}
+
+
+@media screen and (min-width: 1100px) {
+    .product-tag-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .plantext-img-cont{
+        justify-content: center;
+        grid-template-columns: repeat(4, 1fr);
+    }
+}

@@ -10,6 +10,15 @@ class NavBar extends Component {
 
   constructor(props){
     super(props);
+    this.logged = false;
+  }
+
+  async componentDidMount(){
+    if(this.props.isLoggedIn == undefined){
+      var udet = await getUserDetail();
+      this.logged = udet['success'];
+      this.setState({})
+    }
   }
 
   render() {
@@ -31,21 +40,24 @@ class NavBar extends Component {
           <li>
             {this.props.isLoggedIn ? <NavLink to="/account" className="acc-text">
               Account
-            </NavLink> : <NavLink id="loginglink" to="/login" className="acc-text">
+            </NavLink> : this.props.isLoggedIn == undefined ? this.logged ? <NavLink to="/account" className="acc-text">
+              Account
+            </NavLink>: <NavLink id="loginglink" to="/login" className="acc-text">LogIn</NavLink>: <NavLink id="loginglink" to="/login" className="acc-text">
               LogIn
             </NavLink>}
-            {this.props.isLoggedIn ? <NavLink  to='/'>
+            {this.props.isLoggedIn ? <NavLink  to='/cart'>
               <MdOutlineShoppingCart className="cart-icon" />
-            </NavLink> : <div></div>}
+            </NavLink> : this.props.isLoggedIn == undefined ? this.logged ? <NavLink  to='/cart'>
+              <MdOutlineShoppingCart className="cart-icon" /></NavLink> : <div></div>  : <div></div>}
           </li>
         </ul>
 
         <ul className="centre-nav-content">
           <li>
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/#about">About</NavLink>
-           <NavLink to="/shop">Shop</NavLink>
-            <NavLink to="/learn">Learn</NavLink>
+            <NavLink to="/" className='acc-text'>Home</NavLink>
+            <NavLink to="/#about" className='acc-text'>About</NavLink>
+           <NavLink to="/shop" className='acc-text'>Shop</NavLink>
+            <NavLink to="/learn" className='acc-text'>Learn</NavLink>
           </li>
         </ul>
       </nav>

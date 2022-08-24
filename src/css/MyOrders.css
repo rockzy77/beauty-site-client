@@ -1,0 +1,118 @@
+.myorders{
+    width: 100%;
+}
+
+.orderscont{
+    width: 90%;
+}
+
+.maincard{
+    padding: 0%;
+}
+.products{
+
+    padding: 3%;
+    align-items: center;
+}
+.website-font {
+	font-size:2em;
+    font-weight: 600;
+	color:rgb(0, 0, 0);
+    margin: 2%;
+}
+.website-font1 {
+	
+	color:rgb(0, 0, 0);
+    margin-left: 2%;
+}   
+
+.order_status{
+    text-transform: capitalize;
+}
+#card1{
+   border-top: 0ch;
+   border-left: 0ch;
+   border-right: 0ch;
+}
+
+#cartbuttons{
+    width: fit-content;
+    background-color: red;
+}
+
+#cardbuttons img{
+    width: 100px !important;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+#mainlayout{
+    margin: 3%;
+    width: 100%;
+    height: auto;
+    margin-right: 10%;
+    border-left: 5px solid #777fa8;
+    background-color: rgb(243, 243, 243);
+    
+}
+
+.colored-btn{
+    background-color:#777fa8 !important;
+    margin-bottom: 5%;
+    border-radius: 0;
+    color: white !important;
+    border: none;
+}
+
+.outline-btn{
+    border: 1px solid #777fa8 !important;
+    color: #777fa8 !important;
+    font-weight: 400;
+    border-radius: 0;
+    margin-bottom: 5%;
+    border-color: rgba(90,125,180,255);
+}
+
+
+#mainlayout h4{
+    font-weight: 400;
+    font-size: 1.1em;
+}
+
+.orderbtn-nborder{
+    height: 35px;
+    width: 100%;
+    margin-bottom: 15px;
+    border: none;
+    font-size: 1.1em;
+    font-weight: 500;
+    background-color: transparent;
+    color: #777fa8;
+}
+
+.orderbtn-nborder:first-child{
+    margin-top: 5px;
+}
+
+
+
+.nothing{
+    background-color: black;
+    overflow-x: hidden;
+}
+@media screen and (max-width:450px) {
+    #laponly{
+        
+       display: none;
+    }
+    #mainlayout:hover{
+        border-left: 0px solid;
+        border-top: 5px solid grey;
+    }
+    .nothing{
+        display: none;
+    }
+}
+

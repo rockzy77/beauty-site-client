@@ -1,82 +1,185 @@
-var url_head = "http://localhost:4000/api/v2/";
+import axios from "axios";
+
+var url_head = "https://server.reapofficial.com/api/v2/";
 
 const config = { headers: { "Content-Type": "application/json" } };
 
 var $ = require("jquery");
 
-async function getQuery(query){
+async function getQuery(query) {
   const urlParams = new URLSearchParams(window.location.search);
   const param = urlParams.get(query);
   return param;
 }
 
-async function getAllProducts() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const filter = urlParams.get("filter");
-  if (filter != null) {
-    return getFilterProducts(filter);
-  } else {
-    var url = url_head + "products";
+async function getFeaturedProducts(){
+  try {
+    var url = url_head + "products/featured";
+
+    var response = await axios.get(url, config);
+
+    var data = await response.data;
+    return data;
+  } catch (e) {
+    return { success: false };
+  }
+}
+
+async function getAllProducts(page) {
+  try {
+    var url = url_head + "products?page="+page;
+
+    var response = await axios.get(url, config);
+
+    var data = await response.data;
+    return data;
+  } catch (e) {
+    return { success: false };
+  }
+}
+
+async function getSingleProduct(pid) {
+  try {
+    var url = url_head + `product/${pid}`;
 
     var response = await fetch(url);
 
     var data = await response.json();
-
-    return data["products"];
+    return data;
+  } catch (e) {
+    return { success: false };
   }
 }
 
-async function getSingleProduct() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get("productid");
-  var url = url_head + `product/${id}`;
+async function getFilterProducts(filter, page) {
+  try {
+    var url = url_head + "products?page="+page+"&category=" + filter;
 
-  var response = await fetch(url);
+    var response = await axios.get(url, config);
 
-  var data = await response.json();
-
-  return data["products"];
+    var data = await response.data;
+    console.log(data);
+    return data;
+  } catch (e) {
+    console.log(e);
+    return { success: false };
+  }
 }
 
-async function getFilterProducts(filter) {
-  var url = url_head + "products?category=" + filter;
+async function getReviews(pid) {
+  var url = url_head + `reviews?id=${pid}`;
+  try {
 
-  var response = await fetch(url);
-
-  var data = await response.json();
-  console.log(data)
-  return data["products"];
+    var response = await axios.get(url,config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
 }
 
-async function getReviews(id) {
-  var url = url_head + `reviews?id=${id}`;
+async function createReview(pid, comment, rating) {
+  var url = url_head + "product/review";
 
-  var response = await fetch(url);
+  try {
+    var map = {
+      productId: pid,
+      comment: comment,
+      rating: rating,
+    };
 
-  var data = await response.json();
-
-  console.log(data);
+    var response = await axios.post(url, JSON.stringify(map), config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
 }
 
-async function createReview(id) {
-  var comment = "";
-  var rating = "";
-  var data = {
-    productId: id,
-    comment: comment,
-    rating: rating,
-  };
-  var url = url_head + `reviews?id=${id}`;
+async function getCartItem(pid, comment, rating) {
+  var url = url_head + "cart";
 
-  var response = await fetch(url, {
-    method: "POST",
-    headers: config.headers,
-    body: JSON.stringify(data),
-  });
-
-  var data = await response.json();
-
-  console.log(data);
+  try {
+    var response = await axios.get(url, config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
 }
 
-export { getQuery,getAllProducts, getFilterProducts };
+async function addToCart(map) {
+  var url = url_head + "addToCart";
+
+  try {
+    var response = await axios.post(url, JSON.stringify(map),config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
+
+async function updateCart(cid, quanity){
+  var url = url_head + "cart/update/"+cid;
+
+  try {
+    var map = {
+      quantity: parseInt(quanity)
+    }
+    var response = await axios.put(url, JSON.stringify(map),config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
+async function deleteCart(cid){
+  var url = url_head + "removeCart/"+cid;
+
+  try {
+    var response = await axios.delete(url, config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
+async function getOrders(){
+    var url = url_head + "orders/me";
+
+    try {
+      var response = await axios.get(url, config);
+      var body = await response.data;
+      console.log(body);
+      return body;
+    } catch (e) {
+      console.log(e);
+      var d = await e.response.data;
+      return { success: false, message: d["message"] };
+  }
+}
+
+
+export { getQuery, getFeaturedProducts,getAllProducts, getSingleProduct, getFilterProducts, createReview, getReviews, getCartItem, addToCart, updateCart, deleteCart, getOrders };

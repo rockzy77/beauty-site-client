@@ -1,3 +1,3 @@
-var public_url = 'http://localhost:3000/';
+var public_url = 'https://reapofficial.com/';
 
 export default public_url;

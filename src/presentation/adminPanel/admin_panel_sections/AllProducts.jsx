@@ -1,176 +1,191 @@
 import { Component } from "react";
 import { GoLinkExternal } from "react-icons/go";
-import {IoMdArrowRoundBack} from "react-icons/io";
-import {MdDelete, MdModeEdit} from 'react-icons/md';
-import { createProduct, deleteProduct, updateProduct } from "../../../js/adminProduct";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { MdDelete, MdModeEdit } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import {
+  createProduct,
+  deleteProduct,
+  getAllProductsAdmin,
+  updateProduct,
+} from "../../../js/adminProduct";
+import public_url from "../../../js/publicurl";
 import AdminProductDet from "../compo/AdminProductEdit";
 
 class AllProducts extends Component {
-    constructor(props){
-        super(props);
-        this.sectionType = 'all';
-        this.productId = '';
+  constructor(props) {
+    super(props);
+    this.products = [];
+    this.productrow = [];
+    this.backupProductsRow = [];
+  }
+
+  deleteRow(index){
+    this.products.splice(index, 1);
+    this.productrow = [];
+    this.backupProductsRow = [];
+    for (var i = 0; i < this.products.length; i++) {
+      var product = this.products[i];
+      var id = product["id"];
+      var name = product["name"];
+      var price = product["price"];
+      var stock = product["stock"];
+      this.productrow.push(
+        <ProductRow
+          key={i}
+          si={i + 1}
+          pid={id}
+          pname={name}
+          price={price}
+          stock={stock}
+          dlt={this.deleteRow.bind(this)}
+        />
+      );
+      this.backupProductsRow.push(
+        <ProductRow
+          key={i}
+          si={i + 1}
+          pid={id}
+          pname={name}
+          price={price}
+          stock={stock}
+          dlt={this.deleteRow.bind(this)}
+        />
+      );
+      this.setState({});
     }
+  }
+
+
+  async componentDidMount() {
+    var d = await getAllProductsAdmin();
+    if (d["success"]) {
+      this.products = d["products"];
+      this.backupProducts = d["products"];
+      for (var i = 0; i < this.products.length; i++) {
+        var product = this.products[i];
+        var id = product["id"];
+        var name = product["name"];
+        var price = product["price"];
+        var stock = product["stock"];
+        this.productrow.push(
+          <ProductRow
+            key={i}
+            si={i + 1}
+            pid={id}
+            pname={name}
+            stock={stock}
+            price={price}
+            dlt={this.deleteRow.bind(this)}
+          />
+        );
+        this.backupProductsRow.push(
+          <ProductRow
+            key={i}
+            si={i + 1}
+            pid={id}
+            pname={name}
+            stock={stock}
+            price={price}
+            dlt={this.deleteRow.bind(this)}
+          />
+        );
+        this.setState({});
+      }
+    }
+  }
 
   render() {
     return (
       <div className="all-products">
-        
-        {this.sectionType == 'all' ?
-       <div>
-         <input type="text" name="searchContent" placeholder="Search For Product" id="allproductssearch" />
-        <br />
-        <br />
-        <table>
-          <tr>
-            <th>SI NO</th>
-            <th>Product Id</th>
-            <th>Product Name</th>
-            <th>Product Image</th>
-            <th>Product Price</th>
-            <th>Product Stock</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>34324543</td>
-            <td>GLOW RESTORE SERUM</td>
-            <td>
-              <img src={process.env.PUBLIC_URL + "products/serum.JPG"} alt="" />
-            </td>
-            <td>Rs 550</td>
-            <td>50</td>
-            <td>
+        <div>
+          <input
+            onChange={() => {
               
-              <MdModeEdit className="allproductredirect" onClick={()=>{
-                this.sectionType = 'single';
-                this.productId = 123;
-                this.setState({});
-              }} />
-              <MdDelete onClick={()=>{
-                var made = deleteProduct('123');
-                if(made){
-                  alert('Product was deleted')
-                  this.setState({});
-                }
-                else{
-                  alert('Something went wrong')
-                }
-              }} className="allproductdlt"/>
-            </td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>34324543</td>
-            <td>GLOW RESTORE SERUM</td>
-            <td>
-              <img src={process.env.PUBLIC_URL + "products/moist.JPG"} alt="" />
-            </td>
-            <td>Rs 550</td>
-            <td>50</td>
-            <td>
-            <MdModeEdit className="allproductredirect" onClick={()=>{
-                this.sectionType = 'single';
-                this.productId = 123;
-                this.setState({});
-              }} />
-              <MdDelete onClick={()=>{
-                var made = deleteProduct('123');
-                if(made){
-                  alert('Product was deleted')
-                  this.setState({});
-                }
-                else{
-                  alert('Something went wrong')
-                }
-              }} className="allproductdlt"/>
-            </td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>34324543</td>
-            <td>GLOW RESTORE SERUM</td>
-            <td>
-              <img src={process.env.PUBLIC_URL + "products/exfo.JPG"} alt="" />
-            </td>
-            <td>Rs 550</td>
-            <td>50</td>
-            <td>
-            <MdModeEdit className="allproductredirect" onClick={()=>{
-                this.sectionType = 'single';
-                this.productId = 123;
-                this.setState({});
-              }} />
-              <MdDelete onClick={()=>{
-                var made = deleteProduct('123');
-                if(made){
-                  alert('Product was deleted')
-                  this.setState({});
-                }
-                else{
-                  alert('Something went wrong')
-                }
-              }} className="allproductdlt"/>
-            </td>
-          </tr>
-          <tr>
-            <td>4</td>
-            <td>34324543</td>
-            <td>GLOW RESTORE SERUM</td>
-            <td>
-              <img
-                src={process.env.PUBLIC_URL + "products/cleanser.JPG"}
-                alt=""
-              />
-            </td>
-            <td>Rs 550</td>
-            <td>50</td>
-            <td>
-            <MdModeEdit className="allproductredirect" onClick={()=>{
-                this.sectionType = 'single';
-                this.productId = 123;
-                this.setState({});
-              }} />
-              <MdDelete onClick={()=>{
-                var made = deleteProduct('123');
-                if(made){
-                  alert('Product was deleted')
-                  this.setState({});
-                }
-                else{
-                  alert('Something went wrong')
-                }
-              }} className="allproductdlt"/>
-            </td>
-          </tr>
-        </table>
-       </div> : 
+              var backupList = this.backupProductsRow;
+              this.productrow = backupList;
+              var tempList = [];
+              var search = document.getElementById("allproductssearch").value;
+              search = search.toLowerCase();
 
-
-       <div>
-            {/* <input id='simg' type="file" name="ss" />
-            <button onClick={()=>{
-                var img = document.getElementById('simg');
-                createProduct(img.files[0])
-            }}>Upload</button>
-         */}
-        <div className="s_mini_nav">
-        <IoMdArrowRoundBack className="s_back" onClick={()=>{
-           this.sectionType = 'all';
-           this.productId = '';
-           this.setState({});
-       }}/>
-
-       <h6>Edit Product</h6>
-       
+              if (search != "") {
+                for (var i = 0; i < this.products.length; i++) {
+                  if (this.products[i]["name"].toLowerCase().includes(search)) {
+                    tempList.push(this.productrow[i]);
+                  }
+                }
+                this.productrow = tempList;
+                this.setState({});
+              } else {
+                var backupList = this.backupProductsRow;
+                this.productrow = backupList;
+                this.setState({});
+              }
+            }}
+            type="text"
+            name="searchContent"
+            placeholder="Search For Product"
+            id="allproductssearch"
+          />
+          <br />
+          <br />
+          <div className="all-p-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>SI NO</th>
+                  <th>Product Id</th>
+                  <th>Product Name</th>
+                  <th>Product Price</th>
+                  <th>Product Stock</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>{this.productrow}</tbody>
+            </table>
+          </div>
         </div>
-        <AdminProductDet productId='123'/>
-   </div>}
       </div>
     );
   }
-
- 
 }
+
+const ProductRow = (props) => {
+  var navigate = useNavigate();
+  return (
+    <tr>
+      <td>{props.si}</td>
+      <td>{props.pid}</td>
+      <td>{props.pname}</td>
+     
+      <td>Rs {props.price}</td>
+      <td>{props.stock}</td>
+      <td>
+        <MdModeEdit
+          className="allproductredirect"
+          onClick={() => {
+            navigate("/admin_panel/updateProduct/" + props.pid);
+          }}
+        />
+        <MdDelete
+          onClick={async function () {
+            var confirm = window.confirm('Do you want to delete this product?');
+            if(confirm){
+              var made = await deleteProduct(props.pid);
+            if (made['success']) {
+              props.dlt(props.si-1)
+              alert("Product was deleted");
+            } else {
+              alert("Something went wrong");
+            }
+          }
+            }
+            }
+          className="allproductdlt"
+        />
+      </td>
+    </tr>
+  );
+};
 
 export default AllProducts;

@@ -2,86 +2,45 @@ import { Component } from "react";
 import public_url from "../../js/publicurl";
 
 class Facts1 extends Component {
+  constructor(props){
+    super(props);
+  }
+
   render() {
     return (
       <div className="facts1 facts">
         <br />
-        <h3>Why do we need a glow restore serum?</h3>
+        <h3>Why do we need a {this.props.name}?</h3>
         <p>
-          The job of three serums in one. <br />
-          <ol>
-            <li>Vitamin C derivative (Tetrahexyldecyl Ascorbate)</li>
-            <li>Niacinamide </li>
-            <li>Alpha Arbutin </li>
-          </ol>
-          A power packed formulation of plant extracts and science backed
-          ingredients.
+          {this.props.whydoweneed}
         </p>
 
         <h5 className="facts-title">Benefits</h5>
         <ol>
-          <li>Regulate oil/sebum</li>
-          <li>Skin Brightening</li>
-          <li>
-            Rich in antioxidants- protects from pollution and sun exposure
-          </li>
-          <li>Soothing</li>
+          {this.props.benefits != undefined ? this.props.benefits.split(',').map(function(item, i){
+            return <li key={i}>{item}</li>
+          }) : ''}
         </ol>
 
         <h5 className="facts-title">Plant Extracts</h5>
         <div className="plant-ext-row">
-          <div className="plant-ext-item">
+          
+
+          {this.props.plantExtracts.map(function(item, i){
+            return <div key={i} className="plant-ext-item">
             <div className="plant-ext-header">
               <div className="container">
                 <img
-                  src={public_url + "watermelon.png"}
+                  src={item.plantExtractsImage}
                   alt="Vegan"
                 />
               </div>
-              <span className="plant-ext-title">Watermelon</span>
+              <span className="plant-ext-title">{item.plantExtractsText}</span>
               <br />
-              <span>Antioxidant</span>
+              <span>{item.plantExtractsSubText}</span>
             </div>
           </div>
-
-          <div className="plant-ext-item">
-            <div className="plant-ext-header">
-              <div className="container">
-                <img
-                  src={public_url + "bamboowater.jpg"}
-                  alt="Vegan"
-                />
-              </div>
-              <span className="plant-ext-title">Bamboo Water</span>
-              <br />
-              <span>Soothing</span>
-            </div>
-          </div>
-
-          <div className="plant-ext-item">
-            <div className="plant-ext-header">
-              <div className="container">
-                <img src={public_url + "plum.png"} alt="Vegan" />
-              </div>
-              <span className="plant-ext-title">Kakadu Plum</span>
-              <br />
-              <span>Natural Vit C</span>
-            </div>
-          </div>
-
-          <div className="plant-ext-item">
-            <div className="plant-ext-header">
-              <div className="container">
-                <img
-                  src={public_url + "licorice.jpg"}
-                  alt="Vegan"
-                />
-              </div>
-              <span className="plant-ext-title">Licorice root</span>
-              <br />
-              <span>Brightening</span>
-            </div>
-          </div>
+          })}
         </div>
 
         <h5 className="facts-title">Science-backed ingredients:</h5>
@@ -89,28 +48,16 @@ class Facts1 extends Component {
         <div className="scienceback-row">
           <div className="sb-image-cont">
             <img
-              src={public_url + "serumback.jpg"}
+              src={this.props.scienceBacked.scienceBackedImage}
               alt="Serum Science Back"
             />
           </div>
           <div className="sb-det-cont">
-            <h5>Niacinamide:</h5>
-            <span>Anti-acne and brightening</span>
-            <br />
-            <h5>Vitamin C derivative (Tetrahexyldecyl Ascorbate):</h5>
-            <span>Antioxidant and brightening</span>
-            <br />
-            <h5>Alpha Arbutin:</h5>
-            <span>Brightening</span>
-            <br />
-            <h5>Ceramide:</h5>
-            <span>Skin-repairing</span>
-            <br />
-            <h5>Vitamin B5 (Panthenol):</h5>
-            <span>Hydrating and soothing</span>
-            <br />
-            <h5>Beta-Glucan:</h5>
-            <span>Intensive skin repair</span>
+            
+            <p>
+              {this.props.scienceBacked.scienceBackedText}
+            </p>
+            
             <br />
           </div>
         </div>

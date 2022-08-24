@@ -1,10 +1,20 @@
 import "./App.css";
-import "./Product.css";
-import "./AuthView.css";
-import "./AdminPanel.css";
-import "./Shop.css";
-import "./AccountView.css";
-import "./Checkout.css";
+import "./css/Product.css";
+import "./css/AuthView.css";
+import "./css/AdminPanel.css";
+import "./css/Shop.css";
+import "./css/AccountView.css";
+import "./css/Checkout.css";
+import "./css/Cart.css";
+import "./css/Learn.css";
+import "./css/MyOrders.css";
+import './fonts/Gilroy-Light.ttf';
+import './fonts/Gilroy-Regular.ttf';
+import './fonts/Gilroy-Medium.ttf';
+import './fonts/Gilroy-SemiBold.ttf';
+import './fonts/Gilroy-Bold.ttf';
+import './fonts/Gilroy-ExtraBold.ttf';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from "./presentation/home/home";
 import LoginScreen from "./presentation/authView/login";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -19,6 +29,26 @@ import ProtectedRoute from "./presentation/protectedRoute/protectedRoute";
 import ShopPage from "./presentation/shop/ShopPage";
 import Checkout from "./presentation/checkout/checkout";
 import Cart from "./presentation/cart/cart";
+import PaySuccess from "./presentation/orderCheck/PaySuccess";
+import PayFailure from "./presentation/orderCheck/PayFailure";
+import Blog from "./presentation/blog/blog";
+import SingleBlog from "./presentation/blog/SingleBlog";
+import Dashboard from "./presentation/adminPanel/admin_panel_sections/Dashboard";
+import AllProducts from "./presentation/adminPanel/admin_panel_sections/AllProducts";
+import CreateProducts from "./presentation/adminPanel/admin_panel_sections/CreateProducts";
+import AdminProductEdit from "./presentation/adminPanel/compo/AdminProductEdit";
+import AllUsers from "./presentation/adminPanel/admin_panel_sections/User";
+import AdminuserEdit from "./presentation/adminPanel/compo/AdminUserEdit";
+import { useEffect } from "react";
+import $ from 'jquery';
+import CreateBlog from "./presentation/adminPanel/admin_panel_sections/CreateBlog";
+import AllBlogs from "./presentation/adminPanel/admin_panel_sections/AllBlogs";
+import AdminBlogEdit from "./presentation/adminPanel/compo/AdminBlogEdit";
+import CreateDiscounts from "./presentation/adminPanel/admin_panel_sections/CreateDiscount";
+import AllDiscounts from "./presentation/adminPanel/admin_panel_sections/AllDiscounts";
+import AdminDiscountEdit from "./presentation/adminPanel/compo/AdminDiscountEdit";
+import AllOrders from "./presentation/adminPanel/admin_panel_sections/AllOrders";
+import AdminOrderEdit from "./presentation/adminPanel/compo/AdminOrderEdit";
 
 
 function App() {
@@ -44,8 +74,24 @@ function App() {
       <ProtectedRoute protectMethod='ISADMIN'>
         <AdminPanel />
       </ProtectedRoute>
-    }/>
-    <Route path="/checkout/:orderId/:amount/:currency" element={
+      
+    }>
+      <Route path="dashboard" element={<Dashboard/>}/>
+      <Route path="allproducts" element={<AllProducts/>}/>
+      <Route path="createProduct" element={<CreateProducts/>}/>
+      <Route path="updateProduct/:pid" element={<AdminProductEdit/>}/>
+      <Route path="allusers" element={<AllUsers/>}/>
+      <Route path="updateUser/:uid" element={<AdminuserEdit/>}/>
+      <Route path="createBlog" element={<CreateBlog/>}/>
+      <Route path="allBlogs" element={<AllBlogs/>}/>
+      <Route path="updateBlog/:bid" element={<AdminBlogEdit/>}/>
+      <Route path="createDiscount" element={<CreateDiscounts/>}/>
+      <Route path="allDiscounts" element={<AllDiscounts/>}/>
+      <Route path="updateDiscount/:name" element={<AdminDiscountEdit/>}/>
+      <Route path="allOrders" element={<AllOrders/>}/>
+      <Route path="updateOrder/:orderId" element={<AdminOrderEdit/>}/>
+    </Route>
+    <Route path="/checkout" element={
       <ProtectedRoute protectMethod="ISNOTLOGIN">
         <Checkout/>
       </ProtectedRoute>
@@ -55,6 +101,18 @@ function App() {
         <Cart/>
       </ProtectedRoute>
     }/>
+     <Route path="/succ" element={
+      <ProtectedRoute protectMethod="ISNOTLOGIN">
+        <PaySuccess/>
+      </ProtectedRoute>
+    }/>
+     <Route path="/fail/:failReason" element={
+      <ProtectedRoute protectMethod="ISNOTLOGIN">
+        <PayFailure/>
+      </ProtectedRoute>
+    }/>
+    <Route path='/learn' element={<Blog/>} />
+    <Route path='/learn/:blogId' element={<SingleBlog/>} />
     <Route path='*' element={<ErrorScreen/>}/>
   </Routes>
 </BrowserRouter>

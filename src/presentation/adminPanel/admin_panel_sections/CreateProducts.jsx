@@ -1,8 +1,8 @@
 import { Component } from "react";
 import { GoDiffAdded } from "react-icons/go";
 import { createProduct } from "../../../js/adminProduct";
-import {useNavigate} from 'react-router-dom';
-
+import { useNavigate } from "react-router-dom";
+import public_url from "../../../js/publicurl";
 
 class CreateProducts extends Component {
   constructor(props) {
@@ -10,12 +10,18 @@ class CreateProducts extends Component {
     this.thingsToCreate = {};
   }
 
-  createProductReady() {
-    var made = createProduct(this.thingsToCreate);
+  async createProductReady() {
+    console.log(this.thingsToCreate);
+    var made = await createProduct(this.thingsToCreate);
+    if(made['success']){
+      alert('Product successfully created.')
+    }
+    else{
+      alert(made['message'])
+    }
   }
 
   render() {
-    
     return (
       <div className="adminAddProduct">
         <br />
@@ -48,7 +54,7 @@ class CreateProducts extends Component {
         >
           <img
             id="adminPimgEdit"
-            src={process.env.PUBLIC_URL + "addImage.png"}
+            src={public_url + "addImage.png"}
             alt="product_image"
           />
         </div>
@@ -59,8 +65,8 @@ class CreateProducts extends Component {
           type="text"
           placeholder="Product Name"
           name="adpname"
-          onChange={()=>{
-            this.thingsToCreate.name = document.getElementById('adpname').value;
+          onChange={() => {
+            this.thingsToCreate.name = document.getElementById("adpname").value;
           }}
           id="adpname"
         />
@@ -71,8 +77,9 @@ class CreateProducts extends Component {
           name="adplabel"
           placeholder="Product Label"
           id="adplabel"
-          onChange={()=>{
-            this.thingsToCreate.label = document.getElementById('adplabel').value;
+          onChange={() => {
+            this.thingsToCreate.label =
+              document.getElementById("adplabel").value;
           }}
           cols="30"
           rows="10"
@@ -83,8 +90,9 @@ class CreateProducts extends Component {
         <textarea
           name="adpdes"
           id="adpdes"
-          onChange={()=>{
-            this.thingsToCreate.description = document.getElementById('adpdes').value;
+          onChange={() => {
+            this.thingsToCreate.description =
+              document.getElementById("adpdes").value;
           }}
           placeholder="Product Description"
           cols="30"
@@ -96,8 +104,9 @@ class CreateProducts extends Component {
         <input
           type="number"
           placeholder="Product Price"
-          onChange={()=>{
-            this.thingsToCreate.price = document.getElementById('adpprice').value;
+          onChange={() => {
+            this.thingsToCreate.price =
+              document.getElementById("adpprice").value;
           }}
           name="adpprice"
           id="adpprice"
@@ -108,8 +117,9 @@ class CreateProducts extends Component {
         <input
           type="number"
           placeholder="Product Stock"
-          onChange={()=>{
-            this.thingsToCreate.stock = document.getElementById('adpstock').value;
+          onChange={() => {
+            this.thingsToCreate.stock =
+              document.getElementById("adpstock").value;
           }}
           name="adpstock"
           id="adpstock"
@@ -120,8 +130,9 @@ class CreateProducts extends Component {
         <input
           type="text"
           placeholder="Product Category"
-          onChange={()=>{
-            this.thingsToCreate.category = document.getElementById('adpcat').value;
+          onChange={() => {
+            this.thingsToCreate.category =
+              document.getElementById("adpcat").value;
           }}
           name="adpcat"
           id="adpcat"
@@ -137,7 +148,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("producttag1").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -164,8 +175,9 @@ class CreateProducts extends Component {
               type="text"
               className="producttagspan"
               placeholder="Tag"
-              onChange={()=>{
-                this.thingsToCreate.tag1 = document.getElementById('producttagspan1').value;
+              onChange={() => {
+                this.thingsToCreate.productTagText1 =
+                  document.getElementById("producttagspan1").value;
               }}
               name="producttagspan1"
               id="producttagspan1"
@@ -178,7 +190,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("producttag2").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -206,8 +218,9 @@ class CreateProducts extends Component {
               className="producttagspan"
               name="producttagspan2"
               placeholder="Tag"
-              onChange={()=>{
-                this.thingsToCreate.tag2 = document.getElementById('producttagspan2').value;
+              onChange={() => {
+                this.thingsToCreate.productTagText2 =
+                  document.getElementById("producttagspan2").value;
               }}
               id="producttagspan2"
             />
@@ -219,7 +232,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("producttag3").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -247,8 +260,9 @@ class CreateProducts extends Component {
               className="producttagspan"
               name="producttagspan3"
               placeholder="Tag"
-              onChange={()=>{
-                this.thingsToCreate.tag3 = document.getElementById('producttagspan3').value;
+              onChange={() => {
+                this.thingsToCreate.productTagText3 =
+                  document.getElementById("producttagspan3").value;
               }}
               id="producttagspan3"
             />
@@ -260,7 +274,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("producttag4").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -287,8 +301,9 @@ class CreateProducts extends Component {
               type="text"
               className="producttagspan"
               name="producttagspan4"
-              onChange={()=>{
-                this.thingsToCreate.tag4 = document.getElementById('producttagspan4').value;
+              onChange={() => {
+                this.thingsToCreate.productTagText4 =
+                  document.getElementById("producttagspan4").value;
               }}
               placeholder="Tag"
               id="producttagspan4"
@@ -301,16 +316,28 @@ class CreateProducts extends Component {
           <strong>Product Facts</strong>
         </p>
         <p>Why do we need (Required): </p>
-        <textarea onChange={()=>{
-                this.thingsToCreate.whydowe = document.getElementById('adpwhydoweneed').value;
-              }} type="text" name="adpwhydoweneed" id="adpwhydoweneed" />
+        <textarea
+          onChange={() => {
+            this.thingsToCreate.whydoweneed =
+              document.getElementById("adpwhydoweneed").value;
+          }}
+          type="text"
+          name="adpwhydoweneed"
+          id="adpwhydoweneed"
+        />
 
         <br />
         <br />
         <p>Benefits (Required): </p>
-        <input type="text"  onChange={() => {
-            this.thingsToCreate.benefits = document.getElementById('adpbenefits').value;
-          }} name="adpbenefits" id="adpbenefits" />
+        <input
+          type="text"
+          onChange={() => {
+            this.thingsToCreate.benefits =
+              document.getElementById("adpbenefits").value;
+          }}
+          name="adpbenefits"
+          id="adpbenefits"
+        />
 
         <br />
         <br />
@@ -322,7 +349,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("plantext1").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -349,8 +376,9 @@ class CreateProducts extends Component {
               type="text"
               className="plantextspan"
               placeholder="Title"
-              onChange={()=>{
-                this.thingsToCreate.plantextstitle1 = document.getElementById('plantextspan1').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsText1 =
+                  document.getElementById("plantextspan1").value;
               }}
               name="plantextspan1"
               id="plantextspan1"
@@ -360,8 +388,9 @@ class CreateProducts extends Component {
               type="text"
               className="plansubtextspan"
               placeholder="Subtitle"
-              onChange={()=>{
-                this.thingsToCreate.plansubtextstitle1 = document.getElementById('plansubtextspan1').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsSubText1 =
+                  document.getElementById("plansubtextspan1").value;
               }}
               name="plansubtextspan1"
               id="plansubtextspan1"
@@ -374,7 +403,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("plantext2").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -402,8 +431,9 @@ class CreateProducts extends Component {
               type="text"
               className="plantextspan"
               name="plantextspan2"
-              onChange={()=>{
-                this.thingsToCreate.plantextstitle2 = document.getElementById('plantextspan2').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsText2 =
+                  document.getElementById("plantextspan2").value;
               }}
               placeholder="Title"
               id="plantextspan2"
@@ -413,8 +443,9 @@ class CreateProducts extends Component {
               type="text"
               className="plansubtextspan"
               name="plansubtextspan2"
-              onChange={()=>{
-                this.thingsToCreate.plansubtextstitle2 = document.getElementById('plansubtextspan2').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsSubText2 =
+                  document.getElementById("plansubtextspan2").value;
               }}
               placeholder="Subtitle"
               id="plansubtextspan2"
@@ -427,7 +458,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("plantext3").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -454,8 +485,9 @@ class CreateProducts extends Component {
             <input
               type="text"
               className="plantextspan"
-              onChange={()=>{
-                this.thingsToCreate.plantextstitle3 = document.getElementById('plantextspan3').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsText3 =
+                  document.getElementById("plantextspan3").value;
               }}
               name="plantextspan3"
               id="plantextspan3"
@@ -467,8 +499,9 @@ class CreateProducts extends Component {
               className="plansubtextspan"
               name="plansubtextspan3"
               placeholder="Subtitle"
-              onChange={()=>{
-                this.thingsToCreate.plansubtextstitle3 = document.getElementById('plansubtextspan3').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsSubText3 =
+                  document.getElementById("plansubtextspan3").value;
               }}
               id="plansubtextspan3"
             />
@@ -480,7 +513,7 @@ class CreateProducts extends Component {
               onClick={() => {
                 document.getElementById("plantext4").click();
               }}
-              src={process.env.PUBLIC_URL + "addImage.png"}
+              src={public_url + "addImage.png"}
               alt=""
             />{" "}
             <br />
@@ -508,8 +541,9 @@ class CreateProducts extends Component {
               type="text"
               className="plantextspan"
               name="plantextspan4"
-              onChange={()=>{
-                this.thingsToCreate.plantextstitle4 = document.getElementById('plantextspan4').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsText4 =
+                  document.getElementById("plantextspan4").value;
               }}
               placeholder="Title"
               id="plantextspan4"
@@ -519,8 +553,9 @@ class CreateProducts extends Component {
               type="text"
               className="plansubtextspan"
               name="plansubtextspan4"
-              onChange={()=>{
-                this.thingsToCreate.plansubtextstitle4 = document.getElementById('plansubtextspan4').value;
+              onChange={() => {
+                this.thingsToCreate.plantExtractsSubText4 =
+                  document.getElementById("plansubtextspan4").value;
               }}
               placeholder="Subtitle"
               id="plansubtextspan4"
@@ -538,7 +573,7 @@ class CreateProducts extends Component {
             onClick={() => {
               document.getElementById("sciencebimginput").click();
             }}
-            src={process.env.PUBLIC_URL + "addImage.png"}
+            src={public_url + "addImage.png"}
             alt=""
           />{" "}
           <br />
@@ -560,9 +595,15 @@ class CreateProducts extends Component {
             id="sciencebimginput"
           />
         </div>
-        <textarea name="scienceb_text" onChange={()=>{
-                this.thingsToCreate.science_backed = document.getElementById('scienceb_text').value;
-              }} id="scienceb_text" type="text" />
+        <textarea
+          name="scienceb_text"
+          onChange={() => {
+            this.thingsToCreate.scienceBackedText =
+              document.getElementById("scienceb_text").value;
+          }}
+          id="scienceb_text"
+          type="text"
+        />
 
         <br />
         <br />
@@ -572,8 +613,9 @@ class CreateProducts extends Component {
         <textarea
           name="ingredients"
           id="ingredients"
-          onChange={()=>{
-            this.thingsToCreate.ingredients = document.getElementById('ingredients').value;
+          onChange={() => {
+            this.thingsToCreate.ingredients =
+              document.getElementById("ingredients").value;
           }}
           cols="30"
           rows="10"
@@ -584,9 +626,90 @@ class CreateProducts extends Component {
         <p>
           <strong>How to use (Required): </strong>
         </p>
-        <textarea name="howtouse" id="howtouse" onChange={()=>{
-            this.thingsToCreate.howtouse = document.getElementById('howtouse').value;
-          }} type="text" />
+        <textarea
+          name="howtouse"
+          id="howtouse"
+          onChange={() => {
+            this.thingsToCreate.howtouse =
+              document.getElementById("howtouse").value;
+          }}
+          type="text"
+        />
+
+        <br />
+        <br />
+        
+        <p>
+          <strong>Length: </strong>
+        </p>
+        <input
+          type="number"
+          className="length"
+          name="length"
+          onChange={() => {
+            this.thingsToCreate.length =
+              document.getElementById("length").value;
+          }}
+          placeholder="Length"
+          id="length"
+        />
+
+<br />
+<br />
+        
+<p>
+          <strong>Breadth: </strong>
+        </p>
+        <input
+          type="number"
+          className="breadth"
+          name="breadth"
+          onChange={() => {
+            this.thingsToCreate.breadth =
+              document.getElementById("breadth").value;
+          }}
+          placeholder="Breadth"
+          id="breadth"
+        />
+
+<br />
+<br />
+        
+<p>
+          <strong>Height: </strong>
+        </p>
+        <input
+          type="number"
+          className="height"
+          name="height"
+          onChange={() => {
+            this.thingsToCreate.height =
+              document.getElementById("height").value;
+          }}
+          placeholder="Height"
+          id="height"
+        />
+
+
+<br />
+<br />
+        
+<p>
+          <strong>Weight: </strong>
+        </p>
+        <input
+          type="number"
+          className="weight"
+          name="weight"
+          onChange={() => {
+            this.thingsToCreate.weight =
+              document.getElementById("weight").value;
+          }}
+          placeholder="Weight"
+          id="weight"
+        />
+
+
 
         <button
           onClick={() => {

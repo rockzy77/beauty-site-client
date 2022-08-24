@@ -1,4 +1,4 @@
-var url_head = "http://localhost:4000/api/v2/";
+var url_head = "https://server.reapofficial.com/api/v2/";
 
 const axios = require("axios");
 
@@ -38,6 +38,7 @@ async function registerUser() {
   var password = document.getElementById("regpass");
   var cpassword = document.getElementById("regcpass");
   var name = document.getElementById("regname");
+  var refererCode = document.getElementById("referercode");
   if (
     email.value != "" &&
     password.value != "" &&
@@ -52,14 +53,14 @@ async function registerUser() {
           password: password.value,
         };
 
-        var response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-        var body = await response.json();
+        if(refererCode.value != ''){
+          data['referrerCode'] = refererCode.value;
+        }
+
+        var response = await axios.post(url, JSON.stringify(data), config);
+        var body = await response.data;
         if (body["success"] == true) {
-          alert("Succesfully Registered.");
+          alert("Succesfully Registered."); 
           window.location.replace("/");
         } else {
           console.log(body["message"]);
@@ -134,6 +135,19 @@ async function forgotPassword(email){
 }
 
 
+async function getReferralLink(){
+  var url = url_head + "referral/details";
+  try {
+    var response = await axios.get(url, config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
 
 
 export {
@@ -143,5 +157,6 @@ export {
   loginUser,
   logoutUser,
   updatePassword,
-  forgotPassword
+  forgotPassword,
+  getReferralLink
 };

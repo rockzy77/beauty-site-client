@@ -5,8 +5,8 @@ class ProductBlurred extends Component{
     render(){
         return <section className="pblurred">
           <br />
-        <h2>Reap the benefits @reap_skincare</h2>
-        <div className="pbcards">
+        <h2 data-aos='fade-up' id="pbtitle">Reap the benefits @reap_skincare</h2>
+        <div data-aos='fade-up' id="pbcards" className="pbcards">
           {/* product 1 */}
           <NavLink to='/filter_shop/serum'>
           <div className="pbcard card1">

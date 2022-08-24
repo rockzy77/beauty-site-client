@@ -1,8 +1,9 @@
 import { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { getAllProducts } from "../../js/products";
+import { getAllProducts, getFeaturedProducts } from "../../js/products";
 import $ from 'jquery';
 import ProductCard from "../../components/productCard";
+
 
 class HomeProducts extends Component {
   constructor(props){
@@ -11,15 +12,18 @@ class HomeProducts extends Component {
     this.products = [];
   }
   async componentDidMount(){
-    this.data = await getAllProducts();
+    var d = await getFeaturedProducts();
+    this.data = d['data'];
+    console.log(this.data)
     $("#pcards").empty();
     for (var i = 0; i < 4; i++) {
       var product = this.data[i];
-      var id = product['_id'];
+      console.log(product)
+      var id = product.id;
       var img = "products/exfo.JPG";
-      var name = product["name"];
-      var price = product["price"];
-      this.products.push(<ProductCard id={id} key={i} imageurl={img} title={name} price={'Rs '+price} />)
+      var name = product.name;
+      var price = product.price;
+      this.products.push(<ProductCard id={id} si={i+1} key={i} imageurl={img} title={name} price={price} />)
     this.setState({});
   }
 }
@@ -28,8 +32,9 @@ class HomeProducts extends Component {
     return (
       <section className="home-products">
         <br />
-        <div className="products-intro-text">
+        <div data-aos='fade-up' className="products-intro-text">
         <h2>Bridging the gap between</h2>
+        
         <h1>Science backed ingredients and plant extracts.</h1>
         <p>
           Protecting skin's health while battling skin concerns is our forté.{" "}
@@ -39,7 +44,7 @@ class HomeProducts extends Component {
         </p>
         </div>
 
-        <div id="pcards" className="pcards">
+        <div data-aos='fade-up' id="pcards" className="pcards">
           {this.products}
         </div>
         <div id="pcards-viewmore">

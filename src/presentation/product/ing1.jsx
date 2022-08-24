@@ -4,7 +4,6 @@ class Ing1 extends Component {
 
   constructor(props){
     super(props);
-    this.ingredients = 'Aqua, Niacinamide, Dicaprylyl Carbonate, Propylene glycol, Bambusa Vulgaris(Bamboo) Water, Tetrahexyldecyl Ascorbate(Vitamin-C), Alpha Arbutin, Zinc PCA, Polyglyceryl-4 Caprate, Polyglyceryl-6 Caprylate, Citrullus Lanatus(Watermelon) Fruit Extract, Glycyrrhiza Glabra(Licorice) Root Extract, Laminaria Algae Extract, Terminalia Ferdinandiana(Kakadu Plum) Fruit Extract, Glycerin, Beta Glucan, D-Panthenol, Sodium PCA, Ceramide NP, Ceramide AP, Ceramide EOP, Phytosphingosine, Cholesterol, Phenoxyethanol, Dehydroxanthan Gum, Sodium Lauroyl Lactylate, Carbomer, Xanthan Gum, Triethylene Glycol'.split(',');
   }
   render() {
     return (
@@ -12,11 +11,13 @@ class Ing1 extends Component {
         <br />
         <table>
           {
-            this.ingredients.map(function(object, i){
+            this.props.ingredients != undefined ? this.props.ingredients.split(',').map(function(object, i){
               return <tr>
                 <td>{i+1}) {object}</td>
               </tr>
-            })
+            }) : <tr>
+              <td></td>
+            </tr>
           }
          
         </table>
