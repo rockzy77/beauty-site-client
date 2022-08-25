@@ -20,6 +20,7 @@ const Blog=()=>{
         <br />
         <br />
         <br />
+        <br />
         <h1 className="learntitle">Learn more about skincare</h1>
        <center> <div className="underline"></div></center>
        <br />

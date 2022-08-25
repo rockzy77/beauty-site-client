@@ -12,7 +12,8 @@ class ProductBlurred extends Component{
           <div className="pbcard card1">
             <div className="pbcard-header">
               <div className="pbcontainer">
-                <img src={process.env.PUBLIC_URL + "/products/moist.JPG"} alt="" />
+                <span>Cleanser</span>
+              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
               </div>
             </div>
           </div>
@@ -23,7 +24,8 @@ class ProductBlurred extends Component{
           <div className="pbcard card2">
             <div className="pbcard-header">
               <div className="pbcontainer">
-              <img src={process.env.PUBLIC_URL + "/products/cleanser.JPG"} alt="" />
+              <span>Serum</span>
+              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
               </div>
             </div>
           </div>
@@ -34,7 +36,8 @@ class ProductBlurred extends Component{
           <div className="pbcard card3">
             <div className="pbcard-header">
               <div className="pbcontainer">
-              <img src={process.env.PUBLIC_URL + "/products/serum.JPG"} alt="" />
+              <span>Mositurizer</span>
+              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
               </div>
             </div>
           </div>
@@ -45,7 +48,8 @@ class ProductBlurred extends Component{
           <div className="pbcard card4">
             <div className="pbcard-header">
               <div className="pbcontainer">
-              <img src={process.env.PUBLIC_URL + "/products/exfo.JPG"} alt="" />
+              <span>Exfoliator</span>
+              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
               </div>
             </div>
           </div>

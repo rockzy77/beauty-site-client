@@ -116,6 +116,7 @@ class ProductDet extends Component {
     if (det2["success"]) {
       this.comments = det2["reviews"];
     }
+    this.setState({});
     var det3 = await getAllProducts(this.props.page);
     if(det3['success']){
       var productsp = det3['result'];
@@ -144,8 +145,6 @@ class ProductDet extends Component {
       else{
         continue;
       }
-
-      console.log(this.recommendedPImages)
     }
     this.setState({});
   }
@@ -406,10 +405,8 @@ class ProductDet extends Component {
               }.bind(this)
             )
           ) : (
-            <div></div>
+             <div><h3>Be first to post comments</h3></div>
           )}
-          {/*
-           */}
 
           {/* New Comment */}
           <div className="new-comment-cont">

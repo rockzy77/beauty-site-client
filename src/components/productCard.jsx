@@ -29,7 +29,7 @@ class    ProductCard extends Component{
         const to = '/product/'+this.props.id;
         return <div className='pcard'>
         <Link state={{
-          page: 0
+          page: 1
         }} className="navlinks" to={to}>
         <div className="pcard-top">
         <div className="pcard-header">
@@ -47,7 +47,7 @@ class    ProductCard extends Component{
           <span >Add to Cart</span>
         </div>
        </div>
-    </div>
+        </div>
     }
 }
 

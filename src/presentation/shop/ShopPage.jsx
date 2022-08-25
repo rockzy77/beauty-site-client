@@ -97,14 +97,20 @@ class ShopPage extends Component {
           <div className="pagination-grid">
           <div className="pagination">
             <p className='paginationLink' onClick={()=>{
-              if(this.page != 1){
+              if(this.page <= 1){
+                
+              }
+              else{
                 this.page = this.page-1;
                 this.loadProducts();
               }
             }}>&laquo;</p>
             <p onClick={()=>{
               var pages = parseInt(this.totalProducts / 8);
-              if(this.page != pages){
+              if(this.page >= pages){
+                
+              }
+              else{
                 this.page++;
                 this.loadProducts()
               }

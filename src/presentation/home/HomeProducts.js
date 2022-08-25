@@ -10,17 +10,24 @@ class HomeProducts extends Component {
     super(props);
     this.data = [];
     this.products = [];
+    this.images = [];
   }
   async componentDidMount(){
     var d = await getFeaturedProducts();
     this.data = d['data'];
+    this.images = d['images'];
     console.log(this.data)
     $("#pcards").empty();
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < this.data.length; i++) {
       var product = this.data[i];
       console.log(product)
       var id = product.id;
-      var img = "products/exfo.JPG";
+      var img = '';
+      for(var j=0;j<this.images[i].length;j++){
+        if(this.images[i][j].name == 'productImage1'){
+          img = this.images[i][j].url;
+        }
+      }
       var name = product.name;
       var price = product.price;
       this.products.push(<ProductCard id={id} si={i+1} key={i} imageurl={img} title={name} price={price} />)

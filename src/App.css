@@ -61,7 +61,7 @@
 
 .navBar {
   z-index: 3;
-  height: 45px;
+  height: 75px;
   position: fixed;
   width: 100%;
   background-color: #777fa8;
@@ -70,18 +70,16 @@
 .navTitle {
   position: relative;
   left: 25px;
-  top: 9.5px;
-  width: 50px;
+  top: 22px;
+  width: 70px;
   filter: brightness(0) invert(1);
-  font-size: 24px;
-  font-weight: 500;
   color: white;
 }
 
 .navBar ul {
   position: relative;
-  font-size: 16px;
-  bottom: 16px;
+  font-size: 1.1em;
+  bottom: 12px;
 }
 
 .navBar ul li {
@@ -92,6 +90,7 @@
   color: white;
   text-decoration: none;
   padding: 0 18px 0 18px;
+  font-family: "Medium";
 }
 
 .cart-icon {
@@ -102,7 +101,7 @@
 
 .side-nav-content {
   float: right;
-  top: 9.5px;
+  top: 21px;
 }
 
 .nav-menu-btn {
@@ -117,14 +116,8 @@
 
 .side-nav-content .acc-text {
   position: relative;
-  font-size: 16px;
-  font-family: "Regular";
-}
-
-.centre -nav-content .acc-text {
-  position: relative;
-  font-size: 16px;
-  font-family: "Regular";
+  font-size: 1.1em;
+  font-family: "Medium";
 }
 
 
@@ -226,7 +219,7 @@
   background-color: #777fa8;
   border-radius: 45px;
   color: rgb(240, 240, 240);
-  font-size: 18px;
+  font-size: 1.2em;
 }
 
 .header-home-col1 button:hover{
@@ -288,7 +281,6 @@
 
 .pcard {
   padding: 0 20px;
-  height: auto;
 }
 
 .pcard-top, .pcard-bottom{
@@ -313,9 +305,8 @@
 }
 
 .pcard-header img {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
+  width: 100%;
   border-radius: 8px;
 }
 
@@ -370,7 +361,7 @@
 
 .about-row .acontainer .acontent img{
   width: 100%;
-  border-radius: 15px;
+  border-radius: 8px;
 }
 
 
@@ -486,14 +477,16 @@
 }
 
 .carousel-root {
-  width: 64% !important;
+  width: 80% !important;
   margin: auto !important;
   margin-top: 3% !important;
 }
 
 .carousel .slide {
-  background: #fff !important;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.753), rgba(255, 255, 255, 0.685)),url(../public/products/bg.jpg);
   color: rgb(51, 51, 51);
+  background-position: center;
+  background-size: cover;
   height: 100%;
 }
 
@@ -504,16 +497,16 @@
 }
 
 .myCarousel {
-  background: #fafafa;
-  margin-top: -6%;
-  width: 54%;
+  /* background: #fafafa; */
+  /* margin-top: -6%; */
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   padding-top: 6%;
   padding-bottom: 8%;
   padding-left: 5%;
   padding-right: 5%;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   height: 286px;
 }
 
@@ -526,42 +519,44 @@
 .myCarousel h3 {
   color: #222;
   font-weight: 100;
+  font-family: "Medium";
   letter-spacing: 0.2px;
   margin-bottom: 4px;
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 .myCarousel h4 {
   text-transform: uppercase;
   margin-top: 0;
   padding-top: 0;
+  font-family: "Medium";
   font-weight: 500;
   color: #787878;
-  font-size: 14px;
+  font-size: 18px;
 }
 
 .myCarousel p {
   font-weight: 100 !important;
   line-height: 29px !important;
   color: #222;
-  font-size: 15px;
-  font-family: sans-serif;
+  font-family: "Medium";
+  font-size: 18px;
   max-height: 67px;
 }
 
 .myCarousel p:before {
   content: "“";
-  color: #aaa;
-  font-size: 26px;
+  color: #222;
   font-family: monospace;
+  font-size: 26px;
   font-weight: 100;
 }
 
 .myCarousel p:after {
   content: "”";
-  color: #aaa;
+  color: #222;
   font-size: 26px;
   font-family: monospace;
   font-weight: 100;
@@ -593,30 +588,35 @@
   padding: 0 20px;
 }
 
-.pbcard-header {
-  background-color: #777fa8;
-  border-radius: 25px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.445);
-}
 
 .pbcard-header .pbcontainer {
   display: flex;
-  height: 350px;
+  height: 300px;
+  position: relative;
   justify-content: center;
+  transition: 0.5s ease-in-out;
+}
+
+.pbcard-header .pbcontainer span{
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  color: #3a3a3a;
+  font-family: 'ExtraBold';
+  background-color: rgba(255, 255, 255, 0.548);
+  padding: 5px;
+  font-size: 1.5em;
 }
 
 .pbcard-header .pbcontainer img {
-  width: 100%;
-  height: 100%;
   cursor: pointer;
   border-radius: 25px;
   filter: blur(1.5px);
   transition: 0.5s ease-in-out;
 }
 
-.pbcard-header .pbcontainer img:hover {
+.pbcard-header .pbcontainer:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.445);
 }
 
 .pblurred {

@@ -5,7 +5,7 @@ const MyOrders = (props) => {
         <h1 className="website-font">
           My Orders
         </h1>
-        <h6 className="website-font1">{props.ordItems.length} orders</h6>
+        <h6 className="website-font1">{props.ordItems.length == 0 ? 'No Orders' :props.ordItems.length +' Orders'}</h6>
         <div>
           {props.ordItems.map(function(item, i){
             var orderDetails = {};
