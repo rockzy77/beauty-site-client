@@ -5,31 +5,27 @@ class CreateDiscounts extends Component {
   constructor(props) {
     super(props);
     this.thingstoCreate = {
-      is_percent: 0
+      is_percent: 0,
     };
   }
 
-  async createDiscountsReady(){
-    
-    if(this.thingstoCreate.is_percent == 1){
-      if(this.thingstoCreate.discount_amount != undefined){
+  async createDiscountsReady() {
+    if (this.thingstoCreate.is_percent == 1) {
+      if (this.thingstoCreate.discount_amount != undefined) {
         delete this.thingstoCreate.discount_amount;
       }
-    }
-    else{
-      if(this.thingstoCreate.discount_percent != undefined){
+    } else {
+      if (this.thingstoCreate.discount_percent != undefined) {
         delete this.thingstoCreate.discount_percent;
       }
     }
 
     var made = await createDiscount(this.thingstoCreate);
-    if(made['success']){
-      alert('Discount created successfully')
+    if (made["success"]) {
+      alert("Discount created successfully");
+    } else {
+      alert(made["message"]);
     }
-    else{
-      alert(made['message'])
-    }
-
   }
 
   render() {
@@ -57,12 +53,10 @@ class CreateDiscounts extends Component {
               this.thingstoCreate.is_percent = 1;
               document.getElementById("disperccont").style.display = "block";
               document.getElementById("disamountccont").style.display = "none";
-              
             } else {
               this.thingstoCreate.is_percent = 0;
               document.getElementById("disperccont").style.display = "none";
               document.getElementById("disamountccont").style.display = "block";
-              
             }
           }}
           type="checkbox"
@@ -80,8 +74,9 @@ class CreateDiscounts extends Component {
             id="disperc"
             placeholder="Discount Percentage"
             onChange={() => {
-              this.thingstoCreate.discount_percent =
-                parseInt(document.getElementById("disperc").value);
+              this.thingstoCreate.discount_percent = parseInt(
+                document.getElementById("disperc").value
+              );
               // this.setState({});
             }}
           />
@@ -95,8 +90,9 @@ class CreateDiscounts extends Component {
             placeholder="Discount Amount"
             id="disamount"
             onChange={() => {
-              this.thingstoCreate.discount_amount =
-                parseInt(document.getElementById("disamount").value);
+              this.thingstoCreate.discount_amount = parseInt(
+                document.getElementById("disamount").value
+              );
               // this.setState({});
             }}
           />
@@ -110,8 +106,9 @@ class CreateDiscounts extends Component {
           placeholder="Condition Amount"
           id="condamount"
           onChange={() => {
-            this.thingstoCreate.condition_amount =
-              parseInt(document.getElementById("condamount").value);
+            this.thingstoCreate.condition_amount = parseInt(
+              document.getElementById("condamount").value
+            );
             // this.setState({});
           }}
         />
@@ -125,14 +122,30 @@ class CreateDiscounts extends Component {
           placeholder="No of times coupon can be used"
           id="limit"
           onChange={() => {
-            this.thingstoCreate.limit = parseInt(document.getElementById("limit").value);
+            this.thingstoCreate.limit = parseInt(
+              document.getElementById("limit").value
+            );
             // this.setState({});
           }}
         />
 
         <button
           onClick={() => {
-            this.createDiscountsReady();
+            if (this.thingstoCreate.name === undefined) {
+              alert("Please enter a name for the discount");
+            } else if (this.thingstoCreate.is_percent == 1) {
+              if (this.thingstoCreate.discount_percent === undefined) {
+                alert("Please enter a percentage discount");
+              }
+            } else if (this.thingstoCreate.is_percent == 0) {
+              if (this.thingstoCreate.discount_amount === undefined) {
+                alert("Please enter a amount discount");
+              }
+            } else if (this.thingstoCreate.condition_amount === undefined) {
+              alert("Please enter a condition amount");
+            } else {
+              this.createDiscountsReady();
+            }
           }}
           className="s_update_button"
         >

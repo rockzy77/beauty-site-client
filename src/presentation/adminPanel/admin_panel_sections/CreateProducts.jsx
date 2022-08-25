@@ -13,11 +13,10 @@ class CreateProducts extends Component {
   async createProductReady() {
     console.log(this.thingsToCreate);
     var made = await createProduct(this.thingsToCreate);
-    if(made['success']){
-      alert('Product successfully created.')
-    }
-    else{
-      alert(made['message'])
+    if (made["success"]) {
+      alert("Product successfully created.");
+    } else {
+      alert(made["message"]);
     }
   }
 
@@ -638,7 +637,7 @@ class CreateProducts extends Component {
 
         <br />
         <br />
-        
+
         <p>
           <strong>Length: </strong>
         </p>
@@ -654,10 +653,10 @@ class CreateProducts extends Component {
           id="length"
         />
 
-<br />
-<br />
-        
-<p>
+        <br />
+        <br />
+
+        <p>
           <strong>Breadth: </strong>
         </p>
         <input
@@ -672,10 +671,10 @@ class CreateProducts extends Component {
           id="breadth"
         />
 
-<br />
-<br />
-        
-<p>
+        <br />
+        <br />
+
+        <p>
           <strong>Height: </strong>
         </p>
         <input
@@ -690,11 +689,10 @@ class CreateProducts extends Component {
           id="height"
         />
 
+        <br />
+        <br />
 
-<br />
-<br />
-        
-<p>
+        <p>
           <strong>Weight: </strong>
         </p>
         <input
@@ -709,11 +707,101 @@ class CreateProducts extends Component {
           id="weight"
         />
 
-
-
         <button
           onClick={() => {
-            this.createProductReady();
+            if (this.thingsToCreate.productImage1 === undefined) {
+              alert("Please upload a product image");
+            } else if (this.thingsToCreate.label === undefined) {
+              alert("Please enter a label");
+            } else if (this.thingsToCreate.name === undefined) {
+              alert("Please enter a name");
+            } else if (this.thingsToCreate.price === undefined) {
+              alert("Please enter a price");
+            } else if (this.thingsToCreate.description === undefined) {
+              alert("Please enter a description");
+            } else if (this.thingsToCreate.ingredients === undefined) {
+              alert("Please enter ingredients");
+            } else if (this.thingsToCreate.howtouse === undefined) {
+              alert("Please enter how to use");
+            } else if (this.thingsToCreate.length === undefined) {
+              alert("Please enter length");
+            } else if (this.thingsToCreate.breadth === undefined) {
+              alert("Please enter breadth");
+            } else if (this.thingsToCreate.height === undefined) {
+              alert("Please enter height");
+            } else if (this.thingsToCreate.weight === undefined) {
+              alert("Please enter weight");
+            } else if (this.thingsToCreate.scienceBackedImage1 === undefined) {
+              alert("Please upload a science-backed image");
+            } else if (this.thingsToCreate.scienceBackedText === undefined) {
+              alert("Please enter science-backed text");
+            } else if (this.thingsToCreate.plantExtractsImage1 === undefined) {
+              alert("Please upload a plant extract image");
+            } else if (this.thingsToCreate.plantExtractsText1 === undefined) {
+              alert("Please enter plant extract text");
+            } else if (
+              this.thingsToCreate.plantExtractsSubText1 === undefined
+            ) {
+              alert("Please enter plant extract subtext");
+            } else if (this.thingsToCreate.plantExtractsImage2 !== undefined) {
+              if (this.thingsToCreate.plantExtractsText2 === undefined) {
+                alert("Please enter plant extract text");
+              } else if (
+                this.thingsToCreate.plantExtractsSubText2 === undefined
+              ) {
+                alert("Please enter plant extract subtext");
+              }
+            } else if (this.thingsToCreate.plantExtractsImage3 !== undefined) {
+              if (this.thingsToCreate.plantExtractsText3 === undefined) {
+                alert("Please enter plant extract text");
+              } else if (
+                this.thingsToCreate.plantExtractsSubText3 === undefined
+              ) {
+                alert("Please enter plant extract subtext");
+              }
+            } else if (this.thingsToCreate.plantExtractsImage4 !== undefined) {
+              if (this.thingsToCreate.plantExtractsText4 === undefined) {
+                alert("Please enter plant extract text");
+              } else if (
+                this.thingsToCreate.plantExtractsSubText4 === undefined
+              ) {
+                alert("Please enter plant extract subtext");
+              }
+            } else if (this.thingsToCreate.stock === undefined) {
+              alert("Please enter stock");
+            } else if (this.thingsToCreate.category === undefined) {
+              alert("Please enter category");
+            } else if (this.thingsToCreate.tagImage1 === undefined) {
+              alert("Please upload a tag image");
+            } else if (this.thingsToCreate.tagText1 === undefined) {
+              alert("Please enter tag text");
+            } else if (this.thingsToCreate.tagSubText1 === undefined) {
+              alert("Please enter tag subtext");
+            } else if (this.thingsToCreate.tagImage2 !== undefined) {
+              if (this.thingsToCreate.tagText2 === undefined) {
+                alert("Please enter tag text");
+              } else if (this.thingsToCreate.tagSubText2 === undefined) {
+                alert("Please enter tag subtext");
+              }
+            } else if (this.thingsToCreate.tagImage3 !== undefined) {
+              if (this.thingsToCreate.tagText3 === undefined) {
+                alert("Please enter tag text");
+              } else if (this.thingsToCreate.tagSubText3 === undefined) {
+                alert("Please enter tag subtext");
+              }
+            } else if (this.thingsToCreate.tagImage4 !== undefined) {
+              if (this.thingsToCreate.tagText4 === undefined) {
+                alert("Please enter tag text");
+              } else if (this.thingsToCreate.tagSubText4 === undefined) {
+                alert("Please enter tag subtext");
+              }
+            } else if (this.thingsToCreate.whydoweneed === undefined) {
+              alert("Please enter why do we need this");
+            } else if (this.thingsToCreate.benefits === undefined) {
+              alert("Please enter benefits");
+            } else {
+              this.createProductReady();
+            }
           }}
           className="s_update_button"
         >

@@ -9,7 +9,7 @@ class CreateBlog extends Component {
   }
 
   async createBlogReady() {
-    console.log(this.thingstoCreate)
+    console.log(this.thingstoCreate);
     var made = await createBlog(this.thingstoCreate);
     if (made["success"]) {
       alert("Blog created successfully.");
@@ -31,6 +31,7 @@ class CreateBlog extends Component {
           style={{ display: "none" }}
           onChange={() => {
             const input = document.getElementById("blogimginput");
+
             var upload_image = "";
 
             const reader = new FileReader();
@@ -118,7 +119,19 @@ class CreateBlog extends Component {
 
         <button
           onClick={() => {
-            this.createBlogReady();
+            if (this.thingstoCreate.image === undefined) {
+              alert("Please upload an image.");
+            } else if (this.thingstoCreate.author === undefined) {
+              alert("Please enter an author.");
+            } else if (this.thingstoCreate.title === undefined) {
+              alert("Please enter a title.");
+            } else if (this.thingstoCreate.subtitle === undefined) {
+              alert("Please enter a subtitle.");
+            } else if (this.thingstoCreate.content === undefined) {
+              alert("Please enter a content.");
+            } else {
+              this.createBlogReady();
+            }
           }}
           className="s_update_button"
         >
