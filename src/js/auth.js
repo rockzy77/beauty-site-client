@@ -1,4 +1,4 @@
-var url_head = "http://localhost:4000/api/v2/";
+import url_head from "./serverApi";
 
 const axios = require("axios");
 
@@ -6,71 +6,67 @@ axios.defaults.withCredentials = true;
 
 const config = { headers: { "Content-Type": "application/json" } };
 
-
-
-async function loginUser() {
+async function loginUser(email, password) {
   var url = url_head + "login";
 
-  var email = document.getElementById("loginemail");
-  var password = document.getElementById("loginpass");
-  if (email.value != "" && password.value != "") {
-    var data = {
-      email: email.value,
-      password: password.value,
-    };
-    var response = await axios.post(url, JSON.stringify(data), config);
-    var body = await response.data;
-    if (body["success"] == true) {
-      console.log(body["token"]);
-      window.location.replace("/");
-    } else {
-      console.log(body["message"]);
-    }
-  } else {
-    alert("Please fill all the fields.");
+  try {
+      var data = {
+        email: email,
+        password: password,
+      };
+      var response = await axios.post(url, JSON.stringify(data), config);
+      var body = await response.data;
+      return body;
+  } catch (e) {
+    console.log(e);
+    var error = await e.response.data.message;
+    return { success: false, message: error };
   }
 }
 
-async function registerUser() {
+async function googleLoginUser(email) {
+  var url = url_head + "googleSignin";
+  console.log(url)
+
+  try {
+      var data = {
+        email: email,
+      };
+      var response = await axios.post(url, JSON.stringify(data), config);
+      var body = await response.data;
+      return body;
+  } catch (e) {
+    console.log(e);
+    var error = await e.response.data.message;
+    return { success: false, message: error };
+  }
+}
+
+async function registerUser(data) {
   var url = url_head + "registration";
 
-  var email = document.getElementById("regemail");
-  var password = document.getElementById("regpass");
-  var cpassword = document.getElementById("regcpass");
-  var name = document.getElementById("regname");
-  var refererCode = document.getElementById("referercode");
-  if (
-    email.value != "" &&
-    password.value != "" &&
-    name.value != "" &&
-    cpassword.value != ""
-  ) {
-    if (password.value == cpassword.value) {
-      if (password.value.length > 7) {
-        var data = {
-          name: name.value,
-          email: email.value,
-          password: password.value,
-        };
+  try {
+    var response = await axios.post(url, JSON.stringify(data), config);
+    var body = await response.data;
+    return body;
+  } catch (e) {
+    console.log(e);
+    var error = await e.response.data.message;
+    return { success: false, message: error };
+  }
+}
 
-        if(refererCode.value != ''){
-          data['referrerCode'] = refererCode.value;
-        }
+async function googleRegisterUser(data) {
+  var url = url_head + "googleSignup";
 
-        var response = await axios.post(url, JSON.stringify(data), config);
-        var body = await response.data;
-        if (body["success"] == true) {
-          alert("Succesfully Registered."); 
-          window.location.replace("/");
-        } else {
-          console.log(body["message"]);
-        }
-      }
-    } else {
-      alert("Password doesn't match");
-    }
-  } else {
-    alert("Please fill all the fields.");
+  try {
+    var response = await axios.post(url, JSON.stringify(data), config);
+    var body = await response.data;
+    return body;
+  } catch (e) {
+    console.log(e);
+    var error = await e.response.data.message;
+    return { success: false, message: error };
   }
 }
 
@@ -88,9 +84,8 @@ async function getUserDetail() {
     const data = await response.data;
     return data;
   } catch (e) {
-    return {success: false};
+    return { success: false };
   }
-
 }
 
 async function updateUserInfo(name, email) {
@@ -117,25 +112,39 @@ async function updatePassword(oldpass, newpass, cnewpass) {
   window.location.replace("/account");
 }
 
-
-async function forgotPassword(email){
-  var url = url_head+'password/forgot';
-  try{
+async function forgotPassword(email) {
+  var url = url_head + "password/forgot";
+  try {
     var data = {
-      email: email
-    }
+      email: email,
+    };
     var response = await axios.post(url, JSON.stringify(data), config);
     const body = await response.data;
     console.log(body);
-    return body['success'];
-  }
-  catch(e){
+    return body["success"];
+  } catch (e) {
     return false;
   }
 }
 
+async function resetForgotPassword(pass, cpass, token) {
+  var url = url_head + "password/reset/" + token;
+  try {
+    var data = {
+      password: pass,
+      confirmPassword: cpass,
+    };
+    var response = await axios.put(url, JSON.stringify(data), config);
+    const body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    var error = await e.response.data;
+    return { success: false, message: error };
+  }
+}
 
-async function getReferralLink(){
+async function getReferralLink() {
   var url = url_head + "referral/details";
   try {
     var response = await axios.get(url, config);
@@ -149,7 +158,6 @@ async function getReferralLink(){
   }
 }
 
-
 export {
   getUserDetail,
   updateUserInfo,
@@ -158,5 +166,8 @@ export {
   logoutUser,
   updatePassword,
   forgotPassword,
-  getReferralLink
+  getReferralLink,
+  resetForgotPassword,
+  googleLoginUser,
+  googleRegisterUser
 };

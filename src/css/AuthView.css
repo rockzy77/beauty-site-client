@@ -68,6 +68,19 @@
     font-weight: 300;
 }
 
+.googleicon{
+    font-size: 1.5em;
+}
+
+#googlelogin{
+    width: 95%;
+    border-radius: 15px;
+    background-color: white;
+    border: none;
+    box-shadow:  0 0 8px rgba(63, 63, 63, 0.377);
+    height: 50px;
+}
+
 .singuplink{
     color: #777fa8;
     font-weight: 400;
@@ -232,6 +245,89 @@
     font-weight: 400;
 }
 
+
+/* Reset Password */
+
+.resetPasswordSection{
+    height: 100vh;
+    width: 100%;
+}
+
+.resetPassCont{
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.resetPassCont h1{
+    font-size: 2em;
+}
+
+.resetPassCont p{
+    font-size: 17px;
+    font-weight: 400;
+    color: rgb(158, 158, 158);
+}
+
+.resetPassCont label{
+    text-align: left;
+    font-weight: bold;
+}
+
+#newpass{
+    padding-left: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 50px;
+    width: 300px;
+    outline: none;
+}
+
+#newpass2{
+    padding-left: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 50px;
+    width: 300px;
+    outline: none;
+}
+
+.fpassbtn{
+    width: 300px;
+    height: 45px;
+    border: none;
+    background-color: #777fa8;
+    color: white;
+    border-radius: 5px;
+    font-weight: 400;
+}
+
+#errorfphide{
+    display: none;
+}
+
+#fphide{
+    display: none;
+}
+
+.fpspan{
+    color: green !important;
+    position: relative;
+    top: 15px;
+}
+
+.errorfpspan{
+    color: red !important;
+    position: relative;
+    top: 15px;
+}
+
+.fplink{
+    color: purple;
+    font-weight: 400;
+}
 
 @media screen and (max-width: 389px) {
     .login-form-container{

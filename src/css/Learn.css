@@ -23,7 +23,7 @@
 
 .blog{
     margin-bottom: 20px;
-    animation: fadein-right 2s;
+    animation: fadein-up 2s;
     position: relative;
     width: 100%;
     background-color: white;
@@ -33,15 +33,10 @@
 }
 
 
-.blogimg{
-    height: 100px;
-    width: 500px;
-    
-}
+
 
 .blog img{
-    width: 100%;
-    object-fit: cover;
+    width:300px;
     border-radius: 5px;
 }
 
@@ -87,6 +82,17 @@
     background-color: #cacfe64b;
 }
 
+
+.sblog-left h1{
+    font-family: "Medium";
+}
+
+.sblog-left p{
+    font-family: "Medium";
+    font-size: 1.1em;
+}
+
+
 .sblog-right{
     width: 30%;
     padding: 15px;
@@ -94,6 +100,9 @@
     background-color: rgb(247, 247, 247);
 }
 
+.sblog-right h3{
+    font-family: 'Medium';
+}
 .sblog-img-cont{
     width: 100%;
     height: 50vh;
@@ -114,6 +123,7 @@
     object-fit: cover;
     border-top-left-radius: 8px;
     border-bottom-right-radius: 8px;
+    padding: 25px;
 }
 
 .sblogauthor{
@@ -142,6 +152,7 @@
     font-size: 1.4em;
     padding-top: 5px;
     padding-left: 5px;
+    
 }
 
 .other-post p{
@@ -149,6 +160,12 @@
     padding-top: 5px;
     font-weight: 400;
     padding-left: 5px;
+}
+
+.other-post-nav{
+    position: relative;
+    bottom: 10px;
+    left: 5px;
 }
 
 
@@ -161,6 +178,27 @@
         width: 100%;
     }
 }
+
+@media screen and (max-width: 800px) {
+    .blog{
+        display: block;
+    }
+
+    .blogs{
+        padding: 25px 15px;
+    }
+
+    .blogimg{
+        width: 100%;
+    }
+
+    .blogimg img{ 
+        width: 100%;
+        height: auto;
+    }
+}
+
+
 
 @keyframes fadein-right {
     0%{

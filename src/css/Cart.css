@@ -76,7 +76,7 @@
 	flex: 25%;
 	margin-left: 20px;
 	padding: 20px;
-	height: 400px;
+	height: fit-content;
 	border-radius: 5px;
 	background: #fff;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -108,6 +108,58 @@
 	background-color: #586396;
 	color: white;
 }
+
+.checkoutbtns{
+	background-color:#777fa8;
+	color: #fff;
+	text-decoration: none;
+	border: none;
+	text-align: center;
+	height: 40px;
+	width: 100%;
+	transition: 0.5s ease-in-out;
+	font-weight: 900;
+}
+
+.checkoutbtns:hover{
+	background-color: #586396;
+	color: white;
+}
+
+.qbox{
+	width: 140px;
+	display: flex;
+	justify-content: end;
+}
+
+.btn-primary{
+	background-color: #777fa8 !important;
+	border: none !important;
+}
+
+
+@media screen and (max-width: 396px) {
+	.box{
+		display: block;
+	}
+
+	.btn-area{
+		text-align: center;
+		width: 100% !important;
+	}
+
+	.qbox{
+		justify-content: start;
+	}
+
+	.btn2{
+		display: inline !important;
+	}
+}
+
+
+
+
 @media screen and (max-width: 700px) {
 	.content h3 {
 		margin-bottom: 15px;
@@ -130,11 +182,12 @@
 	.btn-area{
 		margin-top: 10%;
 		position: static;
-		max-width: 100px;
+		width: fit-content;
 		align-items: center;
 	}
 	
 }
+
 @media screen and (max-width: 900px) {
 	.project {
 		flex-direction: column;
@@ -149,3 +202,4 @@
 		max-width: 95%;
 	}
 }
+

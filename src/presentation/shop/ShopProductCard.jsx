@@ -1,7 +1,7 @@
-import public_url from "../../js/publicurl";
-import { NavLink, useNavigate } from "react-router-dom";
-import { Component, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import { addToCart } from "../../js/products";
+import { toast } from 'react-toastify';
+
 
 
 const ShopProductCard = (props) => {
@@ -16,21 +16,28 @@ const ShopProductCard = (props) => {
     }
     var made = await addToCart(map);
     if(made['success']){
-      alert('Product added to cart.')
+      toast.success('Product added to cart.');
     }
     else{
-      alert('Something went wrong')
+      if(made.message === 'Please Login for access this resource'){
+        toast.error('Please log in to add to cart')
+      }
+      else{
+        toast.error('Something went wrong')
+      }
+      
     }
   }
 
   var productImage = '';
 
   for(var i=0;i<props.images.length;i++){
-    if(props.images[i].name == 'productImage1'){
+    if(props.images[i].name === 'productImage1'){
       productImage = props.images[i].url;
     }
   }
-  
+
+    
        
        return <NavLink className='navlinks' state={{page: props.page}} to={'/product/'+props.pid}>
        <div className="shop-product">

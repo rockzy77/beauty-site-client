@@ -10,18 +10,51 @@
 
 .adminPanelSideNav{
     position: fixed;
+    left: 0;
+    float: left;
+    transition: 0.5s ease-in-out;
+    z-index: 2;
     height: 100vh;
-    width: 250px;
+    width: 55px;
     background-color: rgb(37, 43, 59);
+}
+
+.adminPanelContent{
+    position: absolute;
+    transition: 0.5s ease-in-out;
+    right: 0;
+    min-height: 100vh;
+    float: right;
+    width: calc(100% - 55px);
+    background-color: rgba(221, 221, 221, 0.61);
 }
 
 .adminPanelSideNav img{
     margin-left: 15px;
     height: 30px;
+    width: auto !important;
+    display: none;
     transition: 0.5s ease-in-out;
     margin-top: 18px;
 }
 
+.admin-menu{
+    font-size: 27px;
+    color: white;
+    margin-left: 12px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.ad-icons{
+    font-size: 20px;
+    position: relative;
+    bottom: 1px;
+}
+
+.ad-spans{
+    display: none;
+}
 
 .admin-img-head{
     height: 60px;
@@ -30,7 +63,7 @@
 
 .admin_panel_btn{
     text-align: left;
-    padding-left:25px;
+    padding-left:15px;
     width:100%;
     height: 50px;
     border: none;
@@ -53,20 +86,13 @@
     background-color: #777fa888;
 }
 
-.adminPanelContent{
-    position: absolute;
-    transition: 0.5s ease-in-out;
-    right: 0;
-    min-height: 100vh;
-    float: right;
-    width: calc(100% - 250px);
-    background-color: rgba(221, 221, 221, 0.61);
-}
+
 
 .section-title{
     font-size: 2em;
     padding: 15px;
 }
+
 
 
 .dashboard-head-grid{
@@ -83,7 +109,6 @@
     color: rgb(37, 43, 59);
     background-color: white;
     border-radius: 5px;
-    cursor: pointer;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.24);
 }
 
@@ -117,6 +142,15 @@
 .targettitle{
     padding-left: 15px;
 }
+
+
+#years{
+    height: 40px;
+    margin: 15px;
+    width: 100px;
+    text-align: center;
+}
+
 
 
 /* All Products */
@@ -220,10 +254,16 @@
     font-weight: 400;
 }
 
+.image-edit-grid{
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
 .ad-edit-img-cont{
     text-align: center;
-    padding: 15px;
-    width: 100%;
+    padding: 45px;
+    width: 200px;
     cursor: pointer;
     background-color: #777fa83f;
 }
@@ -234,7 +274,7 @@
 
 
 .ad-edit-img-cont img{
-    width: 20%;
+    width: 100%;
 }
 
 .adminProductEdit input{
@@ -244,6 +284,28 @@
     font-weight: 400;
     font-size: 1.2em;
     outline: none;
+}
+
+.adminProductEdit input[type=checkbox]{
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+}
+
+.adminProductEdit select{
+   height: 50px;
+   width: 250px;
+   font-family: "Medium";
+}
+
+.shippingsbillingspan{
+    position: relative;
+    bottom:4px;
+    left: 3px;
+}
+
+#shipping-cont{
+    display: none;
 }
 
 .adminProductEdit textarea{
@@ -481,6 +543,20 @@
     padding: 5px;
 }
 
+
+/* Comments */
+
+#deleteReviewBtn{
+    height: 30px;
+    width: 70px;
+    border: none;
+    background-color: red;
+    color: white;
+}
+
+.comment-det{
+    font-size: 1.1em !important; 
+}
 @media screen and (min-width: 300px) {
     .product-tag-img-cont{
         justify-content: center;
@@ -505,19 +581,6 @@
     }
 }
 
-@media screen and (max-width: 915px) {
-    .adminPanelSideNav{
-       width: 0;
-    }
-
-    .adminPanelSideNav > *{
-        display: none;
-    }
-
-    .adminPanelContent{
-        width: 100%
-    }
-}
 
 
 @media screen and (min-width: 1100px) {

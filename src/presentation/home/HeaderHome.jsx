@@ -1,10 +1,7 @@
 import { Component } from "react";
 import BackgroundSlider from "react-background-slider";
 import { NavLink } from "react-router-dom";
-import { sliders } from "../../js/animation";
-import { routers } from "../../js/auth";
 import public_url from "../../js/publicurl";
-import $ from 'jquery';
 
 class HeaderHome extends Component {
 

@@ -1,10 +1,9 @@
 import { Component } from "react";
-import { GoLinkExternal } from "react-icons/go";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { deleteBlog, deleteDiscount, getAllBlogs, getAllDiscounts } from "../../../js/adminProduct";
-import AdminProductDet from "../compo/AdminProductEdit";
+import { deleteDiscount, getAllDiscounts } from "../../../js/adminProduct";
+import { toast } from 'react-toastify';
+
 
 class AllDiscounts extends Component {
   constructor(props) {
@@ -16,14 +15,19 @@ class AllDiscounts extends Component {
   }
 
   deleteRow(index) {
-    this.discounts.splice(index, 1);
+    if(index === 0){
+      this.discounts.shift();
+    }
+    else{
+      this.discounts.splice(index, 1);
+    }
     this.discountsrow = [];
     this.backupDiscountsRow = [];
     for (var i = 0; i < this.discounts.length; i++) {
         var discount = this.discounts[i];
         var name = discount["name"];
         var is_percent = discount["is_percent"];
-        var discount_am = is_percent == 1 ? discount["discount_percent"] : discount["discount_amount"];
+        var discount_am = is_percent === 1 ? discount["discount_percent"] : discount["discount_amount"];
         var condition = discount["condition_amount"];
         var limit = discount["limit"];
         var created = discount["createdAt"];
@@ -66,7 +70,7 @@ class AllDiscounts extends Component {
         var discount = this.discounts[i];
         var name = discount["name"];
         var is_percent = discount["is_percent"];
-        var discount_am = is_percent == 1 ? discount["discount_percent"] : discount["discount_amount"];
+        var discount_am = is_percent === 1 ? discount["discount_percent"] : discount["discount_amount"];
         var condition = discount["condition_amount"];
         var limit = discount["limit"];
         var created = discount["createdAt"];
@@ -111,13 +115,13 @@ class AllDiscounts extends Component {
             var search = document.getElementById("alluserssearch").value;
             search = search.toLowerCase();
 
-            if (search != "") {
+            if (search !== "") {
               for (var i = 0; i < this.discounts.length; i++) {
-                if (this.searchMethod == "Name") {
+                if (this.searchMethod === "Name") {
                   if (this.discounts[i]["name"].toLowerCase().includes(search)) {
                     tempList.push(this.discountsrow[i]);
                   }
-                } else if (this.searchMethod == "Date Created") {
+                } else if (this.searchMethod === "Date Created") {
                   if (
                     this.discounts[i]["createdAt"].toLowerCase().includes(search)
                   ) {
@@ -182,7 +186,7 @@ const DiscountRow = (props) => {
     <tr>
       <td>{props.si}</td>
       <td>{props.name}</td>
-      <td>{(props.is_percent == 0 ? 'Rs ': '') + props.discount_am + (props.is_percent == 1 ? '%': '')}</td>
+      <td>{(props.is_percent === 0 ? 'Rs ': '') + props.discount_am + (props.is_percent === 1 ? '%': '')}</td>
       <td>{props.condition}</td>
       <td>{props.limit}</td>
       <td>{date + " " + time}</td>
@@ -200,9 +204,9 @@ const DiscountRow = (props) => {
               var made = await deleteDiscount(props.name);
               if (made["success"]) {
                 props.dlt(props.si - 1);
-                alert("Discount was deleted");
+                toast.success('Discount was deleted');
               } else {
-                alert('Error: '+made['message']);
+                toast.error('Error: '+made['message']);
               }
             }
           }}

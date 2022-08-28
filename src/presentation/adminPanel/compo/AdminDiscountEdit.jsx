@@ -1,16 +1,11 @@
 import { Component } from "react";
 import {
-  getSingleBlog,
   getSingleDiscount,
-  getSingleuser,
-  updateBlog,
-  updateDiscount,
-  updateProduct,
-  updateuserInfo,
+  updateDiscount
 } from "../../../js/adminProduct";
-import public_url from "../../../js/publicurl";
 import { useParams } from "react-router-dom";
-import $ from "jquery";
+import { toast } from 'react-toastify';
+
 
 const AdminDiscountEdit = () => {
   const { name } = useParams();
@@ -27,9 +22,9 @@ class AdminDiscountEditPanel extends Component {
   async updateDiscountReady() {
     var made = await updateDiscount(this.thingstoUpdate, this.discount.name);
     if (made["success"]) {
-      alert("Discount info updated successfully.");
+      toast.success('Discount info updated successfully.');
     } else {
-      alert("Something went wrong!");
+      toast.error('Something went wrong!');
     }
   }
 
@@ -43,13 +38,11 @@ class AdminDiscountEditPanel extends Component {
       this.discount.discount_amount = discount["discount_amount"];
       this.discount.condition_amount = discount["condition_amount"];
       this.discount.limit = discount["limit"];
-      if (this.discount.is_percent == 1) {
+      if (this.discount.is_percent === 1) {
         document.getElementById("isPerc").checked = true;
         document.getElementById("disperccont").style.display = "block";
         document.getElementById("disamountccont").style.display = "none";
       }
-    } else {
-      alert(det["message"]);
     }
     this.setState({});
   }
@@ -69,7 +62,7 @@ class AdminDiscountEditPanel extends Component {
           type="text"
           readOnly
           placeholder="Discount Name"
-          defaultValue={this.discount.name != null ? this.discount.name : ""}
+          defaultValue={this.discount.name !== undefined ? this.discount.name : ""}
           id="disname"
           onChange={() => {
             this.thingstoUpdate.name = document.getElementById("disname").value;
@@ -104,7 +97,7 @@ class AdminDiscountEditPanel extends Component {
             name="disperc"
             type="number"
             defaultValue={
-              this.discount.discount_percent != null
+              this.discount.discount_percent !== undefined
                 ? this.discount.discount_percent
                 : ""
             }
@@ -126,7 +119,7 @@ class AdminDiscountEditPanel extends Component {
             type="number"
             placeholder="Discount Amount"
             defaultValue={
-              this.discount.discount_amount != null
+              this.discount.discount_amount !== undefined
                 ? this.discount.discount_amount
                 : ""
             }
@@ -147,7 +140,7 @@ class AdminDiscountEditPanel extends Component {
           type="number"
           placeholder="Condition Amount"
           defaultValue={
-            this.discount.condition_amount != null
+            this.discount.condition_amount !== undefined
               ? this.discount.condition_amount
               : ""
           }
@@ -166,7 +159,7 @@ class AdminDiscountEditPanel extends Component {
         <input
           name="limit"
           type="number"
-          defaultValue={this.discount.limit != null ? this.discount.limit : ""}
+          defaultValue={this.discount.limit !== undefined ? this.discount.limit : ""}
           placeholder="No of times coupon can be used"
           id="limit"
           onChange={() => {
@@ -179,7 +172,19 @@ class AdminDiscountEditPanel extends Component {
 
         <button
           onClick={() => {
-            this.updateDiscountReady();
+            if (Object.keys(this.thingsToUpdate).length === 0) {
+              alert("Nothing to update");
+            }
+            else{
+              for (var key in this.thingsToUpdate) {
+                if (this.thingsToUpdate[key] === "") {
+                  alert("Please fill all fields");
+                  return;
+                }
+              }
+              this.updateDiscountReady();
+            }
+            
           }}
           className="s_update_button"
         >

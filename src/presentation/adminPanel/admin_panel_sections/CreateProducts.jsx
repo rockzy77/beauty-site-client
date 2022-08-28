@@ -1,8 +1,8 @@
 import { Component } from "react";
-import { GoDiffAdded } from "react-icons/go";
 import { createProduct } from "../../../js/adminProduct";
-import { useNavigate } from "react-router-dom";
 import public_url from "../../../js/publicurl";
+import { toast } from 'react-toastify';
+
 
 class CreateProducts extends Component {
   constructor(props) {
@@ -14,9 +14,9 @@ class CreateProducts extends Component {
     console.log(this.thingsToCreate);
     var made = await createProduct(this.thingsToCreate);
     if (made["success"]) {
-      alert("Product successfully created.");
+      toast.success('Product successfully created.')
     } else {
-      alert(made["message"]);
+      toast.error('Error: '+ made.message)
     }
   }
 
@@ -24,7 +24,7 @@ class CreateProducts extends Component {
     return (
       <div className="adminAddProduct">
         <br />
-        <p>Product Image: </p>
+        <p>Product Image (Required min 1): </p>
 
         <input
           style={{ display: "none" }}
@@ -45,17 +45,151 @@ class CreateProducts extends Component {
           id="pimginput"
         />
 
-        <div
-          onClick={() => {
-            document.getElementById("pimginput").click();
+        {/* Product 2 input */}
+        <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput2");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit2").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToCreate.productImage2 = input.files[0];
           }}
-          className="ad-edit-img-cont"
-        >
-          <img
-            id="adminPimgEdit"
-            src={public_url + "addImage.png"}
-            alt="product_image"
-          />
+          type="file"
+          name="pimginput2"
+          id="pimginput2"
+        />
+
+        {/* Product 3 input */}
+        <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput3");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit3").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToCreate.productImage3 = input.files[0];
+          }}
+          type="file"
+          name="pimginput3"
+          id="pimginput3"
+        />
+
+        {/* Product 4 input */}
+        <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput4");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit4").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToCreate.productImage4 = input.files[0];
+          }}
+          type="file"
+          name="pimginput4"
+          id="pimginput4"
+        />
+
+        {/* Product 5 input */}
+        <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput5");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit5").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToCreate.productImage5 = input.files[0];
+          }}
+          type="file"
+          name="pimginput5"
+          id="pimginput5"
+        />
+
+        <div className="image-edit-grid">
+          <div
+            onClick={() => {
+              document.getElementById("pimginput").click();
+            }}
+            className="ad-edit-img-cont"
+          >
+            <img
+              id="adminPimgEdit"
+              src={public_url + "addImage.png"}
+              alt="product_image"
+            />
+          </div>
+
+          <div
+            onClick={() => {
+              document.getElementById("pimginput2").click();
+            }}
+            className="ad-edit-img-cont"
+          >
+            <img
+              id="adminPimgEdit2"
+              src={public_url + "addImage.png"}
+              alt="product_image"
+            />
+          </div>
+
+          <div
+            onClick={() => {
+              document.getElementById("pimginput3").click();
+            }}
+            className="ad-edit-img-cont"
+          >
+            <img
+              id="adminPimgEdit3"
+              src={public_url + "addImage.png"}
+              alt="product_image"
+            />
+          </div>
+
+          <div
+            onClick={() => {
+              document.getElementById("pimginput4").click();
+            }}
+            className="ad-edit-img-cont"
+          >
+            <img
+              id="adminPimgEdit4"
+              src={public_url + "addImage.png"}
+              alt="product_image"
+            />
+          </div>
+
+          <div
+            onClick={() => {
+              document.getElementById("pimginput5").click();
+            }}
+            className="ad-edit-img-cont"
+          >
+            <img
+              id="adminPimgEdit5"
+              src={public_url + "addImage.png"}
+              alt="product_image"
+            />
+          </div>
         </div>
         <br />
         <br />
@@ -709,96 +843,127 @@ class CreateProducts extends Component {
 
         <button
           onClick={() => {
+            console.log(this.thingsToCreate);
             if (this.thingsToCreate.productImage1 === undefined) {
               alert("Please upload a product image");
-            } else if (this.thingsToCreate.label === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.label === undefined ||
+              this.thingsToCreate.label === ""
+            ) {
               alert("Please enter a label");
-            } else if (this.thingsToCreate.name === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.name === undefined ||
+              this.thingsToCreate.name === ""
+            ) {
               alert("Please enter a name");
-            } else if (this.thingsToCreate.price === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.price === undefined ||
+              this.thingsToCreate.price === ""
+            ) {
               alert("Please enter a price");
-            } else if (this.thingsToCreate.description === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.description === undefined ||
+              this.thingsToCreate.description === ""
+            ) {
               alert("Please enter a description");
-            } else if (this.thingsToCreate.ingredients === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.ingredients === undefined ||
+              this.thingsToCreate.ingredients === ""
+            ) {
               alert("Please enter ingredients");
-            } else if (this.thingsToCreate.howtouse === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.howtouse === undefined ||
+              this.thingsToCreate.howtouse === ""
+            ) {
               alert("Please enter how to use");
-            } else if (this.thingsToCreate.length === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.length === undefined ||
+              this.thingsToCreate.length === ""
+            ) {
               alert("Please enter length");
-            } else if (this.thingsToCreate.breadth === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.breadth === undefined ||
+              this.thingsToCreate.breadth === ""
+            ) {
               alert("Please enter breadth");
-            } else if (this.thingsToCreate.height === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.height === undefined ||
+              this.thingsToCreate.height === ""
+            ) {
               alert("Please enter height");
-            } else if (this.thingsToCreate.weight === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.weight === undefined ||
+              this.thingsToCreate.weight === ""
+            ) {
               alert("Please enter weight");
+              return;
             } else if (this.thingsToCreate.scienceBackedImage1 === undefined) {
               alert("Please upload a science-backed image");
-            } else if (this.thingsToCreate.scienceBackedText === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.scienceBackedText === undefined ||
+              this.thingsToCreate.scienceBackedText === ""
+            ) {
               alert("Please enter science-backed text");
+              return;
             } else if (this.thingsToCreate.plantExtractsImage1 === undefined) {
               alert("Please upload a plant extract image");
-            } else if (this.thingsToCreate.plantExtractsText1 === undefined) {
-              alert("Please enter plant extract text");
+              return;
             } else if (
-              this.thingsToCreate.plantExtractsSubText1 === undefined
+              this.thingsToCreate.plantExtractsText1 === undefined ||
+              this.thingsToCreate.plantExtractsText1 === ""
+            ) {
+              alert("Please enter plant extract text");
+              return;
+            } else if (
+              this.thingsToCreate.plantExtractsSubText1 === undefined ||
+              this.thingsToCreate.plantExtractsSubText1 === ""
             ) {
               alert("Please enter plant extract subtext");
-            } else if (this.thingsToCreate.plantExtractsImage2 !== undefined) {
-              if (this.thingsToCreate.plantExtractsText2 === undefined) {
-                alert("Please enter plant extract text");
-              } else if (
-                this.thingsToCreate.plantExtractsSubText2 === undefined
-              ) {
-                alert("Please enter plant extract subtext");
-              }
-            } else if (this.thingsToCreate.plantExtractsImage3 !== undefined) {
-              if (this.thingsToCreate.plantExtractsText3 === undefined) {
-                alert("Please enter plant extract text");
-              } else if (
-                this.thingsToCreate.plantExtractsSubText3 === undefined
-              ) {
-                alert("Please enter plant extract subtext");
-              }
-            } else if (this.thingsToCreate.plantExtractsImage4 !== undefined) {
-              if (this.thingsToCreate.plantExtractsText4 === undefined) {
-                alert("Please enter plant extract text");
-              } else if (
-                this.thingsToCreate.plantExtractsSubText4 === undefined
-              ) {
-                alert("Please enter plant extract subtext");
-              }
-            } else if (this.thingsToCreate.stock === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.stock === undefined ||
+              this.thingsToCreate.stock === ""
+            ) {
               alert("Please enter stock");
-            } else if (this.thingsToCreate.category === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.category === undefined ||
+              this.thingsToCreate.category === ""
+            ) {
               alert("Please enter category");
+              return;
             } else if (this.thingsToCreate.tagImage1 === undefined) {
-              alert("Please upload a tag image");
-            } else if (this.thingsToCreate.tagText1 === undefined) {
-              alert("Please enter tag text");
-            } else if (this.thingsToCreate.tagSubText1 === undefined) {
-              alert("Please enter tag subtext");
-            } else if (this.thingsToCreate.tagImage2 !== undefined) {
-              if (this.thingsToCreate.tagText2 === undefined) {
-                alert("Please enter tag text");
-              } else if (this.thingsToCreate.tagSubText2 === undefined) {
-                alert("Please enter tag subtext");
-              }
-            } else if (this.thingsToCreate.tagImage3 !== undefined) {
-              if (this.thingsToCreate.tagText3 === undefined) {
-                alert("Please enter tag text");
-              } else if (this.thingsToCreate.tagSubText3 === undefined) {
-                alert("Please enter tag subtext");
-              }
-            } else if (this.thingsToCreate.tagImage4 !== undefined) {
-              if (this.thingsToCreate.tagText4 === undefined) {
-                alert("Please enter tag text");
-              } else if (this.thingsToCreate.tagSubText4 === undefined) {
-                alert("Please enter tag subtext");
-              }
-            } else if (this.thingsToCreate.whydoweneed === undefined) {
+              alert("Please upload a tag image 1");
+              return;
+            } else if (
+              this.thingsToCreate.productTagText1 === undefined ||
+              this.thingsToCreate.productTagText1 === ""
+            ) {
+              alert("Please enter tag text 1");
+              return;
+            } else if (
+              this.thingsToCreate.whydoweneed === undefined ||
+              this.thingsToCreate.whydoweneed === ""
+            ) {
               alert("Please enter why do we need this");
-            } else if (this.thingsToCreate.benefits === undefined) {
+              return;
+            } else if (
+              this.thingsToCreate.benefits === undefined ||
+              this.thingsToCreate.benefits === ""
+            ) {
               alert("Please enter benefits");
+              return;
             } else {
               this.createProductReady();
             }

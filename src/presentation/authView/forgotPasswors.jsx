@@ -25,7 +25,7 @@ class ForgotPassword extends Component {
             <input
               onClick={async () => {
                 var fpemail = $("#fpassemail").val();
-                if (fpemail != "") {
+                if (fpemail !== "") {
                   $(".fpassbtn").prop("disabled", true);
                   var made = await forgotPassword(fpemail);
 

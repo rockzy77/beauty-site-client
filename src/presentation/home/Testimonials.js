@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import $ from "jquery";
 import Carousal from "../../components/Carousal";
 
 

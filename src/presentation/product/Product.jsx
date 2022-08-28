@@ -6,17 +6,17 @@ import Ing1 from "./ing1";
 import Htu1 from "./htu1";
 import { AiFillStar } from "react-icons/ai";
 import { getUserDetail } from "../../js/auth";
-import queryString from "query-string";
 import {
   addToCart,
   createReview,
   getAllProducts,
-  getQuery,
   getReviews,
   getSingleProduct,
 } from "../../js/products";
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import public_url from "../../js/publicurl";
+import { toast } from 'react-toastify';
+
 
 const Product = () => {
   var { productId } = useParams();
@@ -121,8 +121,8 @@ class ProductDet extends Component {
     if(det3['success']){
       var productsp = det3['result'];
       for(var j=0;j<productsp.length;j++){
-        if(this.recommendedProducts.length != 3){
-          if(productsp[j].id != this.props.productId){
+        if(this.recommendedProducts.length !== 3){
+          if(productsp[j].id !== this.props.productId){
             this.recommendedProducts.push(productsp[j]);
           }
         }
@@ -133,10 +133,10 @@ class ProductDet extends Component {
       var pimages = det3['images'];
       console.log(pimages)
       for(var x=0;x<pimages.length;x++){
-        if(this.recommendedPImages.length != 3){
+        if(this.recommendedPImages.length !== 3){
           for(var k=0;k<pimages[x].length;k++){
-            if(pimages[x][k].ProductId != this.props.productId){
-              if(pimages[x][k].name == 'productImage1'){
+            if(pimages[x][k].ProductId !== this.props.productId){
+              if(pimages[x][k].name === 'productImage1'){
                 this.recommendedPImages.push(pimages[x][k].url);
               }
             }
@@ -161,10 +161,16 @@ class ProductDet extends Component {
     console.log(map)
     var made = await addToCart(map);
     if(made['success']){
-      alert('Product added to cart.')
+      toast.success('Product added to cart');
     }
     else{
-      alert('Something went wrong')
+      if(made.message === 'Please Login for access this resource'){
+        toast.error('Please log in to add to cart')
+      }
+      else{
+        toast.error('Something went wrong')
+      }
+      
     }
   }
 
@@ -182,7 +188,7 @@ class ProductDet extends Component {
 
   addStar(number, id) {
     var row = [];
-    if (number != 5) {
+    if (number !== 5) {
       for (var i = 0; i < 5; i++) {
         if (i < number) {
           row.push(<AiFillStar className={`stars${id} checked`} />);
@@ -210,7 +216,52 @@ class ProductDet extends Component {
 
         <div className="prow">
           <div className="prow-img-cont">
-            <img src={this.product.productImage1} alt="ss" />
+            <img id="productMainImage" src={this.product.productImage1} alt="ProductImage" /> <br />
+            <div className="issue-span">
+            <span>The colour and font on the product may differ due to print technicality issue</span>
+            </div>
+            <div className="product-other-images">
+            {this.product.productImage1 !== undefined ? <div style={{'display': 'none', 'cursor': 'pointer'}} onClick={()=>{
+                document.getElementById("productMainImage").src = this.product.productImage1;
+                document.getElementById('mainImageSub').style.display = 'none';
+              }} id='mainImageSub' className="p1">
+                <img id='productMainImage6' src={this.product.productImage1} alt="ProductImage" />
+              </div> : <div></div>}
+
+
+             {this.product.productImage2 !== undefined ?  <div onClick={()=>{
+                document.getElementById("productMainImage").src = this.product.productImage2;
+                document.getElementById('mainImageSub').style.display = 'block';
+              }} className="p1">
+                <img id='productMainImage2' src={this.product.productImage2} alt="ProductImage" />
+              </div> : <div></div>}
+
+
+              {this.product.productImage3 !== undefined ?  <div onClick={()=>{
+                document.getElementById("productMainImage").src = this.product.productImage3;
+                document.getElementById('mainImageSub').style.display = 'block';
+              }} className="p1">
+                <img id='productMainImage3' src={this.product.productImage3} alt="ProductImage" />
+              </div> : <div></div>}
+
+
+              {this.product.productImage4 !== undefined ?  <div onClick={()=>{
+                document.getElementById("productMainImage").src = this.product.productImage4;
+                document.getElementById('mainImageSub').style.display = 'block';
+              }} className="p1">
+                <img id='productMainImage4' src={this.product.productImage4} alt="ProductImage" />
+              </div> : <div></div>}
+
+
+                {this.product.productImage5 !== undefined ?  <div onClick={()=>{
+                document.getElementById("productMainImage").src = this.product.productImage5;
+                document.getElementById('mainImageSub').style.display = 'block';
+              }} className="p1">
+                <img id='productMainImage5' src={this.product.productImage5} alt="ProductImage" />
+              </div> : <div></div>}
+
+      
+            </div>
           </div>
 
           <div className="prdctinfo">
@@ -230,7 +281,7 @@ class ProductDet extends Component {
             </div>
 
             <div className="priceandcart-desk">
-              <p className="prdctPrice">Rs 550</p>
+              <p className="prdctPrice">Rs {this.product.price}</p>
               <button onClick={this.addToCartReady.bind(this)} className="prdctCartBtn">Add to Cart</button>
             </div>
           </div>
@@ -322,7 +373,7 @@ class ProductDet extends Component {
         <br />
 
         <div className="product-card-row">
-          {this.recommendedProducts != [] ? this.recommendedProducts.map(function(item,i){
+          {this.recommendedProducts !== [] ? this.recommendedProducts.map(function(item,i){
             return  <div className="productcard">
             <NavLink className="navlinks" to="/product">
               <div className="productcard-top">
@@ -351,10 +402,10 @@ class ProductDet extends Component {
                 console.log(map)
                 var made = await addToCart(map);
                 if(made['success']){
-                  alert('Product added to cart.')
+                  toast.success('Product added to cart.');
                 }
                 else{
-                  alert('Something went wrong')
+                  toast.error('Something went wrong')
                 }
               }.bind(this)} className="productcard-footer">
                 <span>Add to Cart</span>
@@ -372,11 +423,11 @@ class ProductDet extends Component {
           <h3>Comments</h3>
           <p>Latest comments by our customers</p>
 
-          {this.comments != [] ? (
+          {this.comments.length !== 0 ? (
             this.comments.map(
               function (item, i) {
                 var date = item.updatedAt.slice(0, 10);
-                if (item.userid == this.user.id) {
+                if (item.userid === this.user.id) {
                   this.isAlreadyCommented = true;
                   this.setState({});
                 }
@@ -385,7 +436,7 @@ class ProductDet extends Component {
                     <div className="comment-box">
                       <div className="comment-box-head">
                         <div className="com-profile-img">
-                          <img src={public_url + "userp.png"} alt="" />
+                          <img src={public_url + "userp.png"} alt="User_Profile" />
                         </div>
                         <div className="com-profile-name">
                           <h5>{item.name}</h5>
@@ -405,13 +456,14 @@ class ProductDet extends Component {
               }.bind(this)
             )
           ) : (
-             <div><h3>Be first to post comments</h3></div>
+             <div><p>{this.isLoggedIn ? 'Be first to post comment on this product' : 'Log In to post comment'}</p></div>
           )}
 
           {/* New Comment */}
+          { this.isLoggedIn ? (<div>
           <div className="new-comment-cont">
             <div className="com-profile-img">
-              <img src={public_url + "userp.png"} alt="" />
+              <img src={public_url + "userp.png"} alt="User_Profile" />
             </div>
             <div className="com-profile-name">
               <h5>{this.user.name}</h5>
@@ -449,7 +501,7 @@ class ProductDet extends Component {
               className="new-star ns5"
             />
           </div>
-          {this.isLoggedIn ? (
+         
             <div className="commnew">
               <div className="new-comment-box">
                 <textarea
@@ -483,9 +535,9 @@ class ProductDet extends Component {
                       stars[i].classList.remove("checked");
                     }
                     this.setState({});
-                    alert("Comment posted successfully");
+                    toast.success('Comment posted successfully');
                   } else {
-                    alert("Something went wrong.");
+                    toast.error('Something went wrong');
                     document.getElementById("newcomment").value = "";
                     this.rating = 0;
                     var stars = document.getElementsByClassName("new-star");
@@ -502,6 +554,7 @@ class ProductDet extends Component {
               <br />
               <br />
             </div>
+          </div>
           ) : (
             <div></div>
           )}
@@ -514,7 +567,7 @@ class ProductDet extends Component {
 const TagRow = (props) => {
   return (
     <div className="tag">
-      <img src={props.tagImage} alt="" />
+      <img src={props.tagImage} alt="TagImage" />
       <p>{props.productTagText}</p>
     </div>
   );

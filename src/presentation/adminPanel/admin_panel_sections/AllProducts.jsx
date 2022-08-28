@@ -1,6 +1,4 @@
 import { Component } from "react";
-import { GoLinkExternal } from "react-icons/go";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,6 +9,8 @@ import {
 } from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
 import AdminProductDet from "../compo/AdminProductEdit";
+import { toast } from 'react-toastify';
+
 
 class AllProducts extends Component {
   constructor(props) {
@@ -21,7 +21,12 @@ class AllProducts extends Component {
   }
 
   deleteRow(index){
-    this.products.splice(index, 1);
+    if(index === 0){
+      this.products.shift();
+    }
+    else{
+      this.products.splice(index, 1);
+    }
     this.productrow = [];
     this.backupProductsRow = [];
     for (var i = 0; i < this.products.length; i++) {
@@ -108,7 +113,7 @@ class AllProducts extends Component {
               var search = document.getElementById("allproductssearch").value;
               search = search.toLowerCase();
 
-              if (search != "") {
+              if (search !== "") {
                 for (var i = 0; i < this.products.length; i++) {
                   if (this.products[i]["name"].toLowerCase().includes(search)) {
                     tempList.push(this.productrow[i]);
@@ -174,9 +179,9 @@ const ProductRow = (props) => {
               var made = await deleteProduct(props.pid);
             if (made['success']) {
               props.dlt(props.si-1)
-              alert("Product was deleted");
+              toast.success('Product was deleted')
             } else {
-              alert("Something went wrong");
+              toast.error('Something went wrong')
             }
           }
             }

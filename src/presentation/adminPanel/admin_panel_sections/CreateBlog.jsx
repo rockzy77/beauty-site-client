@@ -1,6 +1,8 @@
 import { Component } from "react";
 import { createBlog } from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
+import { toast } from 'react-toastify';
+
 
 class CreateBlog extends Component {
   constructor(props) {
@@ -12,9 +14,9 @@ class CreateBlog extends Component {
     console.log(this.thingstoCreate);
     var made = await createBlog(this.thingstoCreate);
     if (made["success"]) {
-      alert("Blog created successfully.");
+      toast.success('Blog created successfully.')
     } else {
-      alert(made["message"]);
+      toast.error('Error: '+made.message)
     }
   }
 
@@ -121,13 +123,13 @@ class CreateBlog extends Component {
           onClick={() => {
             if (this.thingstoCreate.image === undefined) {
               alert("Please upload an image.");
-            } else if (this.thingstoCreate.author === undefined) {
+            } else if (this.thingstoCreate.author === undefined || this.thingstoCreate.author === '') {
               alert("Please enter an author.");
-            } else if (this.thingstoCreate.title === undefined) {
+            } else if (this.thingstoCreate.title === undefined || this.thingstoCreate.title === '') {
               alert("Please enter a title.");
-            } else if (this.thingstoCreate.subtitle === undefined) {
+            } else if (this.thingstoCreate.subtitle === undefined || this.thingstoCreate.subtitle === '') {
               alert("Please enter a subtitle.");
-            } else if (this.thingstoCreate.content === undefined) {
+            } else if (this.thingstoCreate.content === undefined || this.thingstoCreate.content === '') {
               alert("Please enter a content.");
             } else {
               this.createBlogReady();

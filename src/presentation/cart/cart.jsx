@@ -1,13 +1,11 @@
-import { getOrderId } from "../../js/payment";
-import Checkout from "../checkout/checkout";
-import { Link, NavLink } from "react-router-dom";
-import public_url from "../../js/publicurl";
+import { Link } from "react-router-dom";
 import Footer from "../home/Footer";
 import NavBar from "../../components/NavBar";
 import { Component } from "react";
 import { MdDelete } from "react-icons/md";
-import { deleteCart, getCartItem, updateCart } from "../../js/products";
-import { parse } from "query-string";
+import { addToCart, deleteCart, getCartItem, updateCart } from "../../js/products";
+import { toast } from 'react-toastify';
+import { deleteCookie, getCookie } from "../../js/cookies";
 
 class Cart extends Component {
   constructor(props) {
@@ -17,8 +15,8 @@ class Cart extends Component {
     this.dimensions = [];
     this.stocks = [];
     this.totalAmount = 0;
-    this.shipping = 0;
     this.section = "cart";
+    this.morethanthree = false;
     this.height = 0;
     this.length = 0;
     this.breadth = 0;
@@ -36,6 +34,41 @@ class Cart extends Component {
     }
     this.calculateTotals();
     this.setState({});
+    setTimeout(()=>{
+      var guestCart = [];
+    if(getCookie('cartList') !== ''){
+      guestCart = JSON.parse(getCookie('cartList'));
+    }
+    if(guestCart.length > 0){
+      var guestc = window.confirm('You have some items in guest cart. Do you want to add these items to your cart?');
+      if(guestc){
+        this.addToCartReady(guestCart);
+      }
+    }
+    }, 2000)
+  }
+
+  async addToCartReady(guestCart){
+    var cartReturn = [];
+    for(var i = 0; i < guestCart.length; i++){
+      var cartR =  await addToCart(guestCart[i]);;
+      cartReturn.push(cartR);
+    }
+    var allTrue = true;
+    for(var j = 0; j < cartReturn.length; j++){
+      if(!cartReturn[j]['success']){
+        allTrue = false;
+      }
+    }
+    if(allTrue){
+      toast.success('Items added to cart.');
+    }
+    else{
+      toast.error('Some items were not added to cart.');
+    }
+    deleteCookie('cartList');
+    deleteCookie('dimensions');
+    deleteCookie('stocks');
   }
 
   calculateTotals() {
@@ -46,62 +79,91 @@ class Cart extends Component {
     this.length = 0;
     this.breadth = 0;
     this.weight = 0;
+    var totalQuantity = 0;
     for (var i = 0; i < this.cartItems.length; i++) {
       this.amount =
         this.amount +
         this.cartItems[i].productPrice * this.cartItems[i].quantity;
       this.cartItems[i].stock = this.stocks[i];
+      totalQuantity = totalQuantity + this.cartItems[i].quantity;
     }
     for (var j = 0; j < this.dimensions.length; j++) {
-      console.log(this.dimensions)
-      this.weight = parseFloat((
-        parseFloat(this.weight) +
-        parseFloat(
+      console.log(this.dimensions);
+      this.weight = parseFloat(
+        (
+          parseFloat(this.weight) +
           parseFloat(
-            this.dimensions[j].weight * parseFloat(this.cartItems[j].quantity)
+            parseFloat(
+              this.dimensions[j].weight * parseFloat(this.cartItems[j].quantity)
+            )
           )
-        )
-      ).toFixed(3));
-      this.length = parseFloat((
-        parseFloat(this.length) +
-        parseFloat(
+        ).toFixed(3)
+      );
+      this.length = parseFloat(
+        (
+          parseFloat(this.length) +
           parseFloat(
-            this.dimensions[j].length * parseFloat(this.cartItems[j].quantity)
+            parseFloat(
+              this.dimensions[j].length * parseFloat(this.cartItems[j].quantity)
+            )
           )
-        )
-      ).toFixed(3));
-      this.breadth = parseFloat((
-        parseFloat(this.breadth) +
-        parseFloat(
+        ).toFixed(3)
+      );
+      this.breadth = parseFloat(
+        (
+          parseFloat(this.breadth) +
           parseFloat(
-            this.dimensions[j].breadth * parseFloat(this.cartItems[j].quantity)
+            parseFloat(
+              this.dimensions[j].breadth *
+                parseFloat(this.cartItems[j].quantity)
+            )
           )
-        )
-      ).toFixed(3));
-      this.height = parseFloat((
-        parseFloat(this.height) +
-        parseFloat(
+        ).toFixed(3)
+      );
+      this.height = parseFloat(
+        (
+          parseFloat(this.height) +
           parseFloat(
-            this.dimensions[j].height * parseFloat(this.cartItems[j].quantity)
+            parseFloat(
+              this.dimensions[j].height * parseFloat(this.cartItems[j].quantity)
+            )
           )
-        )
-      ).toFixed(3));
+        ).toFixed(3)
+      );
     }
-    this.shipping =
-      parseInt(this.weight * 52) > 90 ? parseInt(this.weight * 52) : 0;
-    this.totalAmount = parseInt(this.amount + this.shipping);
+   
+    this.totalAmount = parseInt(this.amount);
     console.log(this.cartItems);
     console.log(this.weight);
+
+
+    if (totalQuantity > 3) {
+      // 10% discount on cart items more than 3
+      this.morethanthree = true;
+      this.totalAmount = parseInt(this.totalAmount - this.totalAmount * 0.1);
+    } else {
+      this.morethanthree = false;
+    }
     this.setState({});
   }
 
   deleteCartItem(cid) {
     for (var i = 0; i < this.cartItems.length; i++) {
-      if (this.cartItems[i].productId == cid) {
-        this.cartItems.splice(i, 1);
+      if (this.cartItems[i].productId === cid) {
+        if (i == 0) {
+          this.cartItems.shift();
+          this.stocks.shift();
+          this.dimensions.shift();
+        } else {
+          this.cartItems.splice(i, 1);
+          this.stocks.splice(i, i);
+          this.dimensions.splice(i, i);
+        }
       }
     }
-    this.setState({});
+    this.calculateTotals();
+    toast.success('Item removed from cart.');
+    // this.setState({});
   }
 
   render() {
@@ -114,10 +176,10 @@ class Cart extends Component {
         <div className="wrapper">
           <h1>Cart</h1>
           <center>
-            {this.cartItems.length != 0 ? (
+            {this.cartItems.length !== 0 ? (
               <div className="project">
                 <div className="shops">
-                  {this.cartItems.length != 0 ? (
+                  {this.cartItems.length !== 0 ? (
                     this.cartItems.map(
                       function (item, i) {
                         return (
@@ -135,31 +197,47 @@ class Cart extends Component {
                                     var q = document.getElementById(
                                       "cartquantity" + item.productId
                                     ).value;
-                                    if (parseFloat(q) > item.stock) {
-                                      document.getElementById(
-                                        "cartquantity" + item.productId
-                                      ).value = item.stock.toString();
-                                    } else {
-                                      for (
-                                        var i = 0;
-                                        i < this.cartItems.length;
-                                        i++
+                                    for (
+                                      var i = 0;
+                                      i < this.cartItems.length;
+                                      i++
+                                    ) {
+                                      if (
+                                        this.cartItems[i].productId ===
+                                        item.productId
                                       ) {
-                                        if (
-                                          this.cartItems[i].productId ==
-                                          item.productId
-                                        ) {
-                                          this.cartItems[i].quantity =
-                                            parseInt(q);
+                                        if (isNaN(parseFloat(q))) {
+                                          document.getElementById(
+                                            "cartquantity" + item.productId
+                                          ).value = "1";
+                                          this.cartItems[i].quantity = 1;
+                                        } else {
+                                          if (parseFloat(q) <= 0) {
+                                            document.getElementById(
+                                              "cartquantity" + item.productId
+                                            ).value = "1";
+                                            this.cartItems[i].quantity = 1;
+                                          } else {
+                                            if (parseFloat(q) > item.stock) {
+                                              document.getElementById(
+                                                "cartquantity" + item.productId
+                                              ).value = item.stock.toString();
+                                              this.cartItems[i].quantity =
+                                                parseInt(item.stock);
+                                            } else {
+                                              this.cartItems[i].quantity =
+                                                parseInt(q);
+                                            }
+                                          }
                                         }
                                       }
-                                      this.calculateTotals();
-                                      this.setState({});
-                                      var made = await updateCart(
-                                        item.productId,
-                                        q
-                                      );
                                     }
+                                    this.calculateTotals();
+                                    this.setState({});
+                                    var made = await updateCart(
+                                      item.productId,
+                                      q
+                                    );
                                   }.bind(this)}
                                   type="number"
                                   id={"cartquantity" + item.productId}
@@ -168,12 +246,71 @@ class Cart extends Component {
                                   defaultValue={item.quantity}
                                 />
                               </p>
+                              <div className="qbox">
+                                <button
+                                  onClick={async function () {
+                                    var q = document.getElementById('cartquantity' + item.productId);
+                                    if(q.value < item.stock){
+                                        for (
+                                            var i = 0;
+                                            i < this.cartItems.length;
+                                            i++
+                                          ) {
+                                            if (
+                                              this.cartItems[i].productId ===
+                                              item.productId
+                                            ) {
+                                              this.cartItems[i].quantity++;
+                                              q.value = this.cartItems[i].quantity;
+                                            }
+                                          }
+                                    }
+                                      this.calculateTotals();
+                                      this.setState({});
+                                  }.bind(this)}
+                                  className="btn btn-primary"
+                                  type="button"
+                                  style={{ marginLeft: "10px" }}
+                                >
+                                  +
+                                </button>
+                                <button
+                                  onClick={async function () {
+                                    var q = document.getElementById('cartquantity' + item.productId);
+                                    if(q.value > 1){
+                                        for (
+                                            var i = 0;
+                                            i < this.cartItems.length;
+                                            i++
+                                          ) {
+                                            if (
+                                              this.cartItems[i].productId ===
+                                              item.productId
+                                            ) {
+                                              this.cartItems[i].quantity--;
+                                              q.value = this.cartItems[i].quantity;
+                                            }
+                                          }
+                                    }
+                                      this.calculateTotals();
+                                      this.setState({});
+                                  }.bind(this)}
+                                  className="btn btn-primary"
+                                  type="button"
+                                  style={{ marginLeft: "10px" }}
+                                >
+                                  -
+                                </button>
+                              </div>
+
                               <p
                                 onClick={async function () {
                                   var made = await deleteCart(item.productId);
                                   if (made["success"]) {
                                     this.deleteCartItem(item.productId);
-                                    alert("Item removed from cart.");
+                                  }
+                                  else{
+                                    toast.error('Something went wrong');
                                   }
                                 }.bind(this)}
                                 className="btn-area"
@@ -200,17 +337,16 @@ class Cart extends Component {
                   </p>
                   <hr />
                   <p>
-                    <span>Shipping</span> <span>Rs {this.shipping}</span>
-                  </p>
-                  <hr />
-                  <p>
-                    <span>Total</span> <span>Rs {this.totalAmount}</span>
+                    <span>Total</span>{" "}
+                    <span>
+                      Rs {this.totalAmount}{" "}
+                      {this.morethanthree ? "(- 10%)" : ""}
+                    </span>
                   </p>
                   <Link
                     to={"/checkout"}
                     state={{
                       amount: this.amount,
-                      shipping: this.shipping,
                       totalAmount: this.totalAmount,
                       cart_data: this.cartItems,
                       totalHeight: this.height,
@@ -233,6 +369,9 @@ class Cart extends Component {
           <br />
         </div>
         <div className="cartFooter">
+          <div style={{
+           height: this.cartItems.length > 0 ? "100px" : "300px",
+          }} className="spacerfooter"></div>
           <Footer />
         </div>
       </section>

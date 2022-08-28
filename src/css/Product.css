@@ -23,8 +23,29 @@
 }
 
 .prow img {
-  width: 350px;
+  width: 400px;
   border-radius: 15px;
+}
+
+.product-other-images{
+  display: flex;
+  gap: 10px;
+}
+
+.p1{
+  width: 60px;
+  height: 60px;
+}
+
+
+.p1 img{
+  width: 100%;
+  border-radius: 5px;
+  box-shadow:0 0 8px rgba(31, 31, 31, 0.411);
+  cursor: pointer;
+}
+.issue-span{
+  width: 350px;
 }
 
 .prdctinfo-header{
@@ -477,11 +498,16 @@
   .prow {
     display: block;
     text-align: center;
+    padding-left: 8px;
   }
 
   .prdctinfo-header {
     padding-top: 15px;
     text-align: left;
+  }
+
+  .prdctinfo{
+    padding-left: 5px;
   }
 
   .prdctinfo-des {
@@ -505,10 +531,33 @@
     padding-top: 15px;
   }
 
+  .product-other-images{
+    justify-content: center;
+  }
+
+  .p1{
+    width: 55px;
+    height: 55px;
+  }
+
   .prow img {
-    width: 50%;
+    width: 70%;
     height: auto;
   }
+
+  .issue-span{
+    text-align: center;
+    width: 100%;
+  }
+
+  .tag-row-mob{
+    padding-left: 8px;
+  }
+
+  .priceandcart-mob{
+    padding-left: 8px;
+  }
+  
 }
 
 @media screen and (max-width: 689px) {

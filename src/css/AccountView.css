@@ -1,194 +1,205 @@
-.accountPanelRow{
-    display: flex;
-    height: 100vh;
+.accountPanelRow {
+  display: flex;
+  height: 100vh;
 }
 
-.accountSidePanel{
-    width: 270px;
-    height: 100%;
-    text-align: center;
-    background-color: rgb(244, 246, 248);
-    color: rgb(43, 43, 43);
+.accountSidePanel {
+  width: 55px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  float: left;
+  z-index: 2;
+  background-color: rgb(244, 246, 248);
+  color: rgb(43, 43, 43);
+  transition: 0.5s ease-in-out;
 }
 
-.accountContentPanel{
-    background-color: white;
-    width: calc(100% - 270px);
+.accountContentPanel {
+  background-color: white;
+  width: calc(100% - 55px);
+  float: right;
+  position: absolute;
+  right: 0;
+  transition: 0.5s ease-in-out;
 }
 
-.accountSidePanel h1{
-    font-size: 1.8em;
-    text-align: center;
-    font-weight: 600;
+.accountSidePanel h1 {
+  font-size: 1.8em;
+  text-align: center;
+  font-weight: 600;
 }
 
-.accountSidePanel button{
-    margin: 5px 0;
-    width: 240px;
-    height: 50px;
-    border: none;
-    border-radius: 5px;
-    color: #1275d1;
-    font-weight: 600;
+.accountSidePanel button {
+  margin: 5px 0;
+  width: 45px;
+  height: 50px;
+  border: none;
+  border-radius: 5px;
+  color: #1275d1;
+  transition: 0.5s ease-in-out;
+  font-weight: 600;
 }
 
-.accountSidePanel button:hover{
-    background-color: #9a9c9e34;
+.accountSidePanel button:hover {
+  background-color: #9a9c9e34;
 }
 
-.accountSidePanel .active{
-    background-color: rgb(226, 236, 246);
-    border:  1px solid #1275d1;
+.accountSidePanel .active {
+  background-color: rgb(226, 236, 246);
+  border: 1px solid #1275d1;
 }
 
-.acc-icon{
-    font-size: 23px;
-    position: relative;
-    bottom: 2px;
+.admin-panel-nav-buttons {
+  text-align: center;
 }
 
-.personalInfo h1{
-    padding: 15px;
-    font-size: 2em;
-    font-weight: 600;
+.acc-icon {
+  font-size: 23px;
+  position: relative;
+  bottom: 2px;
 }
 
-
-
-.personalForm input{
-    width: 250px;
-    padding: 0 5px;
-    font-weight: 400;
-    height: 50px;
-    border-radius: 5px;
-    border: 1px solid black;
-    margin: 15px;
+.acc-menu {
+  margin: 13px;
+  font-size: 27px;
+  margin-bottom: 0;
+  cursor: pointer;
+  position: relative;
+  color: #1275d1;
+  left: 0;
 }
 
-.personalForm input[type=button]{
-    width: auto;
-    padding: 0 35px;
-    height: 50px;
-    border-radius: 5px;
-    border: none;
-    background-color: #777fa8;
-    color: white;
-    font-weight: 600;
+.acc-span{
+    display: none;
     transition: 0.5s ease-in-out;
-    margin: 15px;
-}
-
-.logoutbtn{
-    border: 1px solid red !important;
-    color: red !important;
-    background-color: rgb(255, 215, 215);
-}
-
-.adminpanelbtn{
-    padding: 17px 64px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 400;
-    cursor: pointer;
-    border: 1px solid green !important;
-    color: green !important;
-    background-color: rgb(218, 255, 215);
-}
-
-.logoutbtn:hover{
-    background-color: rgb(255, 202, 202) !important;
-}
-
-.adminpanelbtn:hover{
-    background-color: rgb(206, 255, 202) !important;
 }
 
 
-
-#pfbtn:disabled{
-    background-color: grey;
+.personalInfo h1 {
+  padding: 15px;
+  font-size: 2em;
+  font-weight: 600;
 }
 
-#pfpassbtn:disabled{
-    background-color: grey;
+.personalForm input {
+  width: 250px;
+  padding: 0 5px;
+  font-weight: 400;
+  height: 50px;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin: 15px;
 }
 
-.pformSpan{
-    padding:  0 15px;
-    position: relative;
-    top: 10px;
-    font-weight: 600;
+.personalForm input[type="button"] {
+  width: auto;
+  padding: 0 35px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  background-color: #777fa8;
+  color: white;
+  font-weight: 600;
+  transition: 0.5s ease-in-out;
+  margin: 15px;
 }
 
-.passerror{
-    padding-left: 15px;
-    color: red;
-    font-weight: 400;
+.logoutbtn {
+  border: 1px solid red !important;
+  color: red !important;
+  background-color: rgb(255, 215, 215);
 }
 
-.cpasserror{
-    padding-left: 15px;
-    color: red;
-    font-weight: 400;
+.adminpanelbtn {
+  padding: 17px 64px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 400;
+  cursor: pointer;
+  border: 1px solid green !important;
+  color: green !important;
+  background-color: rgb(218, 255, 215);
 }
 
-
-.personalForm h5{
-    padding-left: 15px;
+.logoutbtn:hover {
+  background-color: rgb(255, 202, 202) !important;
 }
 
-
-.referalPrg h1{
-    padding: 15px;
-    padding-bottom: 0;
-    font-size: 2em;
-    color: #777fa8;
-    font-weight: 600;
+.adminpanelbtn:hover {
+  background-color: rgb(206, 255, 202) !important;
 }
 
-.referalPrg p{
-    padding: 0px 15px;
-    font-size: 1.1em;
-    color: rgb(39, 39, 39);
-    font-weight: 600;
+#pfbtn:disabled {
+  background-color: grey;
 }
 
-.referalPrg button{
-    margin-left: 15px;
-    border: none;
-    height: 40px;
-    border-radius: 5px;
-    width: 160px;
-    background-color: #777fa8;
-    color: white;
-    transition: 0.5s ease-in-out;
-    font-weight: 600;
+#pfpassbtn:disabled {
+  background-color: grey;
 }
 
-
-.referalPrg button:hover{
-    background-color: #596291;
+.pformSpan {
+  padding: 0 15px;
+  position: relative;
+  top: 10px;
+  font-weight: 600;
 }
 
 
-.referalPrg input{
-    margin-left: 15px;
-    height: 45px;
-    width: 250px;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid black;
-    color: black;
-    transition: 0.5s ease-in-out;
-    font-weight: 600;
+.personalForm h5 {
+  padding-left: 15px;
 }
 
-.referralimg{
-    width: 350px;
-    margin-left: 15px
+.referalPrg h1 {
+  padding: 15px;
+  padding-bottom: 0;
+  font-size: 2em;
+  color: #777fa8;
+  font-weight: 600;
 }
 
-.copy-text{
-    width: 50px !important;
-    border-radius: 5px;
+.referalPrg p {
+  padding: 0px 15px;
+  font-size: 1.1em;
+  color: rgb(39, 39, 39);
+  font-weight: 600;
 }
+
+.referalPrg button {
+  margin-left: 15px;
+  border: none;
+  height: 40px;
+  border-radius: 5px;
+  width: 160px;
+  background-color: #777fa8;
+  color: white;
+  transition: 0.5s ease-in-out;
+  font-weight: 600;
+}
+
+.referalPrg button:hover {
+  background-color: #596291;
+}
+
+.referalPrg input {
+  margin-left: 15px;
+  height: 45px;
+  width: 250px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+  color: black;
+  transition: 0.5s ease-in-out;
+  font-weight: 600;
+}
+
+.referralimg {
+  width: 350px;
+  margin-left: 15px;
+}
+
+.copy-text {
+  width: 50px !important;
+  border-radius: 5px;
+}
+

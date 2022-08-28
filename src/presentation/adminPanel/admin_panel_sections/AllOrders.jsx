@@ -1,11 +1,10 @@
 import { Component } from "react";
-import { GoLinkExternal } from "react-icons/go";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { deleteBlog, deleteDiscount, getAllBlogs, getAllorders, getAllOrdersAdmin } from "../../../js/adminProduct";
+import { getAllOrdersAdmin } from "../../../js/adminProduct";
 import { deleteOrder } from "../../../js/payment";
-import AdminProductDet from "../compo/AdminProductEdit";
+import { toast } from 'react-toastify';
+
 
 class AllOrders extends Component {
   constructor(props) {
@@ -22,53 +21,53 @@ class AllOrders extends Component {
     this.ordersrow = [];
     this.backupordersRow = [];
     for (var i = 0; i < this.orders.length; i++) {
-        var order = this.orders[i];
-        var orderDet = {};
-        for(var j=0;j<this.orderDet.length;j++){
-          if(this.orderDet[j].order_id == orderid){
-            this.orderDet[j].current_status = 'CANCELLED';
-          }
-            if(this.orderDet[j].order_id == this.orders[i].order_id){
-                orderDet = this.orderDet[j];
-            }
+      var order = this.orders[i];
+      var orderDet = {};
+      for (var j = 0; j < this.orderDet.length; j++) {
+        if (this.orderDet[j].order_id === orderid) {
+          this.orderDet[j].current_status = "CANCELLED";
         }
-        this.ordersrow.push(
-          <OrdersRow
-            key={i}
-            si={i + 1}
-            order={order}
-            orderDet={orderDet}
-            orderImage={this.orderImages[i]}
-            dlt={this.deleteRow.bind(this)}
-          />
-        );
-        this.backupordersRow.push(
-            <OrdersRow
-            key={i}
-            si={i + 1}
-            order={order}
-            orderDet={orderDet}
-            orderImage={this.orderImages[i]}
-            dlt={this.deleteRow.bind(this)}
-          />
-        );
-        this.setState({});
+        if (this.orderDet[j].order_id === this.orders[i].order_id) {
+          orderDet = this.orderDet[j];
+        }
       }
+      this.ordersrow.push(
+        <OrdersRow
+          key={i}
+          si={i + 1}
+          order={order}
+          orderDet={orderDet}
+          orderImage={this.orderImages[i]}
+          dlt={this.deleteRow.bind(this)}
+        />
+      );
+      this.backupordersRow.push(
+        <OrdersRow
+          key={i}
+          si={i + 1}
+          order={order}
+          orderDet={orderDet}
+          orderImage={this.orderImages[i]}
+          dlt={this.deleteRow.bind(this)}
+        />
+      );
+      this.setState({});
+    }
   }
 
   async componentDidMount() {
     var d = await getAllOrdersAdmin();
     if (d["success"]) {
       this.orders = d["order_items"];
-      this.orderDet = d['orders_details'];
+      this.orderDet = d["orders_details"];
       this.setState({});
       for (var i = 0; i < this.orders.length; i++) {
         var order = this.orders[i];
         var orderDet = {};
-        for(var j=0;j<this.orderDet.length;j++){
-            if(this.orderDet[j].order_id == this.orders[i].order_id){
-                orderDet = this.orderDet[j];
-            }
+        for (var j = 0; j < this.orderDet.length; j++) {
+          if (this.orderDet[j].order_id === this.orders[i].order_id) {
+            orderDet = this.orderDet[j];
+          }
         }
         this.ordersrow.push(
           <OrdersRow
@@ -80,7 +79,7 @@ class AllOrders extends Component {
           />
         );
         this.backupordersRow.push(
-            <OrdersRow
+          <OrdersRow
             key={i}
             si={i + 1}
             order={order}
@@ -103,26 +102,25 @@ class AllOrders extends Component {
             var search = document.getElementById("alluserssearch").value;
             search = search.toLowerCase();
 
-            if (search != "") {
+            if (search !== "") {
               for (var i = 0; i < this.orders.length; i++) {
-                if (this.searchMethod == "Name") {
+                if (this.searchMethod === "Name") {
                   if (this.orders[i]["name"].toLowerCase().includes(search)) {
                     tempList.push(this.ordersrow[i]);
                   }
-                } else if (this.searchMethod == "Date Created") {
+                } else if (this.searchMethod === "Date Created") {
                   if (
                     this.orders[i]["updatedAt"].toLowerCase().includes(search)
                   ) {
                     tempList.push(this.ordersrow[i]);
                   }
-                }
-                else if (this.searchMethod == "OrderId") {
-                    if (
-                      this.orders[i]["order_id"].toLowerCase().includes(search)
-                    ) {
-                      tempList.push(this.ordersrow[i]);
-                    }
+                } else if (this.searchMethod === "OrderId") {
+                  if (
+                    this.orders[i]["order_id"].toLowerCase().includes(search)
+                  ) {
+                    tempList.push(this.ordersrow[i]);
                   }
+                }
               }
 
               this.ordersrow = tempList;
@@ -198,14 +196,16 @@ const OrdersRow = (props) => {
         />
         <MdDelete
           onClick={async function () {
-            var confirm = window.confirm("Do you want to delete this order? Delete method will affect for all the orders under this order id.");
+            var confirm = window.confirm(
+              "Do you want to delete this order? Delete method will affect for all the orders under this order id."
+            );
             if (confirm) {
               var made = await deleteOrder(props.order.order_id);
               if (made["success"]) {
                 props.dlt(props.order.order_id);
-                alert("Discount was deleted");
+                toast.success("Discount was deleted")
               } else {
-                alert('Error: '+made['message']);
+                toast.error("Error: " + made["message"])
               }
             }
           }}

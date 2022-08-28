@@ -17,7 +17,7 @@ class Facts1 extends Component {
 
         <h5 className="facts-title">Benefits</h5>
         <ol>
-          {this.props.benefits != undefined ? this.props.benefits.split(',').map(function(item, i){
+          {this.props.benefits !== undefined ? this.props.benefits.split(',').map(function(item, i){
             return <li key={i}>{item}</li>
           }) : ''}
         </ol>
@@ -32,7 +32,7 @@ class Facts1 extends Component {
               <div className="container">
                 <img
                   src={item.plantExtractsImage}
-                  alt="Vegan"
+                  alt=""
                 />
               </div>
               <span className="plant-ext-title">{item.plantExtractsText}</span>
@@ -49,7 +49,7 @@ class Facts1 extends Component {
           <div className="sb-image-cont">
             <img
               src={this.props.scienceBacked.scienceBackedImage}
-              alt="Serum Science Back"
+              alt=""
             />
           </div>
           <div className="sb-det-cont">

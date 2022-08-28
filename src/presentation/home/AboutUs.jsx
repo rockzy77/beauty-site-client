@@ -37,7 +37,6 @@ class AboutUs extends Component{
                 <div className="container">
                   <img src={process.env.PUBLIC_URL+'vegans.png'} alt="Vegan" />
                 </div>
-                <br />
                 <span>Vegas</span>
                 
               </div>
@@ -48,7 +47,6 @@ class AboutUs extends Component{
                 <div className="container">
                 <img src={process.env.PUBLIC_URL+'crueltys.png'} alt="Cruelty Free" />
                 </div>
-                <br />
                 <span>Cruelty Free</span>
               </div>
             </div>
@@ -58,7 +56,6 @@ class AboutUs extends Component{
                 <div className="container">
                 <img src={process.env.PUBLIC_URL+'fragrances.png'} alt="Fragrance Free" />
                 </div>
-                <br />
                 <span>Fragrance Free</span>
               </div>
             </div>
@@ -68,7 +65,6 @@ class AboutUs extends Component{
                 <div className="container">
                 <img src={process.env.PUBLIC_URL+'fats.png'} alt="Essential Oil Free" />
                 </div>
-                <br />
                 <span>Essential Oil Free</span>
               </div>
             </div>

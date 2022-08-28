@@ -1,13 +1,10 @@
 import { Component } from "react";
-import FooterMap from "../../components/FooterMap";
 import NavBar from "../../components/NavBar";
 import { getAllProducts, getFilterProducts } from "../../js/products";
 import Footer from "../home/Footer";
 import $ from "jquery";
 import { getUserDetail } from "../../js/auth";
 import ShopProductCard from "./ShopProductCard";
-import { NavLink } from "react-router-dom";
-import AllOrders from "../adminPanel/admin_panel_sections/AllOrders";
 import uuid from "react-uuid";
 
 class ShopPage extends Component {
@@ -24,7 +21,7 @@ class ShopPage extends Component {
 
   async loadProducts(){
     console.log(this.page)
-    if (this.props.filter == undefined) {
+    if (this.props.filter === undefined) {
       var det = await getAllProducts(this.page);
       this.totalProducts = det["total_products"];
       this.data = det["result"];
@@ -96,25 +93,22 @@ class ShopPage extends Component {
           <br />
           <div className="pagination-grid">
           <div className="pagination">
-            <p className='paginationLink' onClick={()=>{
-              if(this.page <= 1){
-                
-              }
-              else{
+            {this.page > 1 ? ( <p className='paginationLink' onClick={()=>{
+              if(this.page > 1){
                 this.page = this.page-1;
                 this.loadProducts();
               }
-            }}>&laquo;</p>
-            <p onClick={()=>{
+            }}>Previous Page</p>) : ( <div></div>)}
+
+            {this.page < parseInt(this.totalProducts/8) ? ( <p onClick={()=>{
               var pages = parseInt(this.totalProducts / 8);
-              if(this.page >= pages){
-                
-              }
-              else{
+              if(this.page < pages){
                 this.page++;
                 this.loadProducts()
               }
-            }} className='paginationLink'>&raquo;</p>
+            }} className='paginationLink'>Next Page</p>) : ( <div></div>)}
+           
+            
           </div>
           </div>
           <br />

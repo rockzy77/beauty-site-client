@@ -1,8 +1,8 @@
 import { Component } from "react";
-import { getSingleuser, updateProduct, updateuserInfo } from "../../../js/adminProduct";
-import public_url from "../../../js/publicurl";
+import { getSingleuser, updateuserInfo } from "../../../js/adminProduct";
 import { useParams } from "react-router-dom"; 
-import $ from 'jquery';
+import { toast } from 'react-toastify';
+
 
 const AdminuserEdit = ()=>{
    const {uid} = useParams();
@@ -13,16 +13,16 @@ class AdminUserEditPanel extends Component {
   constructor(props) {
     super(props);
     this.user = {};
+    this.thingsToUpdate = {};
   }
 
-  async updateUserReady(name, email) {
-    console.log(this.user.pid)
-    var made = await updateuserInfo(this.user.pid,name, email);
+  async updateUserReady() {
+    var made = await updateuserInfo(this.user.pid,this.thingsToUpdate.name,this.thingsToUpdate.email);
     if(made['success']){
-        alert('User info updated successfully.');
+        toast.success('User info updated successfully.');
     }
     else{
-        alert('Somethign went wrong!');
+        toast.error('Error: '+made.message);
     }
   }
 
@@ -55,6 +55,9 @@ class AdminUserEditPanel extends Component {
             id="pfname"
             maxLength={15}
             defaultValue={this.user.name}
+            onChange={(e) => {
+              this.thingsToUpdate.name = document.getElementById("pfname").value;
+            }}
             type="text"
             name="name"
           />
@@ -64,6 +67,9 @@ class AdminUserEditPanel extends Component {
           <input
             type="email"
             defaultValue={this.user.email}
+            onChange={(e) => {
+              this.thingsToUpdate.email = document.getElementById("pfemail").value;
+            }}
             name="email"
             id="pfemail"
           />
@@ -74,10 +80,19 @@ class AdminUserEditPanel extends Component {
           type="button"
           value="Update"
           onClick={() => {
-            var name = $("#pfname").val();
-            var email = $("#pfemail").val();
-            console.log(name, email)
-            this.updateUserReady(name, email)
+            if (Object.keys(this.thingsToUpdate).length === 0) {
+              alert("Nothing to update");
+            }
+            else{
+              for (var key in this.thingsToUpdate) {
+                if (this.thingsToUpdate[key] === "") {
+                  alert("Please fill all fields");
+                  return;
+                }
+              }
+              this.updateUserReady()
+            }
+  
           }}
         />
       </form>

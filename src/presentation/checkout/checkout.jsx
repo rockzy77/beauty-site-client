@@ -1,14 +1,18 @@
-import { Component } from "react";
-import { GiConsoleController } from "react-icons/gi";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import {
   applyDiscount,
+  checkShippingCharge,
   createShipRocketOrder,
   discountUse,
   getOrderId,
   verifyOrder,
 } from "../../js/payment";
+import { sendMail } from "../../js/sendMail";
+import { toast } from 'react-toastify';
+
+
+
 
 const Checkout = (props) => {
   const location = useLocation();
@@ -26,7 +30,7 @@ const Checkout = (props) => {
   var razorpay_signature = "";
   var orderId;
   var currency;
-  var delivery = data.shipping;
+  var delivery = 0;
   var promotionApplied = "";
   var isPromotionApplied = true;
   var discountglobal = 0;
@@ -42,16 +46,16 @@ const Checkout = (props) => {
         [d.getFullYear(), d.getMonth() + 1, d.getDate()].join("-") +
         " " +
         [d.getHours(), d.getMinutes()].join(":");
-    for(var i=0;i<cart_items.length;i++){
+    for (var i = 0; i < cart_items.length; i++) {
       var item = {
         name: cart_items[i].productName,
         sku: cart_items[i].productId,
         selling_price: cart_items[i].productPrice.toString(),
         units: cart_items[i].quantity.toString(),
-      }
+      };
       console.log(item);
       o_items.push(item);
-    }    
+    }
     var orderMap = {
       order_id: idone.toString() + idtwo.toString() + idthree.toString(),
       order_date: dformat,
@@ -68,13 +72,15 @@ const Checkout = (props) => {
       billing_phone: document.getElementById("billing-phone").value,
       order_items: o_items,
       payment_method: orderMethod,
-      sub_total: parseInt(parseInt(totalAmount) - parseInt(discountglobal)).toString(),
+      sub_total: (parseInt(
+        parseInt(totalAmount) - parseInt(discountglobal)
+      )).toString(),
       length: totalLength.toString(),
       breadth: totalBreadth.toString(),
       height: totalHeight.toString(),
       weight: totalWeight.toString(),
     };
-   
+
     if (document.getElementById("shippingisbilling").checked) {
       orderMap.shipping_is_billing = 1;
     } else {
@@ -100,7 +106,31 @@ const Checkout = (props) => {
     var made = await createShipRocketOrder(orderMap);
     console.log(made["success"]);
     if (made["success"]) {
-      var made = await discountUse(promotionApplied);
+      var madew = await discountUse(promotionApplied);
+      var subject = 'Your order has been placed';
+      var body = `Your order was successfully placed. \n
+      Invoice \n
+      ---------------\n
+      Order ID: ${orderMap.order_id} \n
+      Order Date: ${orderMap.order_date} \n
+      No of items: ${orderMap.order_items.length} \n
+      Billing Customer Name: ${orderMap.billing_customer_name} \n
+      Billing Last Name: ${orderMap.billing_last_name} \n
+      Billing Address: ${orderMap.billing_address} \n
+      Billing Address 2: ${orderMap.billing_address_2} \n
+      Billing City: ${orderMap.billing_city} \n
+      Billing Pincode: ${orderMap.billing_pincode} \n
+      Billing State: ${orderMap.billing_state} \n
+      Billing Country: ${orderMap.billing_country} \n
+      Billing Email: ${orderMap.billing_email} \n
+      Billing Phone: ${orderMap.billing_phone} \n
+      Payment Method: ${orderMap.payment_method} \n
+      Total Amount: ${orderMap.sub_total} \n
+      ---------------\n
+      \n
+      Please visit our website to track your order.\n
+      Thank you for shopping with us.`;
+      await sendMail(subject, body);
       navigate("/succ");
     } else {
       navigate("/fail/order");
@@ -111,7 +141,7 @@ const Checkout = (props) => {
     var orderStatus = await getOrderId(
       parseInt(parseInt(totalAmount) - parseInt(discountglobal))
     );
-    if (orderStatus[0] == true) {
+    if (orderStatus[0] === true) {
       orderId = orderStatus[1].id;
       totalAmount = orderStatus[1].amount;
       currency = orderStatus[1].currency;
@@ -139,7 +169,7 @@ const Checkout = (props) => {
           razorpay_signature
         );
         if (success) {
-          completeOrder('Prepaid');
+          completeOrder("Prepaid");
         } else {
           navigate("/fail/payment");
         }
@@ -171,6 +201,7 @@ const Checkout = (props) => {
       <NavBar isLoggedIn={true} />
       <div className="checkout-row">
         <div className="checkout-form-cont">
+          <br />
           <br />
           <br />
           <br />
@@ -274,7 +305,7 @@ const Checkout = (props) => {
             <br />
             <input
               type="email"
-              name="phone"
+              name="email"
               placeholder="Email"
               id="billing-email"
             />{" "}
@@ -297,6 +328,7 @@ const Checkout = (props) => {
               />
               <span>Use Billing address as Shipping address</span>
             </div>
+            <br />
             <br />
             <div id="shipping">
               <br />
@@ -352,33 +384,33 @@ const Checkout = (props) => {
                   id="shipping-city"
                 />
                 <select name="state" id="shipping-state">
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
-                <option value="West Bengal">West Bengal</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
                 </select>
                 <input
                   type="number"
@@ -398,7 +430,7 @@ const Checkout = (props) => {
               <br />
               <input
                 type="email"
-                name="phone"
+                name="email"
                 placeholder="Email"
                 id="shipping-email"
               />{" "}
@@ -409,22 +441,20 @@ const Checkout = (props) => {
         </div>
 
         <div className="checkout-discount-cont">
-          <br />
-          <br />
-          <br />
           <h3>Have a discount code?</h3>
+
           <br />
           <input type="text" id="discountvalue" placeholder="Discount Code" />
           <button
             onClick={async function () {
               promotionApplied = document.getElementById("discountvalue").value;
-              if (promotionApplied != "") {
+              if (promotionApplied !== "") {
                 var made = await applyDiscount(promotionApplied);
                 if (made["success"]) {
                   var discount = made["discount"];
                   isPromotionApplied = true;
                   promotionApplied = discount.name;
-                  if (discount.is_percent == 0) {
+                  if (discount.is_percent === 0) {
                     document.getElementById("discountSpan").innerHTML =
                       "Rs " + discount.discount_amount;
                     document.getElementById("totalAmount").innerHTML =
@@ -432,7 +462,7 @@ const Checkout = (props) => {
                       (parseInt(totalAmount) -
                         parseInt(discount.discount_amount));
                     discountglobal = discount.discount_amount;
-                    alert("Discount added.");
+                    toast.success('Discount added.');
                   } else {
                     var discountmade = parseInt(
                       (discount.discount_percent / 100) * parseInt(totalAmount)
@@ -442,14 +472,15 @@ const Checkout = (props) => {
                     document.getElementById("totalAmount").innerHTML =
                       "Rs " + (parseInt(totalAmount) - parseInt(discountmade));
                     discountglobal = discountmade;
-                    alert("Discount added.");
+                    toast.success('Discount added.');
                   }
                 } else {
                   document.getElementById("discountSpan").innerHTML = "Rs 0";
                   document.getElementById("totalAmount").innerHTML =
                     "Rs " + parseInt(totalAmount);
                   document.getElementById("discountvalue").value = "";
-                  alert(made["message"]);
+               
+                  toast.error(made['message']);
                 }
               }
             }}
@@ -462,12 +493,12 @@ const Checkout = (props) => {
           <br />
           <div className="amount-box">
             <p>Items: </p>
-            <p>{cart_items != undefined ? cart_items.length : 0}</p>
+            <p>{cart_items !== undefined ? cart_items.length : 0}</p>
           </div>
 
           <div className="amount-box">
             <p>Delivery: </p>
-            <p>Rs {delivery}</p>
+            <p id='shippingSpan'>Rs 0</p>
           </div>
 
           <div className="amount-box">
@@ -506,11 +537,120 @@ const Checkout = (props) => {
           <span className="checkSpan">Use Cash On Delivery (COD)</span>
           <br />
 
+          <button onClick={async()=>{
+            var pincode = '';
+            var biss = document.getElementById('shippingisbilling').checked;
+            if(biss){
+              pincode = document.getElementById('billing-pincode').value;
+            }
+            else{
+              pincode = document.getElementById('shipping-pincode').value;
+            }
+            var cod = document.getElementById('checkCOD').checked;
+            var map = {
+              pickup_location: "500087",
+              delivery_location: pincode,
+              weight: totalWeight.toString(),
+              cod: cod ? 1 : 0
+            }
+            var made = await checkShippingCharge(map);
+            if(made.success){
+              
+            }
+          }} id="checkavai">Check availability and shipping charge</button>
+
           <button
             id="completeOrder"
             onClick={() => {
-              document.getElementById("completeOrder").disabled = true;
-              completeOrder('COD');
+              if (
+                document.getElementById("billing-country").value !== "" &&
+                document.getElementById("billing-pincode").value !== "" &&
+                document.getElementById("billing-phone").value !== "" &&
+                document.getElementById("billing-email").value !== "" &&
+                document.getElementById("billing-city").value !== "" &&
+                document.getElementById("billing-state").value !== "" &&
+                document.getElementById("billing-addr").value !== "" &&
+                document.getElementById("billing-fname").value !== "" &&
+                document.getElementById("billing-lname").value !== "" &&
+                document.getElementById("billing-appsuite").value !== ""
+              ) {
+                if (!document.getElementById("shippingisbilling").checked) {
+                  if (
+                    document.getElementById("shipping-country").value = "" &&
+                    document.getElementById("shipping-pincode").value != "" &&
+                    document.getElementById("shipping-phone").value !== "" &&
+                    document.getElementById("shipping-email").value !== "" &&
+                    document.getElementById("shipping-city").value !== "" &&
+                    document.getElementById("shipping-state").value !== "" &&
+                    document.getElementById("shipping-addr").value !== "" &&
+                    document.getElementById("shipping-fname").value !== "" &&
+                    document.getElementById("shipping-lname").value !== "" &&
+                    document.getElementById("shipping-appsuite").value !== ""
+                  ) {
+                    if (
+                      !isNaN(document.getElementById("shipping-pincode").value)
+                    ) {
+                      if (
+                        !isNaN(
+                          document.getElementById("shipping-phone").value
+                        ) &&
+                        document.getElementById("shipping-phone").value
+                          .length === 10
+                      ) {
+                        if (
+                          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                            document.getElementById("shipping-email").value
+                          )
+                        ) {
+                          document.getElementById(
+                            "completeOrder"
+                          ).disabled = true;
+                          completeOrder("COD");
+                        } else {
+                          alert("Please enter a valid email address");
+                          return;
+                        }
+                      } else {
+                        alert("Please enter a valid phone number");
+                      }
+                    } else {
+                      alert("Please enter a valid pincode");
+                    }
+                  } else {
+                    alert("Please fill all the shipping details");
+                  }
+                } else {
+                  if (
+                    !isNaN(document.getElementById("billing-pincode").value)
+                  ) {
+                    if (
+                      !isNaN(document.getElementById("billing-phone").value) &&
+                      document.getElementById("billing-phone").value.length ===
+                        10
+                    ) {
+                      if (
+                        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                          document.getElementById("billing-email").value
+                        )
+                      ) {
+                        document.getElementById(
+                          "completeOrder"
+                        ).disabled = true;
+                        completeOrder("COD");
+                      } else {
+                        alert("Please enter a valid email address");
+                        return;
+                      }
+                    } else {
+                      alert("Please enter a valid phone number");
+                    }
+                  } else {
+                    alert("Please enter a valid pincode");
+                  }
+                }
+              } else {
+                alert("Please fill all the billing details.");
+              }
             }}
           >
             Complete Order
@@ -519,14 +659,374 @@ const Checkout = (props) => {
           <button
             id="checkpayment"
             onClick={() => {
-              document.getElementById("checkpayment").disabled = true;
-              displayRazorPay();
+              if (
+                document.getElementById("billing-country").value !== "" &&
+                document.getElementById("billing-pincode").value !== "" &&
+                document.getElementById("billing-phone").value !== "=" &&
+                document.getElementById("billing-email").value !== "" &&
+                document.getElementById("billing-city").value !== "" &&
+                document.getElementById("billing-state").value !== "" &&
+                document.getElementById("billing-addr").value !== "" &&
+                document.getElementById("billing-fname").value !== "" &&
+                document.getElementById("billing-lname").value !== "" &&
+                document.getElementById("billing-appsuite").value !== ""
+              ) {
+                if (!document.getElementById("shippingisbilling").checked) {
+                  if (
+                    document.getElementById("shipping-country").value !== "" &&
+                    document.getElementById("shipping-pincode").value !== "" &&
+                    document.getElementById("shipping-phone").value !== "" &&
+                    document.getElementById("shipping-email").value !== "" &&
+                    document.getElementById("shipping-city").value !== "" &&
+                    document.getElementById("shipping-state").value !== "" &&
+                    document.getElementById("shipping-addr").value !== "" &&
+                    document.getElementById("shipping-fname").value !== "" &&
+                    document.getElementById("shipping-lname").value !== "" &&
+                    document.getElementById("shipping-appsuite").value !== ""
+                  ) {
+                    if (
+                      !isNaN(document.getElementById("shipping-pincode").value)
+                    ) {
+                      if (
+                        !isNaN(
+                          document.getElementById("shipping-phone").value
+                        ) &&
+                        document.getElementById("shipping-phone").value
+                          .length === 10
+                      ) {
+                        if (
+                          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                            document.getElementById("shipping-email").value
+                          )
+                        ) {
+                          document.getElementById(
+                            "checkpayment"
+                          ).disabled = true;
+                          displayRazorPay();
+                        } else {
+                          alert("Please enter a valid email address");
+                          return;
+                        }
+                      } else {
+                        alert("Please enter a valid phone number");
+                      }
+                    } else {
+                      alert("Please enter a valid pincode");
+                    }
+                  } else {
+                    alert("Please fill all the shipping details");
+                  }
+                } else {
+                  if (
+                    !isNaN(document.getElementById("billing-pincode").value)
+                  ) {
+                    if (
+                      !isNaN(document.getElementById("billing-phone").value) &&
+                      document.getElementById("billing-phone").value.length ===
+                        10
+                    ) {
+                      if (
+                        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                          document.getElementById("billing-email").value
+                        )
+                      ) {
+                        document.getElementById("checkpayment").disabled = true;
+                        displayRazorPay();
+                      } else {
+                        alert("Please enter a valid email address");
+                        return;
+                      }
+                    } else {
+                      alert("Please enter a valid phone number");
+                    }
+                  } else {
+                    alert("Please enter a valid pincode");
+                  }
+                }
+              } else {
+                alert("Please fill all the billing details.");
+              }
             }}
           >
             Continue to Payment
           </button>
         </div>
       </div>
+
+      {/* ss */}
+      <div className="mob-checkout-right">
+        <h3>Have a discount code?</h3>
+
+<br />
+<input type="text" id="discountvalue" placeholder="Discount Code" />
+<button
+  onClick={async function () {
+    promotionApplied = document.getElementById("discountvalue").value;
+    if (promotionApplied !== "") {
+      var made = await applyDiscount(promotionApplied);
+      if (made["success"]) {
+        var discount = made["discount"];
+        isPromotionApplied = true;
+        promotionApplied = discount.name;
+        if (discount.is_percent === 0) {
+          document.getElementById("discountSpan").innerHTML =
+            "Rs " + discount.discount_amount;
+          document.getElementById("totalAmount").innerHTML =
+            "Rs " +
+            (parseInt(totalAmount) -
+              parseInt(discount.discount_amount));
+          discountglobal = discount.discount_amount;
+          toast.success('Discount added.');
+        } else {
+          var discountmade = parseInt(
+            (discount.discount_percent / 100) * parseInt(totalAmount)
+          );
+          document.getElementById("discountSpan").innerHTML =
+            "Rs " + discountmade;
+          document.getElementById("totalAmount").innerHTML =
+            "Rs " + (parseInt(totalAmount) - parseInt(discountmade));
+          discountglobal = discountmade;
+          toast.success('Discount added.');
+        }
+      } else {
+        document.getElementById("discountSpan").innerHTML = "Rs 0";
+        document.getElementById("totalAmount").innerHTML =
+          "Rs " + parseInt(totalAmount);
+        document.getElementById("discountvalue").value = "";
+        toast.error(made.message)
+      }
+    }
+  }}
+>
+  Apply
+</button>
+<br />
+<br />
+<div className="line"></div>
+<br />
+<div className="amount-box">
+  <p>Items: </p>
+  <p>{cart_items !== undefined ? cart_items.length : 0}</p>
+</div>
+
+<div className="amount-box">
+  <p>Delivery: </p>
+  <p id="shippingSpan">Rs 0</p>
+</div>
+
+<div className="amount-box">
+  <p>Total: </p>
+  <p>Rs {parseInt(totalAmount)}</p>
+</div>
+
+<div className="amount-box promotion-amount">
+  <p>Discount: </p>
+  <p id="discountSpan">Rs 0</p>
+</div>
+
+<div className="line"></div>
+<br />
+<div className="amount-box">
+  <p>Order Total: </p>
+  <p id="totalAmount">Rs {parseInt(totalAmount)}</p>
+</div>
+<br />
+
+<input
+  onChange={() => {
+    if (document.getElementById("checkCOD").checked) {
+      document.getElementById("completeOrder").style.display = "block";
+      document.getElementById("checkpayment").style.display = "none";
+    } else {
+      document.getElementById("completeOrder").style.display = "none";
+      document.getElementById("checkpayment").style.display = "block";
+    }
+  }}
+  type="checkbox"
+  name="checkCOD"
+  id="checkCOD"
+/>
+<span className="checkSpan">Use Cash On Delivery (COD)</span>
+<br />
+
+<button
+  id="completeOrder"
+  onClick={() => {
+    if (
+      document.getElementById("billing-country").value !== "" &&
+      document.getElementById("billing-pincode").value !== "" &&
+      document.getElementById("billing-phone").value !== "" &&
+      document.getElementById("billing-email").value !== "" &&
+      document.getElementById("billing-city").value !== "" &&
+      document.getElementById("billing-state").value !== "" &&
+      document.getElementById("billing-addr").value !== "" &&
+      document.getElementById("billing-fname").value !== "" &&
+      document.getElementById("billing-lname").value !== "" &&
+      document.getElementById("billing-appsuite").value !== ""
+    ) {
+      if (!document.getElementById("shippingisbilling").checked) {
+        if (
+          document.getElementById("shipping-country").value !== "" &&
+          document.getElementById("shipping-pincode").value !== "" &&
+          document.getElementById("shipping-phone").value !== "" &&
+          document.getElementById("shipping-email").value !== "" &&
+          document.getElementById("shipping-city").value !== "" &&
+          document.getElementById("shipping-state").value !== "" &&
+          document.getElementById("shipping-addr").value !== "" &&
+          document.getElementById("shipping-fname").value !== "" &&
+          document.getElementById("shipping-lname").value !== "" &&
+          document.getElementById("shipping-appsuite").value !== ""
+        ) {
+          if (
+            !isNaN(document.getElementById("shipping-pincode").value)
+          ) {
+            if (
+              !isNaN(document.getElementById("shipping-phone").value) &&
+              document.getElementById("shipping-phone").value.length ===
+                10
+            ) {
+              if (
+                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                  document.getElementById("shipping-email").value
+                )
+              ) {
+                document.getElementById(
+                  "completeOrder"
+                ).disabled = true;
+                completeOrder("COD");
+              } else {
+                alert("Please enter a valid email address");
+                return;
+              }
+            } else {
+              alert("Please enter a valid phone number");
+            }
+          } else {
+            alert("Please enter a valid pincode");
+          }
+        } else {
+          alert("Please fill all the shipping details");
+        }
+      } else {
+        if (!isNaN(document.getElementById("billing-pincode").value)) {
+          if (
+            !isNaN(document.getElementById("billing-phone").value) &&
+            document.getElementById("billing-phone").value.length === 10
+          ) {
+            if (
+              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                document.getElementById("billing-email").value
+              )
+            ) {
+              document.getElementById("completeOrder").disabled = true;
+              completeOrder("COD");
+            } else {
+              alert("Please enter a valid email address");
+              return;
+            }
+          } else {
+            alert("Please enter a valid phone number");
+          }
+        } else {
+          alert("Please enter a valid pincode");
+        }
+      }
+    } else {
+      alert("Please fill all the billing details.");
+    }
+  }}
+>
+  Complete Order
+</button>
+
+<button
+  id="checkpayment"
+  onClick={() => {
+    if (
+      document.getElementById("billing-country").value !== "" &&
+      document.getElementById("billing-pincode").value !== "" &&
+      document.getElementById("billing-phone").value !== "" &&
+      document.getElementById("billing-email").value !== "" &&
+      document.getElementById("billing-city").value !== "" &&
+      document.getElementById("billing-state").value !== "" &&
+      document.getElementById("billing-addr").value !== "" &&
+      document.getElementById("billing-fname").value !== "" &&
+      document.getElementById("billing-lname").value !== "" &&
+      document.getElementById("billing-appsuite").value !== ""
+    ) {
+      if (!document.getElementById("shippingisbilling").checked) {
+        if (
+          document.getElementById("shipping-country").value !== "" &&
+          document.getElementById("shipping-pincode").value !== "" &&
+          document.getElementById("shipping-phone").value !== "" &&
+          document.getElementById("shipping-email").value !== "" &&
+          document.getElementById("shipping-city").value !== "" &&
+          document.getElementById("shipping-state").value !== "" &&
+          document.getElementById("shipping-addr").value !== "" &&
+          document.getElementById("shipping-fname").value !== "" &&
+          document.getElementById("shipping-lname").value !== "" &&
+          document.getElementById("shipping-appsuite").value !== ""
+        ) {
+          if (
+            !isNaN(document.getElementById("shipping-pincode").value)
+          ) {
+            if (
+              !isNaN(document.getElementById("shipping-phone").value) &&
+              document.getElementById("shipping-phone").value.length ===
+                10
+            ) {
+              if (
+                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                  document.getElementById("shipping-email").value
+                )
+              ) {
+                document.getElementById("checkpayment").disabled = true;
+                displayRazorPay();
+              } else {
+                alert("Please enter a valid email address");
+                return;
+              }
+            } else {
+              alert("Please enter a valid phone number");
+            }
+          } else {
+            alert("Please enter a valid pincode");
+          }
+        } else {
+          alert("Please fill all the shipping details");
+        }
+      } else {
+        if (!isNaN(document.getElementById("billing-pincode").value)) {
+          if (
+            !isNaN(document.getElementById("billing-phone").value) &&
+            document.getElementById("billing-phone").value.length === 10
+          ) {
+            if (
+              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+                document.getElementById("billing-email").value
+              )
+            ) {
+              document.getElementById("checkpayment").disabled = true;
+              displayRazorPay();
+            } else {
+              alert("Please enter a valid email address");
+              return;
+            }
+          } else {
+            alert("Please enter a valid phone number");
+          }
+        } else {
+          alert("Please enter a valid pincode");
+        }
+      }
+    } else {
+      alert("Please fill all the billing details.");
+    }
+  }}
+>
+  Continue to Payment
+</button>
+        </div>
     </div>
   );
 };

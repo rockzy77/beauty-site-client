@@ -1,8 +1,9 @@
 import { Component } from "react";
-import { getSingleBlog, getSingleuser, updateBlog, updateProduct, updateuserInfo } from "../../../js/adminProduct";
+import { getSingleBlog,updateBlog} from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
 import { useParams } from "react-router-dom"; 
-import $ from 'jquery';
+import { toast } from 'react-toastify';
+
 
 const AdminBlogEdit = ()=>{
    const {bid} = useParams();
@@ -19,10 +20,10 @@ class AdminBlogEditPanel extends Component {
   async updateBlogReady() {
     var made = await updateBlog(this.thingstoUpdate, this.blog.bid);
     if(made['success']){
-        alert('Blog info updated successfully.');
+        toast.success('Blog info updated successfully.');
     }
     else{
-        alert('Somethign went wrong!');
+        toast.error('Something went wrong!');
     }
   }
 
@@ -63,6 +64,7 @@ class AdminBlogEditPanel extends Component {
               });
               reader.readAsDataURL(input.files[0]);
               this.thingstoUpdate.image = input.files[0];
+              this.thingstoUpdate.isImageUpdate = true;
               // this.setState({});
             }}
             type="file"
@@ -78,7 +80,7 @@ class AdminBlogEditPanel extends Component {
           >
             <img
               id="adminBlogImg"
-              src={this.blog.image != null ? this.blog.image : public_url+'addImage.png'}
+              src={this.blog.image !== undefined ? this.blog.image : public_url+'addImage.png'}
               alt="blog_image"
             />
           </div>
@@ -89,7 +91,7 @@ class AdminBlogEditPanel extends Component {
             name="blogauthor"
             id="blogauthor"
             cols="30"
-            defaultValue={this.blog.author != null ? this.blog.author : ''}
+            defaultValue={this.blog.author !== undefined ? this.blog.author : ''}
             rows="10"
             onChange={() => {
               this.thingstoUpdate.author =
@@ -104,7 +106,7 @@ class AdminBlogEditPanel extends Component {
             type="text"
             name="blogtitle"
             id="blogtitle"
-            defaultValue={this.blog.title != null ? this.blog.title : ''}
+            defaultValue={this.blog.title !== undefined ? this.blog.title : ''}
             onChange={() => {
               this.thingstoUpdate.title =
                 document.getElementById("blogtitle").value;
@@ -118,7 +120,7 @@ class AdminBlogEditPanel extends Component {
             name="blogsubtitle"
             id="blogsubtitle"
             cols="30"
-            defaultValue={this.blog.subtitle != null ? this.blog.subtitle : ''}
+            defaultValue={this.blog.subtitle != undefined ? this.blog.subtitle : ''}
             rows="10"
             onChange={() => {
               this.thingstoUpdate.subtitle =
@@ -135,7 +137,7 @@ class AdminBlogEditPanel extends Component {
             id="blogcontent"
             cols="30"
             rows="10"
-            defaultValue={this.blog.content != null ? this.blog.content : ''}
+            defaultValue={this.blog.content !== undefined ? this.blog.content : ''}
             onChange={() => {
               this.thingstoUpdate.content =
                 document.getElementById("blogcontent").value;
@@ -145,7 +147,20 @@ class AdminBlogEditPanel extends Component {
   
           <button
             onClick={() => {
-              this.updateBlogReady();
+              if (Object.keys(this.thingsToUpdate).length === 0) {
+                alert("Nothing to update");
+              }
+              else{
+                for (var key in this.thingsToUpdate) {
+                  if (this.thingsToUpdate[key] === "") {
+                    alert("Please fill all fields");
+                    return;
+                  }
+                }
+                this.updateBlogReady();
+              }
+              
+              
             }}
             className="s_update_button"
           >

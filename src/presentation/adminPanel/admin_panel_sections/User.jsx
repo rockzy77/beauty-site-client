@@ -1,17 +1,12 @@
 import { Component } from "react";
-import { GoLinkExternal } from "react-icons/go";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import {
-  createProduct,
-  deleteProduct,
   deleteUser,
-  getAllProductsAdmin,
   getAlluser,
-  updateProduct,
 } from "../../../js/adminProduct";
-import AdminProductDet from "../compo/AdminProductEdit";
+import { toast } from 'react-toastify';
+
 
 class AllUsers extends Component {
   constructor(props) {
@@ -114,21 +109,21 @@ class AllUsers extends Component {
             var search = document.getElementById("alluserssearch").value;
             search = search.toLowerCase();
 
-            if (search != "") {
+            if (search !== "") {
               for (var i = 0; i < this.users.length; i++) {
-                if (this.searchMethod == "Name") {
+                if (this.searchMethod === "Name") {
                   if (this.users[i]["name"].toLowerCase().includes(search)) {
                     tempList.push(this.usersrow[i]);
                   }
-                } else if (this.searchMethod == "Email") {
+                } else if (this.searchMethod === "Email") {
                   if (this.users[i]["email"].toLowerCase().includes(search)) {
                     tempList.push(this.usersrow[i]);
                   }
-                } else if (this.searchMethod == "Role") {
+                } else if (this.searchMethod === "Role") {
                   if (this.users[i]["role"].toLowerCase().includes(search)) {
                     tempList.push(this.usersrow[i]);
                   }
-                } else if (this.searchMethod == "Date Created") {
+                } else if (this.searchMethod === "Date Created") {
                   if (
                     this.users[i]["createdAt"].toLowerCase().includes(search)
                   ) {
@@ -212,9 +207,9 @@ const UserRow = (props) => {
               var made = await deleteUser(props.pid);
               if (made["success"]) {
                 props.dlt(props.si - 1);
-                alert("User was deleted");
+                toast.success("User was deleted")
               } else {
-                alert("Something went wrong");
+                toast.error('Error: '+made.message)
               }
             }
           }}

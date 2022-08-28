@@ -1,9 +1,12 @@
 import { Component } from "react";
 import { updateProduct } from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { useParams } from "react-router-dom";
-import { getSingleProduct } from "../../../js/products";
+import { deleteReview, getReviews, getSingleProduct } from "../../../js/products";
+import { AiFillStar } from "react-icons/ai";
+import { getUserDetail } from "../../../js/auth";
+import { toast } from 'react-toastify';
+
 
 const AdminProductEdit = () => {
   const { pid } = useParams();
@@ -15,17 +18,37 @@ class AdminProductEditPanel extends Component {
     super(props);
     this.thingsToUpdate = {};
     this.product = {};
+    this.comments = [];
   }
 
   async updateProductsReady() {
     console.log(this.thingsToUpdate)
     var made = await updateProduct(this.thingsToUpdate, this.props.pid);
     if(made['success']){
-      alert('Product info updated successfully.')
+      toast.success('Product info updated successfully.')
     }
     else{
-      alert(made['message'])
+      toast.error('Error: '+made.messages)
     }
+  }
+
+  addStar(number, id) {
+    var row = [];
+    if (number !== 5) {
+      for (var i = 0; i < 5; i++) {
+        if (i < number) {
+          row.push(<AiFillStar className={`stars${id} checked`} />);
+        } else {
+          row.push(<AiFillStar className={`stars${id}`} />);
+        }
+      }
+    } else {
+      for (var i = 0; i < 6; i++) {
+        row.push(<AiFillStar className={`stars${id} checked`} />);
+      }
+    }
+
+    return row;
   }
 
   async componentDidMount() {
@@ -39,6 +62,10 @@ class AdminProductEditPanel extends Component {
         this.product[mkey] = images[i]["url"];
       }
     }
+    var det2 = await getReviews(this.props.pid);
+    if (det2["success"]) {
+      this.comments = det2["reviews"];
+    }
     this.setState({});
   }
 
@@ -51,6 +78,7 @@ class AdminProductEditPanel extends Component {
         <br />
         <p>Product Image: </p>
 
+        
         <input
           style={{ display: "none" }}
           onChange={() => {
@@ -65,12 +93,97 @@ class AdminProductEditPanel extends Component {
             reader.readAsDataURL(input.files[0]);
             this.thingsToUpdate.productImage1 = input.files[0];
             this.thingsToUpdate.isProductImage1 = true;
-            // this.setState({});
           }}
           type="file"
           name="pimginput"
           id="pimginput"
         />
+
+        {/* Product 2 input */}
+        <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput2");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit2").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToUpdate.productImage2 = input.files[0];
+            this.thingsToUpdate.isProductImage2 = true;
+          }}
+          type="file"
+          name="pimginput2"
+          id="pimginput2"
+        />
+
+         {/* Product 3 input */}
+         <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput3");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit3").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToUpdate.productImage3 = input.files[0];
+            this.thingsToUpdate.isProductImage3 = true;
+          }}
+          type="file"
+          name="pimginput3"
+          id="pimginput3"
+        />
+
+         {/* Product 4 input */}
+         <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput4");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit4").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToUpdate.productImage4 = input.files[0];
+            this.thingsToUpdate.isProductImage4 = true;
+          }}
+          type="file"
+          name="pimginput4"
+          id="pimginput4"
+        />
+
+         {/* Product 5 input */}
+         <input
+          style={{ display: "none" }}
+          onChange={() => {
+            const input = document.getElementById("pimginput5");
+            var upload_image = "";
+
+            const reader = new FileReader();
+            reader.addEventListener("load", () => {
+              upload_image = reader.result;
+              document.getElementById("adminPimgEdit5").src = upload_image;
+            });
+            reader.readAsDataURL(input.files[0]);
+            this.thingsToUpdate.productImage5 = input.files[0];
+            this.thingsToUpdate.isProductImage5 = true;
+          }}
+          type="file"
+          name="pimginput5"
+          id="pimginput5"
+        />
+
+        <div className="image-edit-grid">
 
         <div
           onClick={() => {
@@ -80,9 +193,62 @@ class AdminProductEditPanel extends Component {
         >
           <img
             id="adminPimgEdit"
-            src={this.product.productImage1}
+            src={this.product.productImage1 !== undefined ? this.product.productImage1 : public_url + "addImage.png"}
             alt="product_image"
           />
+        </div>
+
+        <div
+          onClick={() => {
+            document.getElementById("pimginput2").click();
+          }}
+          className="ad-edit-img-cont"
+        >
+          <img
+            id="adminPimgEdit2"
+            src={this.product.productImage2 !== undefined ? this.product.productImage2 : public_url + "addImage.png"}
+            alt="product_image"
+          />
+        </div>
+
+        <div
+          onClick={() => {
+            document.getElementById("pimginput3").click();
+          }}
+          className="ad-edit-img-cont"
+        >
+          <img
+            id="adminPimgEdit3"
+            src={this.product.productImage3 !== undefined ? this.product.productImage3 : public_url + "addImage.png"}
+            alt="product_image"
+          />
+        </div>
+
+        <div
+          onClick={() => {
+            document.getElementById("pimginput4").click();
+          }}
+          className="ad-edit-img-cont"
+        >
+          <img
+            id="adminPimgEdit4"
+            src={this.product.productImage4 !== undefined ? this.product.productImage4 : public_url + "addImage.png"}
+            alt="product_image"
+          />
+        </div>
+
+        <div
+          onClick={() => {
+            document.getElementById("pimginput5").click();
+          }}
+          className="ad-edit-img-cont"
+        >
+          <img
+            id="adminPimgEdit5"
+            src={this.product.productImage5 !== undefined ? this.product.productImage5 : public_url + "addImage.png"}
+            alt="product_image"
+          />
+        </div>
         </div>
         <br />
         <br />
@@ -180,7 +346,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("producttag1").click();
               }}
               src={
-                this.product.tagImage1 != null
+                this.product.tagImage1 !== undefined
                   ? this.product.tagImage1
                   : public_url + "addImage.png"
               }
@@ -220,7 +386,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="producttagspan1"
               defaultValue={
-                this.product.productTagText1 != null
+                this.product.productTagText1 !== undefined
                   ? this.product.productTagText1
                   : ""
               }
@@ -234,7 +400,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("producttag2").click();
               }}
               src={
-                this.product.tagImage2 != null
+                this.product.tagImage2 !== undefined
                   ? this.product.tagImage2
                   : public_url + "addImage.png"
               }
@@ -273,7 +439,7 @@ class AdminProductEditPanel extends Component {
                 // this.setState({});
               }}
               defaultValue={
-                this.product.productTagText2 != null
+                this.product.productTagText2 !== undefined
                   ? this.product.productTagText2
                   : ""
               }
@@ -287,7 +453,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("producttag3").click();
               }}
               src={
-                this.product.tagImage3 != null
+                this.product.tagImage3 !== undefined
                   ? this.product.tagImage3
                   : public_url + "addImage.png"
               }
@@ -326,7 +492,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="producttagspan3"
               defaultValue={
-                this.product.productTagText3 != null
+                this.product.productTagText3 != undefined
                   ? this.product.productTagText3
                   : ""
               }
@@ -340,7 +506,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("producttag4").click();
               }}
               src={
-                this.product.tagImage4 != null
+                this.product.tagImage4 !== undefined
                   ? this.product.tagImage4
                   : public_url + "addImage.png"
               }
@@ -379,7 +545,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="producttagspan4"
               defaultValue={
-                this.product.productTagText4 != null
+                this.product.productTagText4 != undefined
                   ? this.product.productTagText4
                   : ""
               }
@@ -401,7 +567,7 @@ class AdminProductEditPanel extends Component {
             // this.setState({});
           }}
           defaultValue={
-            this.product.whydoweneed != null ? this.product.whydoweneed : ""
+            this.product.whydoweneed !== undefined ? this.product.whydoweneed : ""
           }
           id="adpwhydoweneed"
         />
@@ -418,7 +584,7 @@ class AdminProductEditPanel extends Component {
             // this.setState({});
           }}
           defaultValue={
-            this.product.benefits != null ? this.product.benefits : ""
+            this.product.benefits !== undefined ? this.product.benefits : ""
           }
           id="adpbenefits"
         />
@@ -434,7 +600,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("plantext1").click();
               }}
               src={
-                this.product.plantExtractsImage1 != null
+                this.product.plantExtractsImage1 !== undefined
                   ? this.product.plantExtractsImage1
                   : public_url + "addImage.png"
               }
@@ -473,7 +639,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="plantextspan1"
               defaultValue={
-                this.product.plantExtractsText1 != null
+                this.product.plantExtractsText1 !== undefined
                   ? this.product.plantExtractsText1
                   : ""
               }
@@ -491,7 +657,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="plansubtextspan1"
               defaultValue={
-                this.product.plantExtractsSubText1 != null
+                this.product.plantExtractsSubText1 !== undefined
                   ? this.product.plantExtractsSubText1
                   : ""
               }
@@ -505,7 +671,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("plantext2").click();
               }}
               src={
-                this.product.plantExtractsImage2 != null
+                this.product.plantExtractsImage2 !== undefined
                   ? this.product.plantExtractsImage2
                   : public_url + "addImage.png"
               }
@@ -544,7 +710,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="plantextspan2"
               defaultValue={
-                this.product.plantExtractsText2 != null
+                this.product.plantExtractsText2 !== undefined
                   ? this.product.plantExtractsText2
                   : ""
               }
@@ -562,7 +728,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="plansubtextspan2"
               defaultValue={
-                this.product.plantExtractsSubText2 != null
+                this.product.plantExtractsSubText2 != undefined
                   ? this.product.plantExtractsSubText2
                   : ""
               }
@@ -576,7 +742,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("plantext3").click();
               }}
               src={
-                this.product.plantExtractsImage3 != null
+                this.product.plantExtractsImage3 !== undefined
                   ? this.product.plantExtractsImage3
                   : public_url + "addImage.png"
               }
@@ -615,7 +781,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="plantextspan3"
               defaultValue={
-                this.product.plantExtractsText3 != null
+                this.product.plantExtractsText3 !== undefined
                   ? this.product.plantExtractsText3
                   : ""
               }
@@ -633,7 +799,7 @@ class AdminProductEditPanel extends Component {
               name="plansubtextspan3"
               id="plansubtextspan3"
               defaultValue={
-                this.product.plantExtractsSubText3 != null
+                this.product.plantExtractsSubText3 != undefined
                   ? this.product.plantExtractsSubText3
                   : ""
               }
@@ -647,7 +813,7 @@ class AdminProductEditPanel extends Component {
                 document.getElementById("plantext4").click();
               }}
               src={
-                this.product.plantExtractsImage4 != null
+                this.product.plantExtractsImage4 !== undefined
                   ? this.product.plantExtractsImage4
                   : public_url + "addImage.png"
               }
@@ -686,7 +852,7 @@ class AdminProductEditPanel extends Component {
               }}
               id="plantextspan4"
               defaultValue={
-                this.product.plantExtractsText4 != null
+                this.product.plantExtractsText4 !== undefined
                   ? this.product.plantExtractsText4
                   : ""
               }
@@ -704,7 +870,7 @@ class AdminProductEditPanel extends Component {
               name="plansubtextspan4"
               id="plansubtextspan4"
               defaultValue={
-                this.product.plantExtractsSubText4 != null
+                this.product.plantExtractsSubText4 !== undefined
                   ? this.product.plantExtractsSubText4
                   : ""
               }
@@ -723,7 +889,7 @@ class AdminProductEditPanel extends Component {
               document.getElementById("sciencebimginput").click();
             }}
             src={
-              this.product.scienceBackedImage1 != null
+              this.product.scienceBackedImage1 !== undefined
                 ? this.product.scienceBackedImage1
                 : public_url + "addImage.png"
             }
@@ -751,7 +917,7 @@ class AdminProductEditPanel extends Component {
         </div>
         <textarea
           defaultValue={
-            this.product.scienceBackedText != null
+            this.product.scienceBackedText != undefined
               ? this.product.scienceBackedText
               : ""
           }
@@ -772,7 +938,7 @@ class AdminProductEditPanel extends Component {
         </p>
         <textarea
           defaultValue={
-            this.product.ingredients != null ? this.product.ingredients : ""
+            this.product.ingredients !== undefined ? this.product.ingredients : ""
           }
           name="ingredients"
           id="ingredients"
@@ -791,7 +957,7 @@ class AdminProductEditPanel extends Component {
         </p>
         <textarea
           defaultValue={
-            this.product.howtouse != null ? this.product.howtouse : ""
+            this.product.howtouse != undefined ? this.product.howtouse : ""
           }
           name="howtouse"
           id="howtouse"
@@ -811,7 +977,7 @@ class AdminProductEditPanel extends Component {
           name="length"
           id="length"
           defaultValue={
-            this.product.length != null ? this.product.length : ""
+            this.product.length !== undefined ? this.product.length : ""
           }
           onChange={() => {
             this.thingsToUpdate.length =
@@ -828,7 +994,7 @@ class AdminProductEditPanel extends Component {
           name="breadth"
           id="breadth"
           defaultValue={
-            this.product.breadth != null ? this.product.breadth : ""
+            this.product.breadth !== undefined ? this.product.breadth : ""
           }
           onChange={() => {
             this.thingsToUpdate.breadth =
@@ -846,7 +1012,7 @@ class AdminProductEditPanel extends Component {
           name="height"
           id="height"
           defaultValue={
-            this.product.height != null ? this.product.height : ""
+            this.product.height != undefined ? this.product.height : ""
           }
           onChange={() => {
             this.thingsToUpdate.height =
@@ -863,7 +1029,7 @@ class AdminProductEditPanel extends Component {
           name="weight"
           id="weight"
           defaultValue={
-            this.product.weight != null ? this.product.weight : ""
+            this.product.weight !== undefined ? this.product.weight : ""
           }
           onChange={() => {
             this.thingsToUpdate.heiweightght =
@@ -876,12 +1042,77 @@ class AdminProductEditPanel extends Component {
 
         <button
           onClick={() => {
-            this.updateProductsReady();
+            if (Object.keys(this.thingsToUpdate).length === 0) {
+              alert("Nothing to update");
+            }
+            else{
+              for (var key in this.thingsToUpdate) {
+                if (this.thingsToUpdate[key] === "") {
+                  alert("Please fill all fields");
+                  return;
+                }
+              }
+              this.updateProductsReady();
+            }
+            
           }}
           className="s_update_button"
         >
           Update
         </button>
+        <div className="comments-sections">
+          <br />
+          <h3>Comments</h3>
+
+          {this.comments.length !== 0 ? (
+            this.comments.map(
+              function (item, i) {
+                var date = item.updatedAt.slice(0, 10);
+                return (
+                  <div key={i}>
+                    <div className="comment-box">
+                      <div className="comment-box-head">
+                        <div className="com-profile-img">
+                          <img src={public_url + "userp.png"} alt="User_Profile" />
+                        </div>
+                        <div className="com-profile-name">
+                          <h5>{item.name}</h5>
+                          <h6>{date}</h6>
+                        </div>
+                      </div>
+                      <div className="comment-box-det">
+                        <p className="comment-det">{item.comment}</p>
+                      </div>
+                      <div className="review-cont">
+                        {this.addStar(item.rating, item.id)} <br />
+                        <button onClick={async ()=>{
+                          var made = await deleteReview(item.ProductId, item.userid);
+                          if(made.success){
+                            if(i === 0){
+                              this.comments.shift();
+                            }
+                            else{
+                              this.comments.splice(i, 0);
+                            }
+                            this.setState({});
+
+                            toast.success('Review deleted successfully')
+                          }
+                          else{
+                            toast.error('Something went wrong');
+                          }
+                        }} id='deleteReviewBtn'>Delete</button>
+                      </div>
+                    </div>
+                    <div className="comment-line"></div>
+                  </div>
+                );
+              }.bind(this)
+            )
+          ) : (
+             <div><p>No comments available</p></div>
+          )}
+          </div>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { getAllProducts, getFeaturedProducts } from "../../js/products";
+import { getFeaturedProducts } from "../../js/products";
 import $ from 'jquery';
 import ProductCard from "../../components/productCard";
 
@@ -16,21 +16,15 @@ class HomeProducts extends Component {
     var d = await getFeaturedProducts();
     this.data = d['data'];
     this.images = d['images'];
-    console.log(this.data)
     $("#pcards").empty();
     for (var i = 0; i < this.data.length; i++) {
       var product = this.data[i];
-      console.log(product)
+      var image = this.images[i];
       var id = product.id;
-      var img = '';
-      for(var j=0;j<this.images[i].length;j++){
-        if(this.images[i][j].name == 'productImage1'){
-          img = this.images[i][j].url;
-        }
-      }
+      var img = image.url;
       var name = product.name;
       var price = product.price;
-      this.products.push(<ProductCard id={id} si={i+1} key={i} imageurl={img} title={name} price={price} />)
+      this.products.push(<ProductCard id={id} si={i+1} key={i} imageurl={img} title={name} price={price} productOtherDet={product}/>)
     this.setState({});
   }
 }

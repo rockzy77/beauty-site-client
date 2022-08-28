@@ -1,8 +1,8 @@
 import { Component } from "react";
-import { GoLinkExternal } from "react-icons/go";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import { MdDelete, MdModeEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 import {
   createProduct,
   deleteBlog,
@@ -25,7 +25,12 @@ class AllBlogs extends Component {
 
   
   deleteRow(index){
-    this.blogs.splice(index, 1);
+    if(index === 0){
+      this.blogsrow.shift();
+    }
+    else{
+      this.blogsrow.splice(index, 1);
+    }
     this.blogsrow = [];
     this.backupBlogsRow = [];
     for (var i = 0; i < this.blogs.length; i++) {
@@ -115,17 +120,17 @@ class AllBlogs extends Component {
             var search = document.getElementById("alluserssearch").value;
             search = search.toLowerCase();
 
-            if (search != "") {
+            if (search !== "") {
               for (var i = 0; i < this.blogs.length; i++) {
-                if (this.searchMethod == "Author") {
+                if (this.searchMethod === "Author") {
                   if (this.blogs[i]["author"].toLowerCase().includes(search)) {
                     tempList.push(this.blogsrow[i]);
                   }
-                } else if (this.searchMethod == "Title") {
+                } else if (this.searchMethod === "Title") {
                   if (this.blogs[i]["title"].toLowerCase().includes(search)) {
                     tempList.push(this.blogsrow[i]);
                   }
-                }  else if (this.searchMethod == "Date Created") {
+                }  else if (this.searchMethod === "Date Created") {
                   if (
                     this.blogs[i]["createdAt"].toLowerCase().includes(search)
                   ) {
@@ -208,9 +213,9 @@ const BlogRow = (props) => {
               var made = await deleteBlog(props.bid);
               if (made["success"]) {
                 props.dlt(props.si - 1);
-                alert("Blog was deleted");
+                toast.success('Blog was deleted');
               } else {
-                alert("Something went wrong");
+                toast.error('Something went wrong');
               }
             }
           }}

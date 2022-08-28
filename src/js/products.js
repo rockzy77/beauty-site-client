@@ -1,6 +1,8 @@
-import axios from "axios";
+import url_head from "./serverApi";
 
-var url_head = "http://localhost:4000/api/v2/";
+const axios = require("axios");
+
+axios.defaults.withCredentials = true;
 
 const config = { headers: { "Content-Type": "application/json" } };
 
@@ -102,6 +104,22 @@ async function createReview(pid, comment, rating) {
   }
 }
 
+
+async function deleteReview(pid,uid){
+  var url = url_head + `reviews?productId=${pid}&userid=${uid}`;
+
+  try {
+    var response = await axios.delete(url, config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data.message;
+    return { success: false, message: d["message"] };
+  }
+}
+
 async function getCartItem(pid, comment, rating) {
   var url = url_head + "cart";
 
@@ -182,4 +200,20 @@ async function getOrders(){
 }
 
 
-export { getQuery, getFeaturedProducts,getAllProducts, getSingleProduct, getFilterProducts, createReview, getReviews, getCartItem, addToCart, updateCart, deleteCart, getOrders };
+async function getSingleOrder(order_id){
+  var url = url_head + "order/"+order_id;
+
+  try {
+    var response = await axios.get(url, config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
+
+export { getQuery, getFeaturedProducts,getAllProducts, getSingleProduct, getFilterProducts, createReview, getReviews, deleteReview, getCartItem, addToCart, updateCart, deleteCart, getOrders, getSingleOrder };

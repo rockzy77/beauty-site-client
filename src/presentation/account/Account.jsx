@@ -7,28 +7,30 @@ import {
   updatePassword,
   updateUserInfo,
 } from "../../js/auth";
-import { MdOutlineAccountCircle } from "react-icons/md";
+import { MdOutlineAccountCircle, MdSettings } from "react-icons/md";
 import { GiTicket } from "react-icons/gi";
 import { BsBagCheck } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
 import { BiLogOut } from "react-icons/bi";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdOutlineAdminPanelSettings, MdMenu, MdClose } from "react-icons/md";
 import { AiOutlineCopy } from "react-icons/ai";
-
 import $ from "jquery";
 import { NavLink } from "react-router-dom";
 import public_url from "../../js/publicurl";
 import MyOrders from "./MyOrders";
 import { getOrders } from "../../js/products";
+import { generateReferralDiscount } from "../../js/payment";
+import { useEffect } from "react";
+import { sendMail } from "../../js/sendMail";
+import {  toast } from 'react-toastify';
 
 class AccountView extends Component {
   constructor(props) {
     super(props);
     this.isLoggedIn = false;
     this.setting = "pinfo";
-    this.referralLink = "";
-    this.referrals = 0;
     this.orderDet = [];
+    this.isAdmin = false;
     this.orderItems = [];
     this.orderImages = [];
     this.userinfo = {
@@ -41,17 +43,16 @@ class AccountView extends Component {
   async componentDidMount() {
     var udet = await getUserDetail();
     this.isLoggedIn = udet["success"];
+    if (this.isLoggedIn) {
+      console.log(udet);
+      this.isAdmin = udet.user.role === "admin";
+    }
     this.userinfo = udet["user"];
-    var det = await getReferralLink();
     var ord = await getOrders();
-    if (det["success"]) {
-      this.referralLink = det["referralCode"];
-      this.referrals = det["referrals"];
-    } 
-    if(ord['success']){
-      this.orderDet = ord['orders_details'];
-      this.orderItems = ord['order_items'];
-      this.orderImages = ord['images'];
+    if (ord["success"]) {
+      this.orderDet = ord["orders_details"];
+      this.orderItems = ord["order_items"];
+      this.orderImages = ord["images"];
     }
     this.setState({});
   }
@@ -72,73 +73,94 @@ class AccountView extends Component {
   render() {
     return (
       <section className="accountView">
-        <NavBar isLoggedIn={this.isLoggedIn} />
+        <NavBar isLoggedIn={this.isLoggedIn} isAdmin={this.isAdmin} />
         <div className="accountPanelRow">
-          <div className="accountSidePanel">
+          <div id="accountSidePanel" className="accountSidePanel">
             <br />
             <br />
             <br />
-            <h1>Account Settings</h1>
             <br />
-            <br />
-            <button
+            <MdMenu
               onClick={() => {
-                this.changeSetting("pinfo");
+                var width =
+                  document.getElementById("accountSidePanel").clientWidth;
+                if (width === 55) {
+                  $("#accountSidePanel").css("width", "270px");
+                  $("#accountSidePanel button").css("width", "240px");
+                  $(".acc-span").fadeIn();
+                } else {
+                  $("#accountSidePanel").css("width", "55px");
+                  $("#accountSidePanel button").css("width", "45px");
+                  $(".acc-span").fadeOut();
+                }
               }}
-              className="active pinfo"
-            >
-              <MdOutlineAccountCircle className="acc-icon" /> Personal Info
-            </button>
-            <br />
+              className="acc-menu"
+            />
 
-            <button
-              onClick={() => {
-                this.changeSetting("myorder");
-              }}
-              className="myorder"
-            >
-              <BsBagCheck className="acc-icon" /> My Orders
-            </button>
-            <br />
-            <button
-              onClick={() => {
-                this.changeSetting("refer");
-              }}
-              className="refer"
-            >
-              <GiTicket className="acc-icon" /> Refer a friend
-            </button>
-            <br />
-            <button
-              onClick={() => {
-                logoutUser();
-              }}
-              className="logoutbtn"
-            >
-              <BiLogOut className="acc-icon" /> Log Out
-            </button>
             <br />
             <br />
-            {this.userinfo.role == "admin" ? (
-              <NavLink className="adminpanelbtn" to="/admin_panel/dashboard">
-                <MdOutlineAdminPanelSettings className="acc-icon" /> Admin Panel
-              </NavLink>
-            ) : (
-              <div></div>
-            )}
+            <div className="admin-panel-nav-buttons">
+              <button
+                onClick={() => {
+                  this.changeSetting("pinfo");
+                }}
+                className="active pinfo ascont"
+              >
+                <MdOutlineAccountCircle className="acc-icon" />{" "}
+                <span className="acc-span">Personal Info</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  this.changeSetting("myorder");
+                }}
+                className="myorder"
+              >
+                <BsBagCheck className="acc-icon" />{" "}
+                <span className="acc-span">My Orders</span>
+              </button>
+              <button
+                onClick={() => {
+                  this.changeSetting("refer");
+                }}
+                className="refer"
+              >
+                <GiTicket className="acc-icon" />{" "}
+                <span className="acc-span">Refer a friend</span>
+              </button>
+              <button
+                onClick={() => {
+                  logoutUser();
+                }}
+                className="logoutbtn"
+              >
+                <BiLogOut className="acc-icon" />
+                <span className="acc-span">Log Out</span>
+              </button>
+              <br />
+              <br />
+            </div>
           </div>
-          <div className="accountContentPanel">
+          <div id="accountContentPanel" className="accountContentPanel">
             <br />
             <br />
             <br />
-            {this.setting == "pinfo" ? (
+            <br />
+            {this.setting === "pinfo" ? (
               <PersonalInfo
                 name={this.userinfo["name"]}
                 email={this.userinfo["email"]}
+                isGoogleUser={this.userinfo.isGoogleUser}
               />
-            ) : this.setting == 'refer' ? (
-              <ReferalPrgScreen referralLink={this.referralLink} referrals={this.referrals} />
-            ): <MyOrders ordDet={this.orderDet} ordItems={this.orderItems} ordImages={this.orderImages} />}
+            ) : this.setting === "refer" ? (
+              <ReferalPrgScreen userName={this.userinfo.name} />
+            ) : (
+              <MyOrders
+                ordDet={this.orderDet}
+                ordItems={this.orderItems}
+                ordImages={this.orderImages}
+              />
+            )}
           </div>
         </div>
       </section>
@@ -146,7 +168,23 @@ class AccountView extends Component {
   }
 }
 
+async function referaldetails() {
+  var det = await getReferralLink();
+  if (det["success"]) {
+    var referrerLink = "https://reapofficial.com/signup/" + det["referralCode"];
+    $("#referallink").val(referrerLink);
+    var noofreferrals = det.referrals;
+    $("#noofrefferal").text("No of referrals: " + noofreferrals);
+    if (noofreferrals > 0) {
+      $("#generatedisbtn").show();
+    }
+  }
+}
+
 const ReferalPrgScreen = (props) => {
+  useEffect(() => {
+    var det = referaldetails();
+  });
   return (
     <div className="referalPrg">
       <h1>Refer your friends and earn rewards.</h1>
@@ -155,14 +193,9 @@ const ReferalPrgScreen = (props) => {
       </p>{" "}
       <br />
       <br />
-      {/* <img className="referralimg" src={public_url+'referral.png'} alt="" /> */}
-      <p>Copy this referral code and send to your friend</p>
-      <input
-        type="text"
-        name="referallink"
-        id="referallink"
-        defaultValue={props.referralLink}
-      />
+      <p>Copy this referral link and send to your friend</p>
+      
+      <input type="text" name="referallink" id="referallink" disabled />
       <button
         className="copy-text"
         onClick={() => {
@@ -172,7 +205,7 @@ const ReferalPrgScreen = (props) => {
           copyText.setSelectionRange(0, 99999);
 
           navigator.clipboard.writeText(copyText.value);
-          alert('Referral code copied.')
+          alert("Referral link copied.");
         }}
       >
         <AiOutlineCopy />
@@ -180,11 +213,51 @@ const ReferalPrgScreen = (props) => {
       <br />
       <br />
       <br />
-      <p style={{'color': '#777fa8'}}>No of refferals: {props.referrals}</p>
-
-      <button>
+      <p>Referral will be increased when invited user buys a product</p>
+      <p id="noofrefferal" style={{ color: "#777fa8" }}></p>
+      <button
+        id="generatedisbtn"
+        style={{ display: "none" }}
+        onClick={async () => {
+          var made = await generateReferralDiscount();
+          if (made.success) {
+            toast.success('Referral discount generated.');
+            $("#noofrefferal").text("No of referrals: " + 0);
+            $("#generatedisbtn").hide();
+            var discountcode = made.discount.name;
+            var percent = made.discount.discount_percent;
+            $('#cong').text(`Congrats, you have acquired ${percent}% discount.`);
+            $('#discount-gen').val(discountcode);
+            $('.discount-show').show();
+            var subject = 'Congratulations, you have acquired a discount';
+            var body = `Hello ${props.userName}, you have acquired a discount of ${percent}%. Use this code '${discountcode}' to redeem your discount.`;
+            await sendMail(subject, body);
+          } else {
+            toast.error('Error generating referral discount.');
+          }
+        }}
+      >
         Generate Discount
       </button>
+      <br />
+      <div style={{'display': 'none'}} className="discount-show">
+        <p id="cong"></p>
+      <p>Discount Code: </p>
+      <input disabled type="text" name="" id="discount-gen" />
+      <button
+        className="copy-text"
+        onClick={() => {
+          var copyText = document.getElementById("discount-gen");
+
+          copyText.select();
+          copyText.setSelectionRange(0, 99999);
+
+          navigator.clipboard.writeText(copyText.value);
+          alert("Discount Code Copied");
+        }}
+      ><AiOutlineCopy /></button>
+      <p>Discount code has been sent to your mail.</p>
+      </div>
     </div>
   );
 };
@@ -226,7 +299,8 @@ const PersonalInfo = (props) => (
       />
       <br />
       <br />
-      <h5>Change Password</h5>
+      {props.isGoogleUser !== 'true' ? <div>
+        <h5>Change Password</h5>
       <input
         type="password"
         placeholder="Current Password"
@@ -259,6 +333,7 @@ const PersonalInfo = (props) => (
         }}
         value="Change Password"
       />
+      </div> : <div></div>}
     </form>
   </div>
 );

@@ -1,6 +1,6 @@
-import { IoMdBody } from "react-icons/io";
 
-var url_head = "http://localhost:4000/api/v2/";
+
+import url_head from "./serverApi";
 
 const axios = require("axios");
 
@@ -330,6 +330,40 @@ async function getAllOrdersAdmin() {
   }
 }
 
+async function updateOrder(map){
+  var url = url_head + "updateOrder";
+
+  try {
+    var response = await axios.post(url, JSON.stringify(map),config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
+
+async function getTotalOrderDetails(year){
+  var url = url_head +'admin/order/total';
+  var map = {
+    year: year
+  };
+  try{
+    var response = await axios.post(url, JSON.stringify(map) ,config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  }
+  catch(e){
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
 
 export {
   createProduct,
@@ -351,5 +385,7 @@ export {
   updateDiscount,
   getSingleDiscount,
   deleteDiscount,
-  getAllOrdersAdmin
+  getAllOrdersAdmin,
+  updateOrder,
+  getTotalOrderDetails
 };

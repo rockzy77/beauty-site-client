@@ -1,0 +1,99 @@
+.contactUs{
+    background-color: #227fbd2a;
+    min-height: 100vh;
+}
+
+
+
+.contact-form{
+    padding: 25px;
+    width: 450px;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 8px rgba(61, 61, 61, 0.267);
+    border-radius: 5px;
+}
+
+
+.contact-form h1{
+    font-size: 1.8em;
+    padding-bottom: 0;
+    font-family: "SemiBold";
+}
+
+.contact-form p{
+    font-size: 1.1em;
+    font-family: "Regular";
+}
+
+.contact-form label{
+    font-size: 1em;
+    width: 100%;
+    font-family: "Medium";
+}
+
+.contact-form label span{
+    font-family: "Medium";
+}
+
+.contact-form input{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+.contact-form input[type=button]{
+    width: 100%;
+    padding: 10px;
+    background-color: #777fa8;
+    border: none;
+    color: white;
+    font-family: "SemiBold";
+    border-radius: 5px;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+.contact-form textarea{
+    width: 100%;
+    padding: 10px;
+    height: 130px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    outline: none;
+}
+
+.center{
+    text-align: center;
+}
+
+
+
+@media screen and (max-width: 470px){
+    .contact-form{
+        width: 100%;
+    }
+
+    .contact-form-cont{
+        padding: 15px
+    }
+
+    .contact-form input{
+        width: 100%;
+    }
+
+    .contact-form textarea{
+        width: 100%;
+    }
+
+    .contact-form button{
+        width: 100%;
+    }
+}

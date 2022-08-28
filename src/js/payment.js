@@ -1,4 +1,4 @@
-var url_head = "http://localhost:4000/api/v2/";
+import url_head from "./serverApi";
 
 const axios = require("axios");
 
@@ -45,6 +45,20 @@ async function verifyOrder(
   } catch (e) {
     console.log(e);
     return { success: false };
+  }
+}
+
+async function checkShippingCharge(map){
+  var url = url_head + "checkShippingCharge";
+  try {
+    var response = await axios.post(url, JSON.stringify(map), config);
+    var body = await response.data;
+    console.log(body);
+    return body;
+  } catch (e) {
+    console.log(e);
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
   }
 }
 
@@ -128,4 +142,4 @@ async function generateReferralDiscount(){
   }
 }
 
-export { getOrderId, verifyOrder, createShipRocketOrder, applyDiscount, discountUse, generateReferralDiscount, deleteOrder};
+export { getOrderId, verifyOrder, createShipRocketOrder, applyDiscount, discountUse, generateReferralDiscount, deleteOrder, checkShippingCharge};

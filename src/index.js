@@ -17,12 +17,6 @@ import AdminPanel from './presentation/adminPanel/adminPanel';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-const PageNotFound = () =>(
-  <div>
-    <h1>PageNotFound</h1>
-  </div>
-)
-
 
    
 

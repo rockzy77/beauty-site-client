@@ -13,7 +13,7 @@ class ProductBlurred extends Component{
             <div className="pbcard-header">
               <div className="pbcontainer">
                 <span>Cleanser</span>
-              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
+              <img src={process.env.PUBLIC_URL + "/products/cleanser.JPG"} alt="" />
               </div>
             </div>
           </div>
@@ -25,7 +25,7 @@ class ProductBlurred extends Component{
             <div className="pbcard-header">
               <div className="pbcontainer">
               <span>Serum</span>
-              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
+              <img src={process.env.PUBLIC_URL + "/products/serum.JPG"} alt="" />
               </div>
             </div>
           </div>
@@ -37,7 +37,7 @@ class ProductBlurred extends Component{
             <div className="pbcard-header">
               <div className="pbcontainer">
               <span>Mositurizer</span>
-              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
+              <img src={process.env.PUBLIC_URL + "/products/moisturizer.JPG"} alt="" />
               </div>
             </div>
           </div>
@@ -49,7 +49,7 @@ class ProductBlurred extends Component{
             <div className="pbcard-header">
               <div className="pbcontainer">
               <span>Exfoliator</span>
-              <img src={process.env.PUBLIC_URL + "/products/productpng.png"} alt="" />
+              <img src={process.env.PUBLIC_URL + "/products/exfoliator.JPG"} alt="" />
               </div>
             </div>
           </div>
