@@ -147,12 +147,13 @@ const Checkout = (props) => {
       console.log(totalAmount);
       currency = orderStatus[1].currency;
     }
+    
     const res = await loadRazorPay();
     if (!res) {
       toast.error("Razorpay not working rn");
       return;
     } 
-    
+
     var options = {
       key: "rzp_test_j2FX8uDCdlDEyU",
       currency: currency,
