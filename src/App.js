@@ -147,9 +147,9 @@ const App = () => {
         <Route
           path="/checkout"
           element={
-            <ProtectedRoute protectMethod="ISNOTLOGIN">
+            // <ProtectedRoute protectMethod="ISNOTLOGIN">
               <Checkout />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route

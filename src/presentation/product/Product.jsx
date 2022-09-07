@@ -6,6 +6,8 @@ import Ing1 from "./ing1";
 import Htu1 from "./htu1";
 import { AiFillStar } from "react-icons/ai";
 import { getUserDetail } from "../../js/auth";
+import ImageGallery from 'react-image-gallery';
+import { createCookie, getCookie } from "../../js/cookies";
 import {
   addToCart,
   createReview,
@@ -13,15 +15,18 @@ import {
   getReviews,
   getSingleProduct,
 } from "../../js/products";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import public_url from "../../js/publicurl";
 import { toast } from 'react-toastify';
+import ReactImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/scss/image-gallery.scss";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 
 const Product = () => {
   var { productId } = useParams();
   const location = useLocation();
-  const data = location.state;
+  const data = location.state != undefined ? location.state : {};
   var page = 1;
   if('page' in data){
     page = data.page;
@@ -35,6 +40,7 @@ class ProductDet extends Component {
     this.detpage = "facts";
     this.isLoggedIn = false;
     this.product = {};
+    this.imagesToSlide = [];
     this.recommendedProducts = [];
     this.recommendedPImages = [];
     this.user = {};
@@ -55,10 +61,20 @@ class ProductDet extends Component {
     if (det["success"]) {
       this.product = det["product"];
       var images = det["images"];
+      var index = 1;
       for (var i = 0; i < images.length; i++) {
         var mkey = images[i].name;
+       
         this.product[mkey] = images[i]["url"];
+        if(mkey.includes('productImage')){
+          this.imagesToSlide.push({
+            original: this.product[mkey],
+            thumbnail: this.product[mkey]
+          })
+          index++;
+        }
       }
+      console.log(this.imagesToSlide)
       if ("tagImage1" in this.product) {
         this.tags.push({
           tagImage: this.product.tagImage1,
@@ -164,13 +180,63 @@ class ProductDet extends Component {
       toast.success('Product added to cart');
     }
     else{
-      if(made.message === 'Please Login for access this resource'){
-        toast.error('Please log in to add to cart')
+      if (made.message === "Please Login for access this resource") {
+        var cartList = [];
+        var dimensions = [];
+        var stocks = [];
+        if (getCookie("cartList") != "") {
+          cartList = JSON.parse(getCookie("cartList"));
+          for (var x = 0; x < cartList.length; x++) {
+            if (cartList[x].productId == this.product.id) {
+              cartList[x].quantity = cartList[x].quantity + 1;
+              createCookie("cartList", JSON.stringify(cartList), 1);
+              toast.success("Product added to cart.");
+              return;
+            }
+          }
+
+          if (getCookie("dimensions") != "") {
+            dimensions = JSON.parse(getCookie("dimensions"));
+          }
+          if (getCookie("stocks") != "") {
+            stocks = JSON.parse(getCookie("stocks"));
+          }
+          cartList.push(map);
+          dimensions.push({
+            length: this.product.length,
+            breadth: this.product.breadth,
+            height: this.product.height,
+            weight: this.product.weight,
+          });
+          stocks.push(this.product.stock);
+          createCookie("cartList", JSON.stringify(cartList), 1);
+          createCookie("dimensions", JSON.stringify(dimensions), 1);
+          createCookie("stocks", JSON.stringify(stocks), 1);
+          toast.success("Product added to cart.");
+        } else {
+          // Cart Scratch
+          if (getCookie("dimensions") != "") {
+            dimensions = JSON.parse(getCookie("cartList"));
+          }
+          if (getCookie("stocks") != "") {
+            stocks = JSON.parse(getCookie("cartList"));
+          }
+          cartList.push(map);
+          dimensions.push({
+            length: this.product.length,
+            breadth: this.product.breadth,
+            height: this.product.height,
+            weight: this.product.weight,
+          });
+          stocks.push(this.product.stock);
+          createCookie("cartList", JSON.stringify(cartList), 1);
+          createCookie("dimensions", JSON.stringify(dimensions), 1);
+          createCookie("stocks", JSON.stringify(stocks), 1);
+          toast.success("Product added to cart.");
+        }
+      } else {
+        toast.error("Something went wrong");
       }
-      else{
-        toast.error('Something went wrong')
-      }
-      
     }
   }
 
@@ -216,51 +282,11 @@ class ProductDet extends Component {
 
         <div className="prow">
           <div className="prow-img-cont">
-            <img id="productMainImage" src={this.product.productImage1} alt="ProductImage" /> <br />
+            <ImageGallery showFullscreenButton={false} showPlayButton={false} id='productMainImage' items={this.imagesToSlide}/>
+           <br />
+     
             <div className="issue-span">
             <span>The colour and font on the product may differ due to print technicality issue</span>
-            </div>
-            <div className="product-other-images">
-            {this.product.productImage1 !== undefined ? <div style={{'display': 'none', 'cursor': 'pointer'}} onClick={()=>{
-                document.getElementById("productMainImage").src = this.product.productImage1;
-                document.getElementById('mainImageSub').style.display = 'none';
-              }} id='mainImageSub' className="p1">
-                <img id='productMainImage6' src={this.product.productImage1} alt="ProductImage" />
-              </div> : <div></div>}
-
-
-             {this.product.productImage2 !== undefined ?  <div onClick={()=>{
-                document.getElementById("productMainImage").src = this.product.productImage2;
-                document.getElementById('mainImageSub').style.display = 'block';
-              }} className="p1">
-                <img id='productMainImage2' src={this.product.productImage2} alt="ProductImage" />
-              </div> : <div></div>}
-
-
-              {this.product.productImage3 !== undefined ?  <div onClick={()=>{
-                document.getElementById("productMainImage").src = this.product.productImage3;
-                document.getElementById('mainImageSub').style.display = 'block';
-              }} className="p1">
-                <img id='productMainImage3' src={this.product.productImage3} alt="ProductImage" />
-              </div> : <div></div>}
-
-
-              {this.product.productImage4 !== undefined ?  <div onClick={()=>{
-                document.getElementById("productMainImage").src = this.product.productImage4;
-                document.getElementById('mainImageSub').style.display = 'block';
-              }} className="p1">
-                <img id='productMainImage4' src={this.product.productImage4} alt="ProductImage" />
-              </div> : <div></div>}
-
-
-                {this.product.productImage5 !== undefined ?  <div onClick={()=>{
-                document.getElementById("productMainImage").src = this.product.productImage5;
-                document.getElementById('mainImageSub').style.display = 'block';
-              }} className="p1">
-                <img id='productMainImage5' src={this.product.productImage5} alt="ProductImage" />
-              </div> : <div></div>}
-
-      
             </div>
           </div>
 
@@ -375,7 +401,9 @@ class ProductDet extends Component {
         <div className="product-card-row">
           {this.recommendedProducts !== [] ? this.recommendedProducts.map(function(item,i){
             return  <div className="productcard">
-            <NavLink className="navlinks" to="/product">
+            <Link className="navlinks" state={{
+          page: 1
+        }} to={"/product/"+item.id}>
               <div className="productcard-top">
                 <div className="productcard-header">
                   <img
@@ -389,7 +417,7 @@ class ProductDet extends Component {
                   <span>Rs {item.price}</span>
                 </div>
               </div>
-            </NavLink>
+            </Link>
             <div className="productcard-bottom">
               <div onClick={async function(){
                 var map = {

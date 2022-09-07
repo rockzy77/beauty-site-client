@@ -27,6 +27,14 @@
   border-radius: 15px;
 }
 
+.image-gallery-image{
+  width: 400px !important;
+}
+
+.image-gallery-svg{
+  width: 30px !important;
+}
+
 .product-other-images{
   display: flex;
   gap: 10px;
@@ -560,6 +568,18 @@
   
 }
 
+
+.tag {
+  text-align: center;
+}
+
+.slick-slide img {
+  margin: auto;
+  width: 50%;
+  height: 50%;
+}
+
+
 @media screen and (max-width: 689px) {
   .product-card-row {
     grid-template-columns: repeat(1, 0.1fr);
@@ -571,4 +591,12 @@
   .prow img {
     width: 100%;
   }
+}
+
+
+@media screen and (max-width: 438px){
+  .image-gallery-image{
+    width: 100% !important;
+  }
+  
 }

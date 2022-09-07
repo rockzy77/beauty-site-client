@@ -287,7 +287,7 @@ const PersonalInfo = (props) => (
         />
       </label>
       <br />
-      <input
+     {props.isGoogleUser !== 'true' ?  <input
         id="pfbtn"
         type="button"
         value="Save"
@@ -296,7 +296,7 @@ const PersonalInfo = (props) => (
           var email = $("#pfemail").val();
           updateUserInfo(name, email);
         }}
-      />
+      /> : <div></div>}
       <br />
       <br />
       {props.isGoogleUser !== 'true' ? <div>

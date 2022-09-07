@@ -30,6 +30,8 @@
 	transition: all .6s ease;
 	box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
+
+
 .box img {
 	width: 300px;
 	height: 200px;
@@ -142,6 +144,11 @@
 	.box{
 		display: block;
 	}
+
+	.box-img{
+		padding-left: 20px;
+	}
+	
 
 	.btn-area{
 		text-align: center;

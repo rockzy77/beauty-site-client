@@ -28,7 +28,8 @@ async function getOrderId(amount) {
 async function verifyOrder(
   razorpay_payment_id,
   razorpay_order_id,
-  razorpay_signature
+  razorpay_signature,
+  orderMap
 ) {
   var url = url_head + "payment/verify";
   try {
@@ -37,14 +38,15 @@ async function verifyOrder(
       razorpay_payment_id: razorpay_payment_id,
       razorpay_signature: razorpay_signature,
     };
-    console.log(data);
-    var response = await axios.post(url, JSON.stringify(data), config);
+    var map = { ...orderMap, ...data };
+    console.log(map);
+    var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
     console.log(body);
-    return body.success;
+    return {success: body.success};
   } catch (e) {
     console.log(e);
-    return { success: false };
+    return { success: false, message: e.response.data["message"] };
   }
 }
 
@@ -58,7 +60,7 @@ async function checkShippingCharge(map){
   } catch (e) {
     console.log(e);
     var d = await e.response.data;
-    return { success: false, message: d["message"] };
+    return { success: false, message: d["error"] };
   }
 }
 

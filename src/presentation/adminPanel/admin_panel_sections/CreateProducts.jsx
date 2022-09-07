@@ -1,22 +1,24 @@
 import { Component } from "react";
 import { createProduct } from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
-import { toast } from 'react-toastify';
-
+import { toast } from "react-toastify";
+import Compressor from "compressorjs";
 
 class CreateProducts extends Component {
   constructor(props) {
     super(props);
     this.thingsToCreate = {};
+    this.maxheight = 2000;
+    this.maxwidth = 2000;
   }
 
   async createProductReady() {
     console.log(this.thingsToCreate);
     var made = await createProduct(this.thingsToCreate);
     if (made["success"]) {
-      toast.success('Product successfully created.')
+      toast.success("Product successfully created.");
     } else {
-      toast.error('Error: '+ made.message)
+      toast.error("Error: " + made.message);
     }
   }
 
@@ -37,8 +39,25 @@ class CreateProducts extends Component {
               upload_image = reader.result;
               document.getElementById("adminPimgEdit").src = upload_image;
             });
-            reader.readAsDataURL(input.files[0]);
-            this.thingsToCreate.productImage1 = input.files[0];
+
+            // Compress image input
+            const image = input.files[0];
+            const max_size = 1000000;
+            const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+            const compress_image = new Compressor(image, {
+              quality: 0.6,
+              maxWidth: max_width,
+              maxHeight: max_height,
+              convertSize: max_size,
+              success: (result) => {
+                const file = new File([result], result.name, {
+                  type: "image/jpeg",
+                });
+                reader.readAsDataURL(file);
+                this.thingsToCreate.productImage1 = file;
+              },
+            });
           }}
           type="file"
           name="pimginput"
@@ -57,8 +76,25 @@ class CreateProducts extends Component {
               upload_image = reader.result;
               document.getElementById("adminPimgEdit2").src = upload_image;
             });
-            reader.readAsDataURL(input.files[0]);
-            this.thingsToCreate.productImage2 = input.files[0];
+
+            // Compress image input
+            const image = input.files[0];
+            const max_size = 1000000;
+            const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+            const compress_image = new Compressor(image, {
+              quality: 0.6,
+              maxWidth: max_width,
+              maxHeight: max_height,
+              convertSize: max_size,
+              success: (result) => {
+                const file = new File([result], result.name, {
+                  type: "image/jpeg",
+                });
+                reader.readAsDataURL(file);
+                this.thingsToCreate.productImage2 = file;
+              },
+            });
           }}
           type="file"
           name="pimginput2"
@@ -77,8 +113,24 @@ class CreateProducts extends Component {
               upload_image = reader.result;
               document.getElementById("adminPimgEdit3").src = upload_image;
             });
-            reader.readAsDataURL(input.files[0]);
-            this.thingsToCreate.productImage3 = input.files[0];
+            // Compress image input
+            const image = input.files[0];
+            const max_size = 1000000;
+            const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+            const compress_image = new Compressor(image, {
+              quality: 0.6,
+              maxWidth: max_width,
+              maxHeight: max_height,
+              convertSize: max_size,
+              success: (result) => {
+                const file = new File([result], result.name, {
+                  type: "image/jpeg",
+                });
+                reader.readAsDataURL(file);
+                this.thingsToCreate.productImage3 = file;
+              },
+            });
           }}
           type="file"
           name="pimginput3"
@@ -97,8 +149,24 @@ class CreateProducts extends Component {
               upload_image = reader.result;
               document.getElementById("adminPimgEdit4").src = upload_image;
             });
-            reader.readAsDataURL(input.files[0]);
-            this.thingsToCreate.productImage4 = input.files[0];
+            // Compress image input
+            const image = input.files[0];
+            const max_size = 1000000;
+            const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+            const compress_image = new Compressor(image, {
+              quality: 0.6,
+              maxWidth: max_width,
+              maxHeight: max_height,
+              convertSize: max_size,
+              success: (result) => {
+                const file = new File([result], result.name, {
+                  type: "image/jpeg",
+                });
+                reader.readAsDataURL(file);
+                this.thingsToCreate.productImage4 = file;
+              },
+            });
           }}
           type="file"
           name="pimginput4"
@@ -117,8 +185,25 @@ class CreateProducts extends Component {
               upload_image = reader.result;
               document.getElementById("adminPimgEdit5").src = upload_image;
             });
-            reader.readAsDataURL(input.files[0]);
-            this.thingsToCreate.productImage5 = input.files[0];
+             // Compress image input
+             const image = input.files[0];
+             const max_size = 1000000;
+             const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+             const compress_image = new Compressor(image, {
+               quality: 0.6,
+               maxWidth: max_width,
+               maxHeight: max_height,
+               convertSize: max_size,
+               success: (result) => {
+                 const file = new File([result], result.name, {
+                   type: "image/jpeg",
+                 });
+                 console.log(file);
+                 reader.readAsDataURL(file);
+                 this.thingsToCreate.productImage5 = file;
+               },
+             });
           }}
           type="file"
           name="pimginput5"
@@ -295,8 +380,24 @@ class CreateProducts extends Component {
                   document.getElementById("product-tag-edit-image1").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.tagImage1 = input.files[0];
+                // Compress image input
+                const image = input.files[0];
+                const max_size = 1000000;
+                const max_width = this.maxwidth;
+                const max_height = this.maxheight;
+                const compress_image = new Compressor(image, {
+                  quality: 0.6,
+                  maxWidth: max_width,
+                  maxHeight: max_height,
+                  convertSize: max_size,
+                  success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                    this.thingsToCreate.tagImage1 = file;
+                  },
+                });
               }}
               type="file"
               accept="image/*"
@@ -337,8 +438,24 @@ class CreateProducts extends Component {
                   document.getElementById("product-tag-edit-image2").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.tagImage2 = input.files[0];
+                 // Compress image input
+                 const image = input.files[0];
+                 const max_size = 1000000;
+                 const max_width = this.maxwidth;
+                 const max_height = this.maxheight;
+                 const compress_image = new Compressor(image, {
+                   quality: 0.6,
+                   maxWidth: max_width,
+                   maxHeight: max_height,
+                   convertSize: max_size,
+                   success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                     this.thingsToCreate.tagImage2 = file;
+                   },
+                 });
               }}
               type="file"
               accept="image/*"
@@ -379,8 +496,24 @@ class CreateProducts extends Component {
                   document.getElementById("product-tag-edit-image3").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.tagImage3 = input.files[0];
+                 // Compress image input
+                 const image = input.files[0];
+                 const max_size = 1000000;
+                 const max_width = this.maxwidth;
+                const max_height = this.maxheight;
+                 const compress_image = new Compressor(image, {
+                   quality: 0.6,
+                   maxWidth: max_width,
+                   maxHeight: max_height,
+                   convertSize: max_size,
+                   success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                     this.thingsToCreate.tagImage3 = file;
+                   },
+                 });
               }}
               type="file"
               accept="image/*"
@@ -421,8 +554,24 @@ class CreateProducts extends Component {
                   document.getElementById("product-tag-edit-image4").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.tagImage4 = input.files[0];
+                // Compress image input
+                const image = input.files[0];
+                const max_size = 1000000;
+                const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+                const compress_image = new Compressor(image, {
+                  quality: 0.6,
+                  maxWidth: max_width,
+                  maxHeight: max_height,
+                  convertSize: max_size,
+                  success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                    this.thingsToCreate.tagImage4 = file;
+                  },
+                });
               }}
               type="file"
               accept="image/*"
@@ -496,8 +645,25 @@ class CreateProducts extends Component {
                   document.getElementById("plantext-edit-image1").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.plantExtractsImage1 = input.files[0];
+
+                 // Compress image input
+                 const image = input.files[0];
+                 const max_size = 1000000;
+                 const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+                 const compress_image = new Compressor(image, {
+                   quality: 0.6,
+                   maxWidth: max_width,
+                   maxHeight: max_height,
+                   convertSize: max_size,
+                   success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                     this.thingsToCreate.plantExtractsImage1 = file;
+                   },
+                 });
               }}
               type="file"
               accept="image/*"
@@ -550,9 +716,24 @@ class CreateProducts extends Component {
                   document.getElementById("plantext-edit-image2").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.plantExtractsImage2 = input.files[0];
-                this.setState({});
+                // Compress image input
+                 const image = input.files[0];
+                 const max_size = 1000000;
+                 const max_width = this.maxwidth;
+                 const max_height = this.maxheight;
+                 const compress_image = new Compressor(image, {
+                   quality: 0.6,
+                   maxWidth: max_width,
+                   maxHeight: max_height,
+                   convertSize: max_size,
+                   success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                     this.thingsToCreate.plantExtractsImage2 = file;
+                   },
+                 });
               }}
               type="file"
               accept="image/*"
@@ -605,9 +786,24 @@ class CreateProducts extends Component {
                   document.getElementById("plantext-edit-image3").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.plantExtractsImage3 = input.files[0];
-                this.setState({});
+               // Compress image input
+               const image = input.files[0];
+               const max_size = 1000000;
+               const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+               const compress_image = new Compressor(image, {
+                 quality: 0.6,
+                 maxWidth: max_width,
+                 maxHeight: max_height,
+                 convertSize: max_size,
+                 success: (result) => {
+                  const file = new File([result], result.name, {
+                    type: "image/jpeg",
+                  });
+                  reader.readAsDataURL(file);
+                   this.thingsToCreate.plantExtractsImage3 = file;
+                 },
+               });
               }}
               type="file"
               accept="image/*"
@@ -660,9 +856,24 @@ class CreateProducts extends Component {
                   document.getElementById("plantext-edit-image4").src =
                     upload_image;
                 });
-                reader.readAsDataURL(input.files[0]);
-                this.thingsToCreate.plantExtractsImage4 = input.files[0];
-                this.setState({});
+                // Compress image input
+                const image = input.files[0];
+                const max_size = 1000000;
+                const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+                const compress_image = new Compressor(image, {
+                  quality: 0.6,
+                  maxWidth: max_width,
+                  maxHeight: max_height,
+                  convertSize: max_size,
+                  success: (result) => {
+                    const file = new File([result], result.name, {
+                      type: "image/jpeg",
+                    });
+                    reader.readAsDataURL(file);
+                    this.thingsToCreate.plantExtractsImage4 = file;
+                  },
+                });
               }}
               type="file"
               accept="image/*"
@@ -719,8 +930,26 @@ class CreateProducts extends Component {
                 upload_image = reader.result;
                 document.getElementById("scienceb_img").src = upload_image;
               });
-              reader.readAsDataURL(input.files[0]);
-              this.thingsToCreate.scienceBackedImage1 = input.files[0];
+              
+              // Compress image input
+              const image = input.files[0];
+              const max_size = 1000000;
+              const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+              const compress_image = new Compressor(image, {
+                quality: 0.6,
+                maxWidth: max_width,
+                maxHeight: max_height,
+                convertSize: max_size,
+                success: (result) => {
+                  // convert blob to file
+                  const file = new File([result], result.name, {
+                    type: "image/jpeg",
+                  });
+                  reader.readAsDataURL(file);
+                  this.thingsToCreate.scienceBackedImage1 = file;
+                },
+              });
             }}
             type="file"
             accept="image/*"

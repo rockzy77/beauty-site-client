@@ -61,8 +61,10 @@ class AllOrders extends Component {
       this.orders = d["order_items"];
       this.orderDet = d["orders_details"];
       this.setState({});
+      var prev_order_id = '';
       for (var i = 0; i < this.orders.length; i++) {
         var order = this.orders[i];
+        prev_order_id = order.order_id;
         var orderDet = {};
         for (var j = 0; j < this.orderDet.length; j++) {
           if (this.orderDet[j].order_id === this.orders[i].order_id) {
@@ -160,6 +162,11 @@ class AllOrders extends Component {
                 <th>Name</th>
                 <th>Units</th>
                 <th>Price</th>
+                <th>SubTotal</th>
+                <th>Billing Name</th>
+                <th>Billing Address</th>
+                <th>Billing Phone</th>
+                <th>Billing Email</th>
                 <th>Status</th>
                 <th>Created At</th>
                 <th>Actions</th>
@@ -185,6 +192,11 @@ const OrdersRow = (props) => {
       <td>{props.order.name}</td>
       <td>{props.order.units}</td>
       <td>{props.order.selling_price}</td>
+      <td>{props.orderDet.sub_total}</td>
+      <td>{props.orderDet.billing_customer_name+' '+props.orderDet.billing_last_name}</td>
+      <td>{props.orderDet.billing_address+', '+props.orderDet.billing_city+', '+props.orderDet.billing_state+', '+props.orderDet.billing_country+', '+props.orderDet.billing_pincode}</td>
+      <td>{props.orderDet.billing_phone}</td>
+      <td>{props.orderDet.billing_email}</td>
       <td>{props.orderDet.current_status}</td>
       <td>{date + " " + time}</td>
       <td>
@@ -203,7 +215,7 @@ const OrdersRow = (props) => {
               var made = await deleteOrder(props.order.order_id);
               if (made["success"]) {
                 props.dlt(props.order.order_id);
-                toast.success("Discount was deleted")
+                toast.success("Order was deleted")
               } else {
                 toast.error("Error: " + made["message"])
               }

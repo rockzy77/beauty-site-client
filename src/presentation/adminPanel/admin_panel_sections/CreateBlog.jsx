@@ -2,12 +2,15 @@ import { Component } from "react";
 import { createBlog } from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
 import { toast } from 'react-toastify';
+import Compressor from "compressorjs";
 
 
 class CreateBlog extends Component {
   constructor(props) {
     super(props);
     this.thingstoCreate = {};
+    this.maxheight = 2000;
+    this.maxwidth = 2000;
   }
 
   async createBlogReady() {
@@ -41,9 +44,25 @@ class CreateBlog extends Component {
               upload_image = reader.result;
               document.getElementById("adminBlogImg").src = upload_image;
             });
-            reader.readAsDataURL(input.files[0]);
-            this.thingstoCreate.image = input.files[0];
-            // this.setState({});
+            const image = input.files[0];
+            const max_size = 1000000;
+            const max_width = this.maxwidth;
+            const max_height = this.maxheight;
+            const compress_image = new Compressor(image, {
+              quality: 0.6,
+              maxWidth: max_width,
+              maxHeight: max_height,
+              convertSize: max_size,
+              success: (result) => {
+                const file = new File([result], result.name, {
+                  type: "image/jpeg",
+                });
+                console.log(file)
+                reader.readAsDataURL(file);
+                this.thingstoCreate.image = file;
+                console.log(this.thingstoCreate)
+              },
+            });
           }}
           type="file"
           name="blogimginput"

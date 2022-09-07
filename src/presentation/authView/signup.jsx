@@ -1,15 +1,32 @@
 import { Component } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import { registerUser, getUserDetail, googleRegisterUser } from "../../js/auth";
 import { FcGoogle } from "react-icons/fc";
 import { firebase_app } from "../../js/config/firebaseConfig";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { toast } from 'react-toastify';
-
+import { toast } from "react-toastify";
+import { BsFacebook } from "react-icons/bs";
+import { deleteCookie } from "../../js/cookies";
 
 const SingupScreen = (props) => {
   const { referrerCode } = useParams();
-  return <SingupScreenCont referrerCode={referrerCode} />;
+  const location = useLocation();
+  var checkout_data = {};
+  const data =
+    location.state !== null
+      ? location.state
+      : {
+          checkout_data: {},
+        };
+  console.log(data);
+  checkout_data = data.checkout_data;
+  console.log(checkout_data);
+  return (
+    <SingupScreenCont
+      referrerCode={referrerCode}
+      checkout_data={checkout_data}
+    />
+  );
 };
 
 class SingupScreenCont extends Component {
@@ -22,45 +39,6 @@ class SingupScreenCont extends Component {
     this.isLoggedIn = udet["success"];
     console.log(this.isLoggedIn);
     this.setState({});
-  }
-
-  async googleRegister() {
-    const provider = new GoogleAuthProvider();
-    const auth = getAuth(firebase_app);
-    signInWithPopup(auth, provider)
-      .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        console.log(user);
-        var map = {
-            name: user.displayName,
-            email: user.email
-        }
-        var refererCode = document.getElementById('referercode').value;
-        if(refererCode !== ''){
-            map.referrerCode = refererCode;
-        }
-        var made = await googleRegisterUser(map);
-        if (made.success) {
-            toast.success('Successfully registered');
-            window.location.href = "/";
-          } else {
-            toast.error(made.message)
-          }
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
-      });
   }
 
   async register() {
@@ -89,10 +67,17 @@ class SingupScreenCont extends Component {
         }
         var made = await registerUser(map);
         if (made.success) {
-          toast.success('Successfully registered');
-          window.location.href = "/";
+          toast.success("Successfully registered");
+          if (Object.keys(this.props.checkout_data).length === 0) {
+            window.location.href = "/";
+          } else {
+            deleteCookie("cartList");
+            deleteCookie("dimensions");
+            deleteCookie("stocks");
+            document.getElementById("checkout_go_btn").click();
+          }
         } else {
-          toast.error(made.message)
+          toast.error(made.message);
         }
       }
     } else {
@@ -157,15 +142,24 @@ class SingupScreenCont extends Component {
                     this.register();
                   }}
                 />
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    this.googleRegister();
+                <NavLink
+                  to="/checkout"
+                  state={{
+                    amount: this.props.checkout_data.amount,
+                    totalAmount: this.props.checkout_data.totalAmount,
+                    cart_data: this.props.checkout_data.cart_data,
+                    totalHeight: this.props.checkout_data.totalHeight,
+                    totalLength: this.props.checkout_data.totalLength,
+                    totalBreadth: this.props.checkout_data.totalBreadth,
+                    totalWeight: this.props.checkout_data.totalWeight,
+                    morethanthree: this.props.checkout_data.morethanthree,
+                    backupamount: this.props.checkout_data.backupamount,
                   }}
-                  id="googlelogin"
+                  id="checkout_go_btn"
+                  style={{ display: "none" }}
                 >
-                  <FcGoogle className="googleicon" /> SignUp Via Google
-                </button>
+                  s
+                </NavLink>
                 <br />
                 <br />
                 <span>

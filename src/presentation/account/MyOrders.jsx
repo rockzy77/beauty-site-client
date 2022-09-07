@@ -62,7 +62,7 @@ const MyOrders = (props) => {
                   <div className="col">
                     <div className="d-grid gap-2">
                       <br />
-                      <button 
+                      {orderDetails.current_status !== 'DELIVERED' ?  <button 
                         onClick={()=>{
                           window.location.href = 'https://reapofficial.shiprocket.co/'
                         }}
@@ -70,7 +70,7 @@ const MyOrders = (props) => {
                         type="button"
                       >
                         Track order
-                      </button>
+                      </button> : <div></div>}
                     </div>
                   </div>
                 </div>

@@ -81,7 +81,7 @@ class Blog extends Component{
           </div>
        </div>
        <div style={{
-            'height': '300px'
+           height: this.blogs.length > 0 ? "100px" : "300px",
           }} className="spacerfooter"></div>
        <Footer/>
     </section>

@@ -135,21 +135,9 @@ class NavBar extends Component {
                 </NavLink>
               )}
 
-              {this.props.isLoggedIn ? (
-                <NavLink to="/cart">
+<NavLink to="/cart">
                   <MdOutlineShoppingCart className="nav-menu-btn" />
                 </NavLink>
-              ) : this.props.isLoggedIn == undefined ? (
-                this.logged ? (
-                  <NavLink to="/cart">
-                    <MdOutlineShoppingCart className="nav-menu-btn" />
-                  </NavLink>
-                ) : (
-                  <div></div>
-                )
-              ) : (
-                <div></div>
-              )}
 
             
             </div>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import Footer from "../home/Footer";
 import NavBar from "../../components/NavBar";
 import { Component } from "react";
@@ -7,12 +7,21 @@ import { deleteCart, getCartItem, updateCart } from "../../js/products";
 import { toast } from "react-toastify";
 import { createCookie, getCookie } from "../../js/cookies";
 
-class CartGuest extends Component {
+const CartGuest = () =>{
+  const navigate = useNavigate();
+  function toLoginPage(){
+    navigate('/login');
+  }
+  return <CartGuestDiv toLogin={toLoginPage}/>;
+}
+
+class CartGuestDiv extends Component {
   constructor(props) {
     super(props);
     this.amount = 0;
     this.cartItems = [];
     this.dimensions = [];
+    this.backupamount = 0;
     this.stocks = [];
     this.totalAmount = 0;
     this.section = "cart";
@@ -97,6 +106,7 @@ class CartGuest extends Component {
       );
     }
     this.totalAmount = parseInt(this.amount);
+    this.backupamount = this.totalAmount;
     console.log(this.cartItems);
     console.log(this.weight);
 
@@ -150,7 +160,9 @@ class CartGuest extends Component {
                       function (item, i) {
                         return (
                           <div key={i} className="box">
-                            <img src={item.productImage} />
+                             <div className="box-img">
+                           <img src={item.productImage} />
+                           </div>
                             <div className="content">
                               <h3>{item.productName}</h3>
                               <h4>Rs {item.productPrice}</h4>
@@ -294,10 +306,6 @@ class CartGuest extends Component {
                   </p>
                   <hr />
                   <p>
-                    <span>Shipping</span> <span>Rs {this.shipping}</span>
-                  </p>
-                  <hr />
-                  <p>
                     <span>Total</span>{" "}
                     <span>
                       Rs {this.totalAmount}{" "}
@@ -306,12 +314,26 @@ class CartGuest extends Component {
                   </p>
                   <button
                   onClick={()=>{
-                    toast.error("Please login to continue")
+                    alert('Please login to checkout.')
+                    document.getElementById('toLogin').click();
                   }}
                     className="checkoutbtns"
                   >
                     <i className="fa fa-shopping-cart"></i>Checkout
                   </button>
+                  <NavLink style={{'display': 'none'}} id="toLogin" to='/login' state={{
+                      checkout_data: {
+                          amount: this.amount,
+                        totalAmount: this.totalAmount,
+                        cart_data: this.cartItems,
+                        totalHeight: this.height,
+                        totalLength: this.length,
+                        totalBreadth: this.breadth,
+                        totalWeight: this.weight,
+                        morethanthree: this.morethanthree,
+                        backupamount: this.backupamount
+                      }
+                    }}>ss</NavLink>
                 </div>
               </div>
             ) : (

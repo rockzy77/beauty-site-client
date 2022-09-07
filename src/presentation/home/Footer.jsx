@@ -51,6 +51,7 @@ class Footer extends Component{
                                 <li> <a target='_blank' href="https://aishwarya25011999.github.io/termsAndConditions/"> Terms and Conditions</a> </li>
                                 <li> <a target='_blank' href="https://aishwarya25011999.github.io/privacyPolicy/"> Privacy</a> </li>
                                 <li> <a target='_blank' href="https://aishwarya25011999.github.io/refundPolicy/"> Refunds/Cancellations</a> </li>
+                                <li> <a target='_blank' href="https://aishwarya25011999.github.io/shippingPolicy/"> Shipping Policy</a> </li>
                              </ul>
                           </div>
                        </div>

@@ -10,7 +10,7 @@ class HeaderHome extends Component {
       <div id="header-home" className="header-home">
         <BackgroundSlider images={[
           public_url+'products/bg.jpg',
-          public_url+'products/DSC_4190.JPG',
+          public_url+'products/bg2.JPG',
           public_url+'products/DSC_4328.JPG'
         ]}
         className="header-home-image"
@@ -24,7 +24,7 @@ class HeaderHome extends Component {
             <h1>
               Simple Routine,
               <br />
-              Best reults.
+              Best results.
             </h1>
             <p>
               Simplifying your routine with our multi ingredient focused

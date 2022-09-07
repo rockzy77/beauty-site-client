@@ -68,18 +68,30 @@
     font-weight: 300;
 }
 
+.social-login{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
 .googleicon{
     font-size: 1.5em;
 }
+.facebookicon{
+    font-size: 1.5em;
+    color: #3b5998;
+}
 
 #googlelogin{
-    width: 95%;
+    width: 75px;
     border-radius: 15px;
     background-color: white;
     border: none;
     box-shadow:  0 0 8px rgba(63, 63, 63, 0.377);
     height: 50px;
 }
+
+
 
 .singuplink{
     color: #777fa8;

@@ -94,7 +94,7 @@ class AdminOrderEditPanel extends Component {
 
     this.thingstoUpdate.order_id = this.props.oid;
 
-    var det = await updateOrder(this.thingstoUpdate);
+    var det = await updateOrder(this.thingstoUpdate); 
     if(det["success"]){
       toast.success('Order updated successfully')
     }
@@ -460,6 +460,8 @@ class AdminOrderEditPanel extends Component {
 
           <br />
           <br />
+
+          
         </div>
         <button
           onClick={() => {

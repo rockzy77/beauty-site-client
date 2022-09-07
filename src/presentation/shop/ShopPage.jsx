@@ -19,10 +19,15 @@ class ShopPage extends Component {
     this.paginationRow = [];
   }
 
+   calculateNumberOfPages(totalItems, itemsPerPage) {
+    return Math.ceil(totalItems / itemsPerPage);
+}
+
   async loadProducts(){
     console.log(this.page)
     if (this.props.filter === undefined) {
       var det = await getAllProducts(this.page);
+      console.log(det)
       this.totalProducts = det["total_products"];
       this.data = det["result"];
       this.images = det["images"];
@@ -40,6 +45,7 @@ class ShopPage extends Component {
             images={this.images[i]}
             title={name}
             price={price}
+            productOtherDet={product}
           />
         );
       }
@@ -98,10 +104,10 @@ class ShopPage extends Component {
                 this.page = this.page-1;
                 this.loadProducts();
               }
+             
             }}>Previous Page</p>) : ( <div></div>)}
-
-            {this.page < parseInt(this.totalProducts/8) ? ( <p onClick={()=>{
-              var pages = parseInt(this.totalProducts / 8);
+            {this.page < (this.calculateNumberOfPages(parseInt(this.totalProducts), 8)) ? ( <p onClick={()=>{
+              var pages = (this.calculateNumberOfPages(parseInt(this.totalProducts), 8));
               if(this.page < pages){
                 this.page++;
                 this.loadProducts()

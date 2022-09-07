@@ -29,7 +29,7 @@ class AboutUs extends Component{
          </div>
         </div>
         <div data-aos='fade-up' id="conscious" className="conscious">
-          <h1>What we're consious about</h1>
+          <h1>What we're conscious about</h1>
           <br />
           <div className="conscious-row">
             <div className="conscious-item">
@@ -37,7 +37,7 @@ class AboutUs extends Component{
                 <div className="container">
                   <img src={process.env.PUBLIC_URL+'vegans.png'} alt="Vegan" />
                 </div>
-                <span>Vegas</span>
+                <span>Vegans</span>
                 
               </div>
             </div>

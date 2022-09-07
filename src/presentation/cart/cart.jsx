@@ -12,6 +12,7 @@ class Cart extends Component {
     super(props);
     this.amount = 0;
     this.cartItems = [];
+    this.backupamount = 0;
     this.dimensions = [];
     this.stocks = [];
     this.totalAmount = 0;
@@ -34,46 +35,11 @@ class Cart extends Component {
     }
     this.calculateTotals();
     this.setState({});
-    setTimeout(()=>{
-      var guestCart = [];
-    if(getCookie('cartList') !== ''){
-      guestCart = JSON.parse(getCookie('cartList'));
-    }
-    if(guestCart.length > 0){
-      var guestc = window.confirm('You have some items in guest cart. Do you want to add these items to your cart?');
-      if(guestc){
-        this.addToCartReady(guestCart);
-      }
-    }
-    }, 2000)
   }
 
-  async addToCartReady(guestCart){
-    var cartReturn = [];
-    for(var i = 0; i < guestCart.length; i++){
-      var cartR =  await addToCart(guestCart[i]);;
-      cartReturn.push(cartR);
-    }
-    var allTrue = true;
-    for(var j = 0; j < cartReturn.length; j++){
-      if(!cartReturn[j]['success']){
-        allTrue = false;
-      }
-    }
-    if(allTrue){
-      toast.success('Items added to cart.');
-    }
-    else{
-      toast.error('Some items were not added to cart.');
-    }
-    deleteCookie('cartList');
-    deleteCookie('dimensions');
-    deleteCookie('stocks');
-  }
 
   calculateTotals() {
     this.amount = 0;
-    this.shipping = 0;
     this.totalAmount = 0;
     this.height = 0;
     this.length = 0;
@@ -131,8 +97,8 @@ class Cart extends Component {
         ).toFixed(3)
       );
     }
-   
     this.totalAmount = parseInt(this.amount);
+    this.backupamount = this.totalAmount;
     console.log(this.cartItems);
     console.log(this.weight);
 
@@ -184,7 +150,10 @@ class Cart extends Component {
                       function (item, i) {
                         return (
                           <div key={i} className="box">
-                            <img src={item.productImage} />
+                           <Link to={'/product/'+item.productId}>
+                            <div className="box-img">
+                           <img src={item.productImage} />
+                           </div></Link>
                             <div className="content">
                               <h3>{item.productName}</h3>
                               <h4>Rs {item.productPrice}</h4>
@@ -353,6 +322,8 @@ class Cart extends Component {
                       totalLength: this.length,
                       totalBreadth: this.breadth,
                       totalWeight: this.weight,
+                      morethanthree: this.morethanthree,
+                      backupamount: this.backupamount,
                     }}
                     className="checkoutbtn"
                   >

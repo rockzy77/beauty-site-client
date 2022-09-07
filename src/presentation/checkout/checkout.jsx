@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavBar";
 import {
   applyDiscount,
@@ -9,10 +9,8 @@ import {
   verifyOrder,
 } from "../../js/payment";
 import { sendMail } from "../../js/sendMail";
-import { toast } from 'react-toastify';
-
-
-
+import { toast } from "react-toastify";
+import $ from "jquery";
 
 const Checkout = (props) => {
   const location = useLocation();
@@ -24,6 +22,8 @@ const Checkout = (props) => {
   const totalLength = data.totalLength;
   const totalBreadth = data.totalBreadth;
   const totalWeight = data.totalWeight;
+  const morethanthree = data.morethanthree;
+  const backupamount = data.backupamount;
   var navigate = useNavigate();
   var razorpay_payment_id = "";
   var razorpay_order_id = "";
@@ -34,6 +34,8 @@ const Checkout = (props) => {
   var promotionApplied = "";
   var isPromotionApplied = true;
   var discountglobal = 0;
+  var total = data.totalAmount;
+  var backupTotalAmount = data.totalAmount;
   var totalAmount = data.totalAmount;
 
   async function completeOrder(orderMethod) {
@@ -72,9 +74,7 @@ const Checkout = (props) => {
       billing_phone: document.getElementById("billing-phone").value,
       order_items: o_items,
       payment_method: orderMethod,
-      sub_total: (parseInt(
-        parseInt(totalAmount) - parseInt(discountglobal)
-      )).toString(),
+      sub_total: totalAmount.toString(),
       length: totalLength.toString(),
       breadth: totalBreadth.toString(),
       height: totalHeight.toString(),
@@ -106,8 +106,10 @@ const Checkout = (props) => {
     var made = await createShipRocketOrder(orderMap);
     console.log(made["success"]);
     if (made["success"]) {
-      var madew = await discountUse(promotionApplied);
-      var subject = 'Your order has been placed';
+      if(promotionApplied !== ''){
+        var madew = await discountUse(promotionApplied);
+      }
+      var subject = "Your order has been placed";
       var body = `Your order was successfully placed. \n
       Invoice \n
       ---------------\n
@@ -138,17 +140,16 @@ const Checkout = (props) => {
   }
 
   async function displayRazorPay() {
-    var orderStatus = await getOrderId(
-      parseInt(parseInt(totalAmount) - parseInt(discountglobal))
-    );
+    var orderStatus = await getOrderId(parseInt(totalAmount));
     if (orderStatus[0] === true) {
       orderId = orderStatus[1].id;
-      totalAmount = orderStatus[1].amount;
+      totalAmount = parseInt(parseInt(orderStatus[1].amount) / 100);
+      console.log(totalAmount);
       currency = orderStatus[1].currency;
     }
     const res = await loadRazorPay();
     if (!res) {
-      alert("Razorpay not working rn");
+      toast.error("Razorpay not working rn");
       return;
     }
     var options = {
@@ -162,16 +163,89 @@ const Checkout = (props) => {
         razorpay_payment_id = response.razorpay_payment_id;
         razorpay_order_id = response.razorpay_order_id;
         razorpay_signature = response.razorpay_signature;
-        console.log(razorpay_order_id);
-        var success = await verifyOrder(
+        var idone = Math.floor(100000 + Math.random() * 900000);
+        var idtwo = Math.floor(100000 + Math.random() * 900000);
+        var idthree = Math.floor(100000 + Math.random() * 900000);
+        var o_items = [];
+        var d = new Date(),
+          dformat =
+            [d.getFullYear(), d.getMonth() + 1, d.getDate()].join("-") +
+            " " +
+            [d.getHours(), d.getMinutes()].join(":");
+        for (var i = 0; i < cart_items.length; i++) {
+          var item = {
+            name: cart_items[i].productName,
+            sku: cart_items[i].productId,
+            selling_price: cart_items[i].productPrice.toString(),
+            units: cart_items[i].quantity.toString(),
+          };
+          o_items.push(item);
+        }
+        var orderMap = {
+          order_id: idone.toString() + idtwo.toString() + idthree.toString(),
+          order_date: dformat,
+          pickup_location: "Bhanu",
+          billing_customer_name: document.getElementById("billing-fname").value,
+          billing_last_name: document.getElementById("billing-lname").value,
+          billing_address: document.getElementById("billing-addr").value,
+          billing_address_2: document.getElementById("billing-addr2").value,
+          billing_city: document.getElementById("billing-city").value,
+          billing_pincode: document.getElementById("billing-pincode").value,
+          billing_state: document.getElementById("billing-state").value,
+          billing_country: document.getElementById("billing-country").value,
+          billing_email: document.getElementById("billing-email").value,
+          billing_phone: document.getElementById("billing-phone").value,
+          order_items: o_items,
+          payment_method: "Prepaid",
+          sub_total: totalAmount.toString(),
+          length: totalLength.toString(),
+          breadth: totalBreadth.toString(),
+          height: totalHeight.toString(),
+          weight: totalWeight.toString(),
+        };
+        var made = await verifyOrder(
           razorpay_payment_id,
           razorpay_order_id,
-          razorpay_signature
+          razorpay_signature,
+          orderMap
         );
-        if (success) {
-          completeOrder("Prepaid");
+        if (made.success) {
+          if(promotionApplied !== ''){
+            var madew = await discountUse(promotionApplied);
+          }
+          var subject = "Your order has been placed";
+          var body = `Your order was successfully placed. \n
+      Invoice \n
+      ---------------\n
+      Order ID: ${orderMap.order_id} \n
+      Order Date: ${orderMap.order_date} \n
+      No of items: ${orderMap.order_items.length} \n
+      Billing Customer Name: ${orderMap.billing_customer_name} \n
+      Billing Last Name: ${orderMap.billing_last_name} \n
+      Billing Address: ${orderMap.billing_address} \n
+      Billing Address 2: ${orderMap.billing_address_2} \n
+      Billing City: ${orderMap.billing_city} \n
+      Billing Pincode: ${orderMap.billing_pincode} \n
+      Billing State: ${orderMap.billing_state} \n
+      Billing Country: ${orderMap.billing_country} \n
+      Billing Email: ${orderMap.billing_email} \n
+      Billing Phone: ${orderMap.billing_phone} \n
+      Payment Method: ${orderMap.payment_method} \n
+      Total Amount: ${orderMap.sub_total} \n
+      ---------------\n
+      \n
+      Please visit our website to track your order.\n
+      Thank you for shopping with us.`;
+          await sendMail(subject, body);
+          navigate("/succ");
         } else {
-          navigate("/fail/payment");
+          if(made.message === 'The payment was not successful.Please try again!'){
+            navigate("/fail/payment");
+          }
+          else{
+            navigate("/fail/order");
+          }
+          
         }
       },
       theme: {
@@ -225,7 +299,7 @@ const Checkout = (props) => {
             <input
               type="text"
               name="fname"
-              placeholder="Last Name"
+              placeholder="Last Name (Optional)"
               id="billing-lname"
             />{" "}
             <br />
@@ -239,14 +313,14 @@ const Checkout = (props) => {
             <input
               type="text"
               name="addr"
-              placeholder="Address 2"
+              placeholder="Address 2 (Optional)"
               id="billing-addr2"
             />{" "}
             <br />
             <input
               type="text"
               name="appsuite"
-              placeholder="Appartment, suite, etc. (optional)"
+              placeholder="Appartment, suite, etc. (Optional)"
               id="billing-appsuite"
             />{" "}
             <br />
@@ -282,6 +356,7 @@ const Checkout = (props) => {
                 <option value="Rajasthan">Rajasthan</option>
                 <option value="Sikkim">Sikkim</option>
                 <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
                 <option value="Tripura">Tripura</option>
                 <option value="Uttar Pradesh">Uttar Pradesh</option>
                 <option value="Uttarakhand">Uttarakhand</option>
@@ -291,6 +366,58 @@ const Checkout = (props) => {
                 type="number"
                 name="pincode"
                 placeholder="PIN Code"
+                onChange={async (e) => {
+                  e.preventDefault();
+                  if (document.getElementById("shippingisbilling").checked) {
+                    var pincode =
+                      document.getElementById("billing-pincode").value;
+                    if (pincode.length === 6) {
+                      var map = {
+                        pickup_postcode: "500087",
+                        delivery_postcode: pincode,
+                        weight: totalWeight,
+                        cod: document.getElementById("checkCOD").checked
+                          ? 1
+                          : 0,
+                      };
+                      var made = await checkShippingCharge(map);
+                      if (made.success) {
+                        delivery = made.result.shipping_charge;
+                        totalAmount = backupTotalAmount;
+                        totalAmount -= discountglobal;
+                        totalAmount += delivery;
+                        document.getElementById("shippingSpan").innerHTML =
+                          "Rs " + delivery;
+                        document.getElementById("totalAmount").innerHTML =
+                          "Rs " + totalAmount;
+                        document.getElementById("notavail").style.display =
+                          "none";
+                        document.getElementById(
+                          "checkpayment"
+                        ).disabled = false;
+                        document.getElementById(
+                          "completeOrder"
+                        ).disabled = false;
+                        console.log(made.result);
+                      } else {
+                        if (
+                          made.message ===
+                          "Cannot read property 'available_courier_companies' of undefined"
+                        ) {
+                          document.getElementById("notavail").style.display =
+                            "block";
+                          document.getElementById(
+                            "checkpayment"
+                          ).disabled = true;
+                          document.getElementById(
+                            "completeOrder"
+                          ).disabled = true;
+                        }
+                        console.log(made.message);
+                      }
+                    }
+                  }
+                }}
                 className="inputrow"
                 id="billing-pincode"
               />{" "}
@@ -314,12 +441,86 @@ const Checkout = (props) => {
             <div className="shpngisblngcont">
               <input
                 defaultChecked
-                onChange={(value) => {
+                onChange={async (value) => {
+                  document.getElementById("checkpayment").disabled = true;
+                  document.getElementById("completeOrder").disabled = true;
                   var checked = value.target.checked;
                   if (checked) {
                     document.getElementById("shipping").style.display = "none";
+                    var map = {
+                      pickup_postcode: "500087",
+                      delivery_postcode:
+                        document.getElementById("billing-pincode").value,
+                      weight: totalWeight,
+                      cod: document.getElementById("checkCOD").checked ? 1 : 0,
+                    };
+                    var made = await checkShippingCharge(map);
+                    if (made.success) {
+                      delivery = made.result.shipping_charge;
+                      totalAmount = backupTotalAmount;
+                      totalAmount -= discountglobal;
+                      totalAmount += delivery;
+                      document.getElementById("shippingSpan").innerHTML =
+                        "Rs " + delivery;
+                      document.getElementById("totalAmount").innerHTML =
+                        "Rs " + totalAmount;
+                      document.getElementById("notavail").style.display =
+                        "none";
+                      document.getElementById("checkpayment").disabled = false;
+                      document.getElementById("completeOrder").disabled = false;
+                      console.log(made.result);
+                    } else {
+                      if (
+                        made.message ===
+                        "Cannot read property 'available_courier_companies' of undefined"
+                      ) {
+                        document.getElementById("notavail").style.display =
+                          "block";
+                        document.getElementById("checkpayment").disabled = true;
+                        document.getElementById(
+                          "completeOrder"
+                        ).disabled = true;
+                      }
+                      console.log(made.message);
+                    }
                   } else {
                     document.getElementById("shipping").style.display = "block";
+                    var map = {
+                      pickup_postcode: "500087",
+                      delivery_postcode:
+                        document.getElementById("shipping-pincode").value,
+                      weight: totalWeight,
+                      cod: document.getElementById("checkCOD").checked ? 1 : 0,
+                    };
+                    var made = await checkShippingCharge(map);
+                    if (made.success) {
+                      delivery = made.result.shipping_charge;
+                      totalAmount = backupTotalAmount;
+                      totalAmount -= discountglobal;
+                      totalAmount += delivery;
+                      document.getElementById("shippingSpan").innerHTML =
+                        "Rs " + delivery;
+                      document.getElementById("totalAmount").innerHTML =
+                        "Rs " + totalAmount;
+                      document.getElementById("notavail").style.display =
+                        "none";
+                      document.getElementById("checkpayment").disabled = false;
+                      document.getElementById("completeOrder").disabled = false;
+                      console.log(made.result);
+                    } else {
+                      if (
+                        made.message ===
+                        "Cannot read property 'available_courier_companies' of undefined"
+                      ) {
+                        document.getElementById("notavail").style.display =
+                          "block";
+                        document.getElementById("checkpayment").disabled = true;
+                        document.getElementById(
+                          "completeOrder"
+                        ).disabled = true;
+                      }
+                      console.log(made.message);
+                    }
                   }
                 }}
                 type="checkbox"
@@ -350,7 +551,7 @@ const Checkout = (props) => {
               <input
                 type="text"
                 name="fname"
-                placeholder="Last Name"
+                placeholder="Last Name (Optional)"
                 id="shipping-lname"
               />{" "}
               <br />
@@ -364,14 +565,14 @@ const Checkout = (props) => {
               <input
                 type="text"
                 name="addr"
-                placeholder="Address 2"
+                placeholder="Address 2 (Optional)"
                 id="shipping-addr2"
               />{" "}
               <br />
               <input
                 type="text"
                 name="appsuite"
-                placeholder="Appartment, suite, etc. (optional)"
+                placeholder="Appartment, suite, etc. (Optional)"
                 id="shipping-appsuite"
               />{" "}
               <br />
@@ -407,6 +608,7 @@ const Checkout = (props) => {
                   <option value="Rajasthan">Rajasthan</option>
                   <option value="Sikkim">Sikkim</option>
                   <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
                   <option value="Tripura">Tripura</option>
                   <option value="Uttar Pradesh">Uttar Pradesh</option>
                   <option value="Uttarakhand">Uttarakhand</option>
@@ -417,6 +619,56 @@ const Checkout = (props) => {
                   name="pincode"
                   placeholder="PIN Code"
                   className="inputrow"
+                  onChange={async (e) => {
+                    e.preventDefault();
+                    var pincode =
+                      document.getElementById("shipping-pincode").value;
+                    if (pincode.length === 6) {
+                      var map = {
+                        pickup_postcode: "500087",
+                        delivery_postcode: pincode,
+                        weight: totalWeight,
+                        cod: document.getElementById("checkCOD").checked
+                          ? 1
+                          : 0,
+                      };
+                      var made = await checkShippingCharge(map);
+                      if (made.success) {
+                        delivery = made.result.shipping_charge;
+                        totalAmount = backupTotalAmount;
+                        totalAmount -= discountglobal;
+                        totalAmount += delivery;
+                        document.getElementById("shippingSpan").innerHTML =
+                          "Rs " + delivery;
+                        document.getElementById("totalAmount").innerHTML =
+                          "Rs " + totalAmount;
+                        document.getElementById("notavail").style.display =
+                          "none";
+                        document.getElementById(
+                          "checkpayment"
+                        ).disabled = false;
+                        document.getElementById(
+                          "completeOrder"
+                        ).disabled = false;
+                        console.log(made.result);
+                      } else {
+                        if (
+                          made.message ===
+                          "Cannot read property 'available_courier_companies' of undefined"
+                        ) {
+                          document.getElementById("notavail").style.display =
+                            "block";
+                          document.getElementById(
+                            "checkpayment"
+                          ).disabled = true;
+                          document.getElementById(
+                            "completeOrder"
+                          ).disabled = true;
+                        }
+                        console.log(made.message);
+                      }
+                    }
+                  }}
                   id="shipping-pincode"
                 />{" "}
                 <br />
@@ -451,36 +703,44 @@ const Checkout = (props) => {
               if (promotionApplied !== "") {
                 var made = await applyDiscount(promotionApplied);
                 if (made["success"]) {
+                  if (morethanthree) {
+                    $("#disc-l-c").css("display", "block");
+                    $("#disc-l-i").css("display", "block");
+                  }
                   var discount = made["discount"];
                   isPromotionApplied = true;
                   promotionApplied = discount.name;
+                  totalAmount = backupamount;
+                  totalAmount += delivery;
                   if (discount.is_percent === 0) {
+                    discountglobal = discount.discount_amount;
+                    totalAmount -= discountglobal;
                     document.getElementById("discountSpan").innerHTML =
                       "Rs " + discount.discount_amount;
                     document.getElementById("totalAmount").innerHTML =
-                      "Rs " +
-                      (parseInt(totalAmount) -
-                        parseInt(discount.discount_amount));
-                    discountglobal = discount.discount_amount;
-                    toast.success('Discount added.');
+                      "Rs " + totalAmount;
+
+                    toast.success("Discount added.");
                   } else {
                     var discountmade = parseInt(
                       (discount.discount_percent / 100) * parseInt(totalAmount)
                     );
+                    discountglobal = discountmade;
+                    totalAmount -= discountglobal;
                     document.getElementById("discountSpan").innerHTML =
                       "Rs " + discountmade;
                     document.getElementById("totalAmount").innerHTML =
-                      "Rs " + (parseInt(totalAmount) - parseInt(discountmade));
-                    discountglobal = discountmade;
-                    toast.success('Discount added.');
+                      "Rs " + totalAmount;
+
+                    toast.success("Discount added.");
                   }
                 } else {
                   document.getElementById("discountSpan").innerHTML = "Rs 0";
                   document.getElementById("totalAmount").innerHTML =
                     "Rs " + parseInt(totalAmount);
                   document.getElementById("discountvalue").value = "";
-               
-                  toast.error(made['message']);
+
+                  toast.error(made["message"]);
                 }
               }
             }}
@@ -490,6 +750,23 @@ const Checkout = (props) => {
           <br />
           <br />
           <div className="line"></div>
+          <div className="checkoutCartItems">
+            {cart_items.map(function (item, i) {
+              return (
+                <div className="itemCard">
+                  <div className="cardImage">
+                    <img src={item.productImage} alt="" />
+                    <p>{item.quantity}</p>
+                  </div>
+                  <div className="itemDes">
+                    <h6>{item.productName}</h6>
+                    <h6>Price: Rs {item.productPrice}</h6>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="line"></div>
           <br />
           <div className="amount-box">
             <p>Items: </p>
@@ -498,18 +775,102 @@ const Checkout = (props) => {
 
           <div className="amount-box">
             <p>Delivery: </p>
-            <p id='shippingSpan'>Rs 0</p>
+            <p id="shippingSpan">Rs 0</p>
           </div>
 
           <div className="amount-box">
             <p>Total: </p>
-            <p>Rs {parseInt(totalAmount)}</p>
+            <p>Rs {morethanthree ? backupamount : parseInt(total)}</p>
           </div>
 
           <div className="amount-box promotion-amount">
             <p>Discount: </p>
-            <p id="discountSpan">Rs 0</p>
+            <p id="discountSpan">
+              {morethanthree
+                ? `Rs ${(backupamount * 10) / 100} (-10%)`
+                : "Rs 0"}
+            </p>
           </div>
+
+          <label
+            id="disc-l-c"
+            style={{ display: "none" }}
+            htmlFor="discount-radio"
+          >
+            <input
+              defaultChecked
+              onChange={async () => {
+                if (promotionApplied !== "") {
+                  var made = await applyDiscount(promotionApplied);
+                  if (made["success"]) {
+                    var discount = made["discount"];
+                    isPromotionApplied = true;
+                    promotionApplied = discount.name;
+                    totalAmount = backupamount;
+                    totalAmount += delivery;
+                    if (discount.is_percent === 0) {
+                      discountglobal = discount.discount_amount;
+                      totalAmount -= discountglobal;
+                      document.getElementById("discountSpan").innerHTML =
+                        "Rs " + discount.discount_amount;
+                      document.getElementById("totalAmount").innerHTML =
+                        "Rs " + totalAmount;
+
+                      toast.success("Discount added.");
+                    } else {
+                      var discountmade = parseInt(
+                        (discount.discount_percent / 100) *
+                          parseInt(totalAmount)
+                      );
+                      discountglobal = discountmade;
+                      totalAmount -= discountglobal;
+                      document.getElementById("discountSpan").innerHTML =
+                        "Rs " + discountmade;
+                      document.getElementById("totalAmount").innerHTML =
+                        "Rs " + totalAmount;
+
+                      toast.success("Discount added.");
+                    }
+                  } else {
+                    document.getElementById("discountSpan").innerHTML = "Rs 0";
+                    document.getElementById("totalAmount").innerHTML =
+                      "Rs " + parseInt(totalAmount);
+                    document.getElementById("discountvalue").value = "";
+
+                    toast.error(made["message"]);
+                  }
+                }
+              }}
+              type="radio"
+              name="discount-radio"
+              id="discount-radio-c"
+            />
+            <span> </span> Use Coupon Offer
+          </label>
+
+          <label
+            id="disc-l-i"
+            style={{ display: "none" }}
+            htmlFor="discount-radio"
+          >
+            <input
+              onChange={() => {
+                totalAmount = backupTotalAmount;
+                totalAmount += delivery;
+                document.getElementById("discountSpan").innerHTML = `Rs ${
+                  (backupamount * 10) / 100
+                } (-10%)`;
+                document.getElementById("totalAmount").innerHTML =
+                  "Rs " + parseInt(totalAmount);
+              }}
+              type="radio"
+              name="discount-radio"
+              id="discount-radio-i"
+            />
+            <span> </span> Use Inbuilt Offer
+            <br />
+            <br />
+          </label>
 
           <div className="line"></div>
           <br />
@@ -520,12 +881,88 @@ const Checkout = (props) => {
           <br />
 
           <input
-            onChange={() => {
+            onChange={async (e) => {
+              // e.preventDefault();
+              var pincode = "";
+              if (document.getElementById("shippingisbilling").checked) {
+                pincode = document.getElementById("billing-pincode").value;
+              } else {
+                pincode = document.getElementById("shipping-pincode").value;
+              }
+              document.getElementById("checkpayment").disabled = true;
+              document.getElementById("completeOrder").disabled = true;
               if (document.getElementById("checkCOD").checked) {
+                var map = {
+                  pickup_postcode: "500087",
+                  delivery_postcode: pincode,
+                  weight: totalWeight,
+                  cod: 1,
+                };
+
+                var made = await checkShippingCharge(map);
+                if (made.success) {
+                  delivery = made.result.shipping_charge;
+                  totalAmount = backupTotalAmount;
+                  totalAmount -= discountglobal;
+                  totalAmount += delivery;
+                  document.getElementById("shippingSpan").innerHTML =
+                    "Rs " + delivery;
+                  document.getElementById("totalAmount").innerHTML =
+                    "Rs " + totalAmount;
+                  document.getElementById("notavail").style.display = "none";
+                  document.getElementById("checkpayment").disabled = false;
+                  document.getElementById("completeOrder").disabled = false;
+                  console.log(made.result);
+                } else {
+                  if (
+                    made.message ===
+                    "Cannot read property 'available_courier_companies' of undefined"
+                  ) {
+                    document.getElementById("notavail").style.display = "block";
+                    document.getElementById("checkpayment").disabled = true;
+                    document.getElementById("completeOrder").disabled = true;
+                  }
+                  console.log(made.message);
+                }
+
+                //
                 document.getElementById("completeOrder").style.display =
                   "block";
                 document.getElementById("checkpayment").style.display = "none";
               } else {
+                var map = {
+                  pickup_postcode: "500087",
+                  delivery_postcode: pincode,
+                  weight: totalWeight,
+                  cod: 0,
+                };
+
+                var made = await checkShippingCharge(map);
+                if (made.success) {
+                  delivery = made.result.shipping_charge;
+                  totalAmount = backupTotalAmount;
+                  totalAmount -= discountglobal;
+                  totalAmount += delivery;
+                  document.getElementById("shippingSpan").innerHTML =
+                    "Rs " + delivery;
+                  document.getElementById("totalAmount").innerHTML =
+                    "Rs " + totalAmount;
+                  document.getElementById("notavail").style.display = "none";
+                  document.getElementById("checkpayment").disabled = false;
+                  document.getElementById("completeOrder").disabled = false;
+                  console.log(made.result);
+                } else {
+                  if (
+                    made.message ===
+                    "Cannot read property 'available_courier_companies' of undefined"
+                  ) {
+                    document.getElementById("notavail").style.display = "block";
+                    document.getElementById("checkpayment").disabled = true;
+                    document.getElementById("completeOrder").disabled = true;
+                  }
+                  console.log(made.message);
+                }
+                //
                 document.getElementById("completeOrder").style.display = "none";
                 document.getElementById("checkpayment").style.display = "block";
               }
@@ -536,28 +973,6 @@ const Checkout = (props) => {
           />
           <span className="checkSpan">Use Cash On Delivery (COD)</span>
           <br />
-
-          <button onClick={async()=>{
-            var pincode = '';
-            var biss = document.getElementById('shippingisbilling').checked;
-            if(biss){
-              pincode = document.getElementById('billing-pincode').value;
-            }
-            else{
-              pincode = document.getElementById('shipping-pincode').value;
-            }
-            var cod = document.getElementById('checkCOD').checked;
-            var map = {
-              pickup_location: "500087",
-              delivery_location: pincode,
-              weight: totalWeight.toString(),
-              cod: cod ? 1 : 0
-            }
-            var made = await checkShippingCharge(map);
-            if(made.success){
-              
-            }
-          }} id="checkavai">Check availability and shipping charge</button>
 
           <button
             id="completeOrder"
@@ -570,22 +985,19 @@ const Checkout = (props) => {
                 document.getElementById("billing-city").value !== "" &&
                 document.getElementById("billing-state").value !== "" &&
                 document.getElementById("billing-addr").value !== "" &&
-                document.getElementById("billing-fname").value !== "" &&
-                document.getElementById("billing-lname").value !== "" &&
-                document.getElementById("billing-appsuite").value !== ""
+                document.getElementById("billing-fname").value !== ""
               ) {
                 if (!document.getElementById("shippingisbilling").checked) {
                   if (
-                    document.getElementById("shipping-country").value = "" &&
-                    document.getElementById("shipping-pincode").value != "" &&
-                    document.getElementById("shipping-phone").value !== "" &&
-                    document.getElementById("shipping-email").value !== "" &&
-                    document.getElementById("shipping-city").value !== "" &&
-                    document.getElementById("shipping-state").value !== "" &&
-                    document.getElementById("shipping-addr").value !== "" &&
-                    document.getElementById("shipping-fname").value !== "" &&
-                    document.getElementById("shipping-lname").value !== "" &&
-                    document.getElementById("shipping-appsuite").value !== ""
+                    (document.getElementById("shipping-country").value =
+                      "" &&
+                      document.getElementById("shipping-pincode").value != "" &&
+                      document.getElementById("shipping-phone").value !== "" &&
+                      document.getElementById("shipping-email").value !== "" &&
+                      document.getElementById("shipping-city").value !== "" &&
+                      document.getElementById("shipping-state").value !== "" &&
+                      document.getElementById("shipping-addr").value !== "" &&
+                      document.getElementById("shipping-fname").value !== "")
                   ) {
                     if (
                       !isNaN(document.getElementById("shipping-pincode").value)
@@ -607,17 +1019,17 @@ const Checkout = (props) => {
                           ).disabled = true;
                           completeOrder("COD");
                         } else {
-                          alert("Please enter a valid email address");
+                          toast.error("Please enter a valid email address");
                           return;
                         }
                       } else {
-                        alert("Please enter a valid phone number");
+                        toast.error("Please enter a valid phone number");
                       }
                     } else {
-                      alert("Please enter a valid pincode");
+                      toast.error("Please enter a valid pincode");
                     }
                   } else {
-                    alert("Please fill all the shipping details");
+                    toast.error("Please fill all the shipping details");
                   }
                 } else {
                   if (
@@ -638,18 +1050,18 @@ const Checkout = (props) => {
                         ).disabled = true;
                         completeOrder("COD");
                       } else {
-                        alert("Please enter a valid email address");
+                        toast.error("Please enter a valid email address");
                         return;
                       }
                     } else {
-                      alert("Please enter a valid phone number");
+                      toast.error("Please enter a valid phone number");
                     }
                   } else {
-                    alert("Please enter a valid pincode");
+                    toast.error("Please enter a valid pincode");
                   }
                 }
               } else {
-                alert("Please fill all the billing details.");
+                toast.error("Please fill all the billing details.");
               }
             }}
           >
@@ -667,9 +1079,7 @@ const Checkout = (props) => {
                 document.getElementById("billing-city").value !== "" &&
                 document.getElementById("billing-state").value !== "" &&
                 document.getElementById("billing-addr").value !== "" &&
-                document.getElementById("billing-fname").value !== "" &&
-                document.getElementById("billing-lname").value !== "" &&
-                document.getElementById("billing-appsuite").value !== ""
+                document.getElementById("billing-fname").value !== ""
               ) {
                 if (!document.getElementById("shippingisbilling").checked) {
                   if (
@@ -680,9 +1090,7 @@ const Checkout = (props) => {
                     document.getElementById("shipping-city").value !== "" &&
                     document.getElementById("shipping-state").value !== "" &&
                     document.getElementById("shipping-addr").value !== "" &&
-                    document.getElementById("shipping-fname").value !== "" &&
-                    document.getElementById("shipping-lname").value !== "" &&
-                    document.getElementById("shipping-appsuite").value !== ""
+                    document.getElementById("shipping-fname").value !== ""
                   ) {
                     if (
                       !isNaN(document.getElementById("shipping-pincode").value)
@@ -704,17 +1112,17 @@ const Checkout = (props) => {
                           ).disabled = true;
                           displayRazorPay();
                         } else {
-                          alert("Please enter a valid email address");
+                          toast.error("Please enter a valid email address");
                           return;
                         }
                       } else {
-                        alert("Please enter a valid phone number");
+                        toast.error("Please enter a valid phone number");
                       }
                     } else {
-                      alert("Please enter a valid pincode");
+                      toast.error("Please enter a valid pincode");
                     }
                   } else {
-                    alert("Please fill all the shipping details");
+                    toast.error("Please fill all the shipping details");
                   }
                 } else {
                   if (
@@ -733,300 +1141,29 @@ const Checkout = (props) => {
                         document.getElementById("checkpayment").disabled = true;
                         displayRazorPay();
                       } else {
-                        alert("Please enter a valid email address");
+                        toast.error("Please enter a valid email address");
                         return;
                       }
                     } else {
-                      alert("Please enter a valid phone number");
+                      toast.error("Please enter a valid phone number");
                     }
                   } else {
-                    alert("Please enter a valid pincode");
+                    toast.error("Please enter a valid pincode");
                   }
                 }
               } else {
-                alert("Please fill all the billing details.");
+                toast.error("Please fill all the billing details.");
               }
             }}
           >
             Continue to Payment
           </button>
+          <p id="notavail">
+            *This location is currently unavailable to reach. Please try another
+            location.
+          </p>
         </div>
       </div>
-
-      {/* ss */}
-      <div className="mob-checkout-right">
-        <h3>Have a discount code?</h3>
-
-<br />
-<input type="text" id="discountvalue" placeholder="Discount Code" />
-<button
-  onClick={async function () {
-    promotionApplied = document.getElementById("discountvalue").value;
-    if (promotionApplied !== "") {
-      var made = await applyDiscount(promotionApplied);
-      if (made["success"]) {
-        var discount = made["discount"];
-        isPromotionApplied = true;
-        promotionApplied = discount.name;
-        if (discount.is_percent === 0) {
-          document.getElementById("discountSpan").innerHTML =
-            "Rs " + discount.discount_amount;
-          document.getElementById("totalAmount").innerHTML =
-            "Rs " +
-            (parseInt(totalAmount) -
-              parseInt(discount.discount_amount));
-          discountglobal = discount.discount_amount;
-          toast.success('Discount added.');
-        } else {
-          var discountmade = parseInt(
-            (discount.discount_percent / 100) * parseInt(totalAmount)
-          );
-          document.getElementById("discountSpan").innerHTML =
-            "Rs " + discountmade;
-          document.getElementById("totalAmount").innerHTML =
-            "Rs " + (parseInt(totalAmount) - parseInt(discountmade));
-          discountglobal = discountmade;
-          toast.success('Discount added.');
-        }
-      } else {
-        document.getElementById("discountSpan").innerHTML = "Rs 0";
-        document.getElementById("totalAmount").innerHTML =
-          "Rs " + parseInt(totalAmount);
-        document.getElementById("discountvalue").value = "";
-        toast.error(made.message)
-      }
-    }
-  }}
->
-  Apply
-</button>
-<br />
-<br />
-<div className="line"></div>
-<br />
-<div className="amount-box">
-  <p>Items: </p>
-  <p>{cart_items !== undefined ? cart_items.length : 0}</p>
-</div>
-
-<div className="amount-box">
-  <p>Delivery: </p>
-  <p id="shippingSpan">Rs 0</p>
-</div>
-
-<div className="amount-box">
-  <p>Total: </p>
-  <p>Rs {parseInt(totalAmount)}</p>
-</div>
-
-<div className="amount-box promotion-amount">
-  <p>Discount: </p>
-  <p id="discountSpan">Rs 0</p>
-</div>
-
-<div className="line"></div>
-<br />
-<div className="amount-box">
-  <p>Order Total: </p>
-  <p id="totalAmount">Rs {parseInt(totalAmount)}</p>
-</div>
-<br />
-
-<input
-  onChange={() => {
-    if (document.getElementById("checkCOD").checked) {
-      document.getElementById("completeOrder").style.display = "block";
-      document.getElementById("checkpayment").style.display = "none";
-    } else {
-      document.getElementById("completeOrder").style.display = "none";
-      document.getElementById("checkpayment").style.display = "block";
-    }
-  }}
-  type="checkbox"
-  name="checkCOD"
-  id="checkCOD"
-/>
-<span className="checkSpan">Use Cash On Delivery (COD)</span>
-<br />
-
-<button
-  id="completeOrder"
-  onClick={() => {
-    if (
-      document.getElementById("billing-country").value !== "" &&
-      document.getElementById("billing-pincode").value !== "" &&
-      document.getElementById("billing-phone").value !== "" &&
-      document.getElementById("billing-email").value !== "" &&
-      document.getElementById("billing-city").value !== "" &&
-      document.getElementById("billing-state").value !== "" &&
-      document.getElementById("billing-addr").value !== "" &&
-      document.getElementById("billing-fname").value !== "" &&
-      document.getElementById("billing-lname").value !== "" &&
-      document.getElementById("billing-appsuite").value !== ""
-    ) {
-      if (!document.getElementById("shippingisbilling").checked) {
-        if (
-          document.getElementById("shipping-country").value !== "" &&
-          document.getElementById("shipping-pincode").value !== "" &&
-          document.getElementById("shipping-phone").value !== "" &&
-          document.getElementById("shipping-email").value !== "" &&
-          document.getElementById("shipping-city").value !== "" &&
-          document.getElementById("shipping-state").value !== "" &&
-          document.getElementById("shipping-addr").value !== "" &&
-          document.getElementById("shipping-fname").value !== "" &&
-          document.getElementById("shipping-lname").value !== "" &&
-          document.getElementById("shipping-appsuite").value !== ""
-        ) {
-          if (
-            !isNaN(document.getElementById("shipping-pincode").value)
-          ) {
-            if (
-              !isNaN(document.getElementById("shipping-phone").value) &&
-              document.getElementById("shipping-phone").value.length ===
-                10
-            ) {
-              if (
-                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-                  document.getElementById("shipping-email").value
-                )
-              ) {
-                document.getElementById(
-                  "completeOrder"
-                ).disabled = true;
-                completeOrder("COD");
-              } else {
-                alert("Please enter a valid email address");
-                return;
-              }
-            } else {
-              alert("Please enter a valid phone number");
-            }
-          } else {
-            alert("Please enter a valid pincode");
-          }
-        } else {
-          alert("Please fill all the shipping details");
-        }
-      } else {
-        if (!isNaN(document.getElementById("billing-pincode").value)) {
-          if (
-            !isNaN(document.getElementById("billing-phone").value) &&
-            document.getElementById("billing-phone").value.length === 10
-          ) {
-            if (
-              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-                document.getElementById("billing-email").value
-              )
-            ) {
-              document.getElementById("completeOrder").disabled = true;
-              completeOrder("COD");
-            } else {
-              alert("Please enter a valid email address");
-              return;
-            }
-          } else {
-            alert("Please enter a valid phone number");
-          }
-        } else {
-          alert("Please enter a valid pincode");
-        }
-      }
-    } else {
-      alert("Please fill all the billing details.");
-    }
-  }}
->
-  Complete Order
-</button>
-
-<button
-  id="checkpayment"
-  onClick={() => {
-    if (
-      document.getElementById("billing-country").value !== "" &&
-      document.getElementById("billing-pincode").value !== "" &&
-      document.getElementById("billing-phone").value !== "" &&
-      document.getElementById("billing-email").value !== "" &&
-      document.getElementById("billing-city").value !== "" &&
-      document.getElementById("billing-state").value !== "" &&
-      document.getElementById("billing-addr").value !== "" &&
-      document.getElementById("billing-fname").value !== "" &&
-      document.getElementById("billing-lname").value !== "" &&
-      document.getElementById("billing-appsuite").value !== ""
-    ) {
-      if (!document.getElementById("shippingisbilling").checked) {
-        if (
-          document.getElementById("shipping-country").value !== "" &&
-          document.getElementById("shipping-pincode").value !== "" &&
-          document.getElementById("shipping-phone").value !== "" &&
-          document.getElementById("shipping-email").value !== "" &&
-          document.getElementById("shipping-city").value !== "" &&
-          document.getElementById("shipping-state").value !== "" &&
-          document.getElementById("shipping-addr").value !== "" &&
-          document.getElementById("shipping-fname").value !== "" &&
-          document.getElementById("shipping-lname").value !== "" &&
-          document.getElementById("shipping-appsuite").value !== ""
-        ) {
-          if (
-            !isNaN(document.getElementById("shipping-pincode").value)
-          ) {
-            if (
-              !isNaN(document.getElementById("shipping-phone").value) &&
-              document.getElementById("shipping-phone").value.length ===
-                10
-            ) {
-              if (
-                /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-                  document.getElementById("shipping-email").value
-                )
-              ) {
-                document.getElementById("checkpayment").disabled = true;
-                displayRazorPay();
-              } else {
-                alert("Please enter a valid email address");
-                return;
-              }
-            } else {
-              alert("Please enter a valid phone number");
-            }
-          } else {
-            alert("Please enter a valid pincode");
-          }
-        } else {
-          alert("Please fill all the shipping details");
-        }
-      } else {
-        if (!isNaN(document.getElementById("billing-pincode").value)) {
-          if (
-            !isNaN(document.getElementById("billing-phone").value) &&
-            document.getElementById("billing-phone").value.length === 10
-          ) {
-            if (
-              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-                document.getElementById("billing-email").value
-              )
-            ) {
-              document.getElementById("checkpayment").disabled = true;
-              displayRazorPay();
-            } else {
-              alert("Please enter a valid email address");
-              return;
-            }
-          } else {
-            alert("Please enter a valid phone number");
-          }
-        } else {
-          alert("Please enter a valid pincode");
-        }
-      }
-    } else {
-      alert("Please fill all the billing details.");
-    }
-  }}
->
-  Continue to Payment
-</button>
-        </div>
     </div>
   );
 };

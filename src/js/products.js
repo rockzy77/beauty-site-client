@@ -21,6 +21,7 @@ async function getFeaturedProducts(){
     var response = await axios.get(url, config);
 
     var data = await response.data;
+    console.log(data)
     return data;
   } catch (e) {
     return { success: false };

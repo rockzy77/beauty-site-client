@@ -30,29 +30,32 @@
     grid-gap: 20px;
 }
 
+
 .shop-product{
     color: rgb(78, 78, 78);
-    width: 100%;
-    border-radius: 10px;
+    width: 270px;
+    border-radius: 5px;
     background-color: rgb(255, 255, 255);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.295);
     transition: 0.5s ease-in-out;
     height: auto;
+    width: 100%;
 }
 
 .shop-product-image{
-    padding: 15px;
+    padding: 8px;
+    
 }
 
 .shop-product-image-cont{
-    height: 250px;
+    height: 100%;
 }
 
 
 .shop-product-image-cont img{
     width: 100%;
-    height: 250px;
-    border-radius: 10px;
+    height: 100%;
+    border-radius: 5px;
 }
 
 .shop-product-info{
@@ -124,31 +127,77 @@
   
   .paginationLink:hover:not(.active) {background-color: #ddd;}
 
-@media screen and (min-width: 550px) {
-    .shop-products{
-        display: grid;
-        grid-gap: 20px;
-        padding: 25px;
-        grid-template-columns: repeat(2, 1fr);
+
+
+@media screen and (min-width: 530px) {
+    .shop-product{
+        width: 80%;
+    }
+
+    .shop-product-image img{
+        height: 100%;
+    }
+
+    .shop-product-image-cont{
+        height: 100%;
     }
 }
 
+@media screen and (min-width: 693px) {
+    .shop-product{
+        width: 70%;
+    }
 
+    .shop-product-image img{
+        height: 100%;
+    }
 
-@media screen and (min-width: 810px) {
+    .shop-product-image-cont{
+        height: 100%;
+    }
+}
+
+@media screen and (min-width: 790px) {
     .shop-products{
         display: grid;
         grid-gap: 20px;
         padding: 25px;
         justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    .shop-product{
+        width: 350px;
+    }
+
+    .shop-product-image img{
+        height: auto;
+    }
+
+    .shop-product-image{
+        height: 350px;
+    }
+}
+
+@media screen and (min-width: 957px) {
+    .shop-products{
+        display: grid;
+        grid-gap: 20px;
+        padding: 25px;
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
 
-@media screen and (min-width: 1200px){
+
+@media screen and (min-width: 1283px){
     .shop-product{
         width: 270px;
+    }
+
+    .shop-product-image{
+        height: auto
     }
 
     .shop-product-footer h3{
