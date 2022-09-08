@@ -109,14 +109,9 @@ const CartNumberMobile = () =>{
   return <NavLink to="/cart" id="cart-icon-mob">
                   <div className="s">
                     <MdOutlineShoppingCart className="nav-menu-btn" />
-                    <span id="cart-count-mob">{this.cartItems}</span>
+                    <span id="cart-count-mob">{data}</span>
                   </div>
                 </NavLink>
-
-
-
-
-
 
 
 }
