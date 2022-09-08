@@ -155,7 +155,7 @@ const Checkout = (props) => {
     }
 
     var options = {
-      key: "rzp_test_j2FX8uDCdlDEyU",
+      key: "rzp_live_Iamb707ufEa7d1",
       currency: currency,
       amount: totalAmount.toString(),
       name: "Reap Official",
