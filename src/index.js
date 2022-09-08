@@ -3,17 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import dataReducer from "./js/myStore";
 
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Shop from './presentation/shop/Shop';
-import LoginScreen from './presentation/authView/login';
-import SingupScreen from './presentation/authView/signup';
-import { getUserDetail } from './js/auth';
-import { CookiesProvider } from "react-cookie";
-import Product from './presentation/product/Product';
-import AccountView from './presentation/account/Account';
-import ForgotPassword from './presentation/authView/forgotPasswors';
-import AdminPanel from './presentation/adminPanel/adminPanel';
+const store = configureStore({
+  reducer: {
+    theStore: dataReducer,
+  },
+});
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -21,7 +20,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
    
 
 root.render(
-  <App/>
+  <Provider store={store}>
+    <App/>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

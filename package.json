@@ -4,6 +4,7 @@
   "homepage": "https://reapofficial.com",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -28,6 +29,7 @@
     "react-icons": "^4.4.0",
     "react-image-gallery": "^1.2.9",
     "react-owl-carousel": "^2.3.3",
+    "react-redux": "^8.0.2",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -36,6 +38,7 @@
     "react-star-rating-component": "^1.4.1",
     "react-toastify": "^9.0.8",
     "react-uuid": "^1.0.2",
+    "reactn": "^2.2.7",
     "recharts": "^2.1.13",
     "sass": "^1.54.8",
     "slick-carousel": "^1.8.1",

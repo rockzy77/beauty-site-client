@@ -8,39 +8,79 @@ import { NavLink } from "react-router-dom";
 import public_url from "../js/publicurl";
 import { RiAccountCircleFill } from "react-icons/ri";
 import ScrollIntoView from "react-scroll-into-view";
+import { getCartItem } from "../js/products";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { getData } from "../js/myStore";
+import { getCookie } from "../js/cookies";
+
+
+const CartNumber = () =>{
+  const [cartNumber, setCartNumber] = useState(0);
+  var dispatch = useDispatch();
+  async function getN(){
+    const cart = await getCartItem();
+    if(cart.success){
+      setCartNumber(cart.cartData.length);
+    }
+    else{
+      if(cart.message === "Please Login for access this resource"){
+        if(getCookie('cartList') != ''){
+          var carts = JSON.parse(getCookie("cartList"));
+          setCartNumber(carts.length);
+        }
+        else{
+          setCartNumber(0);
+        }
+      }
+      else{
+        setCartNumber(0);
+      }
+    }
+  }
+  const data = useSelector((state) => state.theStore.value);
+  useEffect(()=>{
+    getN();
+    dispatch(getData(cartNumber));
+  })
+  return <NavLink to="/cart">
+  <MdOutlineShoppingCart className="cart-icon cart-icons" />
+  <span id="cart-count">{data}</span>
+</NavLink>
+}
 
 class NavBar extends Component {
   constructor(props) {
     super(props);
     this.logged = false;
+    this.cartItems = 0;
   }
 
   async componentDidMount() {
-    if (this.props.isLoggedIn === undefined) {
-      var udet = await getUserDetail();
-      this.logged = udet["success"];
-      console.log("d");
-      this.setState({});
-    }
+    var udet = await getUserDetail();
+    this.logged = udet["success"];
+    // this.cartItems = this.props.cartNumber;
+    this.setState({});
   }
 
   render() {
     var openNav = function () {
-      console.log("ss");
       $(".nav-content-mobile").toggleClass("show");
       $(".navBarMobile").toggleClass("fitheight");
     };
     return (
       <div className="navEntry">
+        {/* <button onClick={()=>{
+
+        }}>sddd</button> */}
         {/* For desktop */}
         <div className="navDesk">
           <nav className="navBar">
             <img className="navTitle" src={public_url + "logo.png"} alt="" />
             <ul className="side-nav-content">
               <li>
-                  <NavLink to="/cart">
-                    <MdOutlineShoppingCart className="cart-icon" />
-                  </NavLink>
+                <CartNumber/>
 
                 {this.props.isLoggedIn ? (
                   <NavLink to="/account" className="acc-text">
@@ -53,12 +93,12 @@ class NavBar extends Component {
                     </NavLink>
                   ) : (
                     <NavLink id="loginglink" to="/login" className="acc-text">
-                       <FiLogIn className="cart-icon" />
+                      <FiLogIn className="cart-icon" />
                     </NavLink>
                   )
                 ) : (
                   <NavLink id="loginglink" to="/login" className="acc-text">
-                   <FiLogIn className="cart-icon" />
+                    <FiLogIn className="cart-icon" />
                   </NavLink>
                 )}
 
@@ -113,33 +153,49 @@ class NavBar extends Component {
                 alt=""
               />
 
-              <MdMenu onClick={openNav} className="nav-menu-btn menu-menu" />
-
-              {this.props.isLoggedIn ? (
-                <NavLink to="/account">
-                  <RiAccountCircleFill className="nav-menu-btn" />
+              <div className="nav-mob-icon-cont">
+                <NavLink to="/cart" id="cart-icon-mob">
+                  <div className="s">
+                    <MdOutlineShoppingCart className="nav-menu-btn" />
+                    <span id="cart-count-mob">{this.cartItems}</span>
+                  </div>
                 </NavLink>
-              ) : this.props.isLoggedIn === undefined ? (
-                this.logged ? (
+
+                {this.props.isLoggedIn ? (
                   <NavLink to="/account">
-                    <RiAccountCircleFill className="nav-menu-btn" />
+                    <div className="s">
+                      <RiAccountCircleFill className="nav-menu-btn" />
+                    </div>
                   </NavLink>
+                ) : this.props.isLoggedIn === undefined ? (
+                  this.logged ? (
+                    <NavLink to="/account">
+                      <div className="s">
+                        <RiAccountCircleFill className="nav-menu-btn" />
+                      </div>
+                    </NavLink>
+                  ) : (
+                    <NavLink id="loginglink" to="/login">
+                      <div className="s">
+                        <FiLogIn className="nav-menu-btn" />
+                      </div>
+                    </NavLink>
+                  )
                 ) : (
                   <NavLink id="loginglink" to="/login">
-                    <FiLogIn className="nav-menu-btn" />
+                    <div className="s">
+                      <FiLogIn className="nav-menu-btn" />
+                    </div>
                   </NavLink>
-                )
-              ) : (
-                <NavLink id="loginglink" to="/login">
-                  <FiLogIn className="nav-menu-btn" />
-                </NavLink>
-              )}
+                )}
 
-<NavLink to="/cart">
-                  <MdOutlineShoppingCart className="nav-menu-btn" />
-                </NavLink>
-
-            
+                <div className="s">
+                  <MdMenu
+                    onClick={openNav}
+                    className="nav-menu-btn menu-menu"
+                  />
+                </div>
+              </div>
             </div>
 
             <br />
@@ -178,8 +234,11 @@ class NavBar extends Component {
                 </NavLink>
               </li>
               <li className="adminli">
-              {this.props.isAdmin ? (
-                  <NavLink className='acc-text-mobile' to="/admin_panel/dashboard">
+                {this.props.isAdmin ? (
+                  <NavLink
+                    className="acc-text-mobile"
+                    to="/admin_panel/dashboard"
+                  >
                     <MdAdminPanelSettings className="cart-icon" />
                   </NavLink>
                 ) : (

@@ -20,7 +20,7 @@ class ErrorScreen extends Component{
             <br />
             <br />
             <br />
-            <center><h1>404 Error: Page Not Found</h1></center>
+            <center><h1 className="t404title">404 Error: Page Not Found!</h1></center>
         </div>
     }
 }

@@ -106,7 +106,7 @@ const Checkout = (props) => {
     var made = await createShipRocketOrder(orderMap);
     console.log(made["success"]);
     if (made["success"]) {
-      if(promotionApplied !== ''){
+      if (promotionApplied !== "") {
         var madew = await discountUse(promotionApplied);
       }
       var subject = "Your order has been placed";
@@ -147,12 +147,12 @@ const Checkout = (props) => {
       console.log(totalAmount);
       currency = orderStatus[1].currency;
     }
-    
+
     const res = await loadRazorPay();
     if (!res) {
-      toast.error("Razorpay not working rn");
+      toast.error("Razorpay not working right now");
       return;
-    } 
+    }
 
     var options = {
       key: "rzp_test_j2FX8uDCdlDEyU",
@@ -205,6 +205,31 @@ const Checkout = (props) => {
           height: totalHeight.toString(),
           weight: totalWeight.toString(),
         };
+        if (document.getElementById("shippingisbilling").checked) {
+          orderMap.shipping_is_billing = 1;
+        } else {
+          orderMap.shipping_is_billing = 0;
+          orderMap.shipping_customer_name =
+            document.getElementById("shipping-fname").value;
+          orderMap.shipping_last_name =
+            document.getElementById("shipping-lname").value;
+          orderMap.shipping_address =
+            document.getElementById("shipping-addr").value;
+          orderMap.shipping_address_2 =
+            document.getElementById("shipping-addr2").value;
+          orderMap.shipping_city =
+            document.getElementById("shipping-city").value;
+          orderMap.shipping_pincode =
+            document.getElementById("shipping-pincode").value;
+          orderMap.shipping_state =
+            document.getElementById("shipping-state").value;
+          orderMap.shipping_country =
+            document.getElementById("shipping-country").value;
+          orderMap.shipping_email =
+            document.getElementById("shipping-email").value;
+          orderMap.shipping_phone =
+            document.getElementById("shipping-phone").value;
+        }
         var made = await verifyOrder(
           razorpay_payment_id,
           razorpay_order_id,
@@ -212,7 +237,7 @@ const Checkout = (props) => {
           orderMap
         );
         if (made.success) {
-          if(promotionApplied !== ''){
+          if (promotionApplied !== "") {
             var madew = await discountUse(promotionApplied);
           }
           var subject = "Your order has been placed";
@@ -241,13 +266,13 @@ const Checkout = (props) => {
           await sendMail(subject, body);
           navigate("/succ");
         } else {
-          if(made.message === 'The payment was not successful.Please try again!'){
+          if (
+            made.message === "The payment was not successful.Please try again!"
+          ) {
             navigate("/fail/payment");
-          }
-          else{
+          } else {
             navigate("/fail/order");
           }
-          
         }
       },
       theme: {

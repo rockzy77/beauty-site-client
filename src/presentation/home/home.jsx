@@ -9,7 +9,7 @@ import ProductBlurred from "./ProductBlurred";
 import Testimonials from "./Testimonials";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { addToCart } from "../../js/products";
+import { addToCart, getCartItem } from "../../js/products";
 import { deleteCookie, getCookie } from "../../js/cookies";
 import { toast } from "react-toastify";
 
@@ -17,6 +17,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.isLoggedIn = false;
+    this.cartNumber = 0;
   }
 
   async componentDidMount() {
@@ -34,6 +35,7 @@ class Home extends Component {
     }
     this.setState({});
   }
+
 
   async addToCartReady(guestCart){
     var cartReturn = [];
@@ -64,7 +66,7 @@ class Home extends Component {
       <div className="homeSection">
         {/* Nav-Bar */}
         <header>
-          <NavBar isLoggedIn={this.isLoggedIn} />
+          <NavBar isLoggedIn={this.isLoggedIn} cartNumber={this.cartNumber}/>
 
           {/*Header Home-Page */}
           <br />

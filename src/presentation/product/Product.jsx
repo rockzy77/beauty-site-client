@@ -21,9 +21,16 @@ import { toast } from 'react-toastify';
 import ReactImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/scss/image-gallery.scss";
 import "react-image-gallery/styles/css/image-gallery.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../js/myStore";
 
 
 const Product = () => {
+  var dispatch = useDispatch();
+  const datas = useSelector((state) => state.theStore.value);
+  function changeCartNumber(){
+    dispatch(getData(datas+1));
+  }
   var { productId } = useParams();
   const location = useLocation();
   const data = location.state != undefined ? location.state : {};
@@ -31,7 +38,7 @@ const Product = () => {
   if('page' in data){
     page = data.page;
   }
-  return <ProductDet key={productId} page={page} productId={productId} />;
+  return <ProductDet changeCartNumber={changeCartNumber} key={productId} page={page} productId={productId} />;
 };
 
 class ProductDet extends Component {
@@ -178,6 +185,7 @@ class ProductDet extends Component {
     var made = await addToCart(map);
     if(made['success']){
       toast.success('Product added to cart');
+      this.props.changeCartNumber();
     }
     else{
       if (made.message === "Please Login for access this resource") {
@@ -191,6 +199,7 @@ class ProductDet extends Component {
               cartList[x].quantity = cartList[x].quantity + 1;
               createCookie("cartList", JSON.stringify(cartList), 1);
               toast.success("Product added to cart.");
+              this.props.changeCartNumber();
               return;
             }
           }
@@ -213,6 +222,7 @@ class ProductDet extends Component {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
+          this.props.changeCartNumber();
         } else {
           // Cart Scratch
           if (getCookie("dimensions") != "") {
@@ -233,6 +243,7 @@ class ProductDet extends Component {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
+          this.props.changeCartNumber();
         }
       } else {
         toast.error("Something went wrong");

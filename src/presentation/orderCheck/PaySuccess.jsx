@@ -10,7 +10,7 @@ const PaySuccess = ()=>{
         <h3>Your order is succesfull</h3>
         <p>Thankyou for your order. A invoice containing order details have been sent to your email. You can track yout order through 'My Orders' Panel</p>
         
-        <NavLink className='succlink' to='/account'>Go to My Orders</NavLink>
+        <NavLink className='succlink' to='/shop'>Continue Shopping</NavLink>
     </div>
     </section>
 }

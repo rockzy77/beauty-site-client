@@ -53,6 +53,7 @@ import ContactUs from "./presentation/contactUs/ContactUs";
 import {initializeFirebase} from "./js/config/firebaseConfig";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NavBar from "./components/NavBar";
 
 
 const App = () => {

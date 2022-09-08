@@ -1,4 +1,4 @@
-var typeOfRun = 'D';
+var typeOfRun = 'P';
 
 var url_head = typeOfRun === 'P' ? process.env.REACT_APP_SERVER_PRODUCTION_API : process.env.REACT_APP_SERVER_DEVELOPMENT_API;
 
