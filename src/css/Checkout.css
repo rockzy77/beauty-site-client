@@ -254,8 +254,10 @@
 }
 
 .succlink{
-    color: #777fa8;
-    font-weight: 400;
+    color: #ffffff;
+    background-color: #777fa8;
+    font-family: 'Medium';
+    padding: 8px 26px;
 }
 
 /* Fail */
