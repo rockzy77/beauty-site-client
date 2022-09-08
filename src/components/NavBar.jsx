@@ -50,6 +50,77 @@ const CartNumber = () =>{
 </NavLink>
 }
 
+const CartNumberMobile = () =>{
+
+  const [cartNumber, setCartNumber] = useState(0);
+
+  var dispatch = useDispatch();
+
+  async function getN(){
+
+    const cart = await getCartItem();
+
+    if(cart.success){
+
+      setCartNumber(cart.cartData.length);
+
+    }
+
+    else{
+
+      if(cart.message === "Please Login for access this resource"){
+
+        if(getCookie('cartList') != ''){
+
+          var carts = JSON.parse(getCookie("cartList"));
+
+          setCartNumber(carts.length);
+
+        }
+
+        else{
+
+          setCartNumber(0);
+
+        }
+
+      }
+
+      else{
+
+        setCartNumber(0);
+
+      }
+
+    }
+
+  }
+
+  const data = useSelector((state) => state.theStore.value);
+
+  useEffect(()=>{
+
+    getN();
+
+    dispatch(getData(cartNumber));
+
+  })
+
+  return <NavLink to="/cart" id="cart-icon-mob">
+                  <div className="s">
+                    <MdOutlineShoppingCart className="nav-menu-btn" />
+                    <span id="cart-count-mob">{this.cartItems}</span>
+                  </div>
+                </NavLink>
+
+
+
+
+
+
+
+}
+
 class NavBar extends Component {
   constructor(props) {
     super(props);
@@ -154,12 +225,7 @@ class NavBar extends Component {
               />
 
               <div className="nav-mob-icon-cont">
-                <NavLink to="/cart" id="cart-icon-mob">
-                  <div className="s">
-                    <MdOutlineShoppingCart className="nav-menu-btn" />
-                    <span id="cart-count-mob">{this.cartItems}</span>
-                  </div>
-                </NavLink>
+                <CartNumberMobile />
 
                 {this.props.isLoggedIn ? (
                   <NavLink to="/account">
