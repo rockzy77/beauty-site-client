@@ -6,8 +6,21 @@ import { MdDelete } from "react-icons/md";
 import { addToCart, deleteCart, getCartItem, updateCart } from "../../js/products";
 import { toast } from 'react-toastify';
 import { deleteCookie, getCookie } from "../../js/cookies";
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../js/myStore";
 
-class Cart extends Component {
+const Cart = () => {
+  var dispatch = useDispatch();
+  const data = useSelector((state) => state.theStore.value);
+  function changeCartNumber(){
+    if(parseInt(data) !== 0){
+      dispatch(getData(parseInt(data)+1));
+    }
+  }
+  return <CartDet changeCartNumber={changeCartNumber}/>;
+}
+
+class CartDet extends Component {
   constructor(props) {
     super(props);
     this.amount = 0;
@@ -127,6 +140,7 @@ class Cart extends Component {
         }
       }
     }
+    this.props.changeCartNumber();
     this.calculateTotals();
     toast.success('Item removed from cart.');
     // this.setState({});

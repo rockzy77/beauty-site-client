@@ -34,7 +34,6 @@ const ShopProductCard = (props) => {
               cartList[x].quantity = cartList[x].quantity + 1;
               createCookie("cartList", JSON.stringify(cartList), 1);
               toast.success("Product added to cart.");
-              dispatch(getData(parseInt(data)+1));
               return;
             }
           }

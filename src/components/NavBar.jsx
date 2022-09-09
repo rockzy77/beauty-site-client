@@ -16,105 +16,90 @@ import { getData } from "../js/myStore";
 import { getCookie } from "../js/cookies";
 
 
-const CartNumber = () =>{
+var called = false; 
+var calledM = false; 
+
+const CartNumber = () => {
   const [cartNumber, setCartNumber] = useState(0);
   var dispatch = useDispatch();
-  async function getN(){
+  async function getN() {
+    called = true;
     const cart = await getCartItem();
-    if(cart.success){
+    if (cart.success) {
       setCartNumber(cart.cartData.length);
-    }
-    else{
-      if(cart.message === "Please Login for access this resource"){
-        if(getCookie('cartList') != ''){
+    } else {
+      if (cart.message === "Please Login for access this resource") {
+        if (getCookie("cartList") != "") {
           var carts = JSON.parse(getCookie("cartList"));
           setCartNumber(carts.length);
-        }
-        else{
+        } else {
           setCartNumber(0);
         }
-      }
-      else{
+      } else {
         setCartNumber(0);
       }
     }
+    
   }
   const data = useSelector((state) => state.theStore.value);
-  useEffect(()=>{
+  useEffect(() => {
+   if(called === false){
     getN();
+   }
     dispatch(getData(cartNumber));
-  })
-  return <NavLink to="/cart">
-  <MdOutlineShoppingCart className="cart-icon cart-icons" />
-  <span id="cart-count">{data}</span>
-</NavLink>
-}
+  });
+  return (
+    <NavLink to="/cart">
+      <MdOutlineShoppingCart className="cart-icon cart-icons" />
+      <span id="cart-count">{data}</span>
+    </NavLink>
+  );
+};
 
-const CartNumberMobile = () =>{
-
+const CartNumberMobile = () => {
   const [cartNumber, setCartNumber] = useState(0);
-
   var dispatch = useDispatch();
 
-  async function getN(){
-
+  async function getN() {
+    calledM = true;
     const cart = await getCartItem();
 
-    if(cart.success){
-
+    if (cart.success) {
       setCartNumber(cart.cartData.length);
-
-    }
-
-    else{
-
-      if(cart.message === "Please Login for access this resource"){
-
-        if(getCookie('cartList') != ''){
-
+    } else {
+      if (cart.message === "Please Login for access this resource") {
+        if (getCookie("cartList") != "") {
           var carts = JSON.parse(getCookie("cartList"));
 
           setCartNumber(carts.length);
-
-        }
-
-        else{
-
+        } else {
           setCartNumber(0);
-
         }
-
-      }
-
-      else{
-
+      } else {
         setCartNumber(0);
-
       }
-
     }
-
+    
   }
 
   const data = useSelector((state) => state.theStore.value);
 
-  useEffect(()=>{
-
-    getN();
-
+  useEffect(() => {
+    if (calledM === false) {
+      getN();
+    }
     dispatch(getData(cartNumber));
+  });
 
-  })
-
-  return <NavLink to="/cart" id="cart-icon-mob">
-                  <div className="s">
-                    <MdOutlineShoppingCart className="nav-menu-btn" />
-                    <span id="cart-count-mob">{data}</span>
-                  </div>
-                </NavLink>
-
-
-}
+  return (
+    <NavLink to="/cart" id="cart-icon-mob">
+      <div className="s">
+        <MdOutlineShoppingCart className="nav-menu-btn" />
+        <span id="cart-count-mob">{data}</span>
+      </div>
+    </NavLink>
+  );
+};
 
 class NavBar extends Component {
   constructor(props) {
@@ -146,7 +131,7 @@ class NavBar extends Component {
             <img className="navTitle" src={public_url + "logo.png"} alt="" />
             <ul className="side-nav-content">
               <li>
-                <CartNumber/>
+                <CartNumber />
 
                 {this.props.isLoggedIn ? (
                   <NavLink to="/account" className="acc-text">

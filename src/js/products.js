@@ -127,7 +127,6 @@ async function getCartItem(pid, comment, rating) {
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
     console.log(e);

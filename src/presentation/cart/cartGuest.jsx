@@ -6,13 +6,22 @@ import { MdDelete } from "react-icons/md";
 import { deleteCart, getCartItem, updateCart } from "../../js/products";
 import { toast } from "react-toastify";
 import { createCookie, getCookie } from "../../js/cookies";
+import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../js/myStore";
 
 const CartGuest = () =>{
   const navigate = useNavigate();
   function toLoginPage(){
     navigate('/login');
   }
-  return <CartGuestDiv toLogin={toLoginPage}/>;
+  var dispatch = useDispatch();
+  const data = useSelector((state) => state.theStore.value);
+  function changeCartNumber(){
+    if(parseInt(data) !== 0){
+      dispatch(getData(parseInt(data)+1));
+    }
+  }
+  return <CartGuestDiv toLogin={toLoginPage} changeCartNumber={changeCartNumber}/>;
 }
 
 class CartGuestDiv extends Component {
@@ -137,6 +146,7 @@ class CartGuestDiv extends Component {
     createCookie("cartList", JSON.stringify(this.cartItems), 1);
     createCookie("dimensions", JSON.stringify(this.dimensions), 1);
     createCookie("stocks", JSON.stringify(this.stocks), 1);
+    this.props.changeCartNumber();
     this.calculateTotals();
     toast.success("Item removed from cart.");
     // this.setState({});

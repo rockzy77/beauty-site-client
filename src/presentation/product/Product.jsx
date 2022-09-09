@@ -199,7 +199,6 @@ class ProductDet extends Component {
               cartList[x].quantity = cartList[x].quantity + 1;
               createCookie("cartList", JSON.stringify(cartList), 1);
               toast.success("Product added to cart.");
-              this.props.changeCartNumber();
               return;
             }
           }
