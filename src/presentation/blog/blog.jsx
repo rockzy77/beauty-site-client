@@ -6,6 +6,8 @@ import 'aos/dist/aos.css';
 import { Component } from "react";
 import { getBlogs } from "../../js/blogs";
 import uuid from "react-uuid";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 class Blog extends Component{
     constructor(props){
@@ -13,6 +15,7 @@ class Blog extends Component{
         this.blogs = [];
         this.page = 1;
         this.totalBlogs = 0;
+        this.loading = true;
     }
 
     async componentDidMount(){
@@ -25,9 +28,16 @@ class Blog extends Component{
         if(det.success){
             this.blogs = det.result;
             console.log(this.blogs);
+            this.loading = false;
             this.setState({})
         }
     }
+
+    calculateNumberOfPages(totalItems, itemsPerPage) {
+      return Math.ceil(totalItems / itemsPerPage);
+  }
+
+  
     render(){
         return <section id="learn">
         <NavBar />
@@ -38,6 +48,7 @@ class Blog extends Component{
         <h1 className="learntitle">Learn more about skincare</h1>
        <center> <div className="underline"></div></center>
        <br />
+        { !this.loading ? <div className="loaded-blogs">
         <div data-aos='fade-up' className="blogs">
             {this.blogs.length !== 0 ? this.blogs.map(function(item, i){
                 return <div key={uuid()}  data-aos='fade-up' id="blog" className="blog">
@@ -69,8 +80,8 @@ class Blog extends Component{
               }
             }}>Previous Page</p>) : ( <div></div>)}
 
-            {this.page < parseInt(this.totalBlogs/8) ? ( <p onClick={()=>{
-              var pages = parseInt(this.totalBlogs / 8);
+            {this.page < this.calculateNumberOfPages((this.totalBlogs/8)) ? ( <p onClick={()=>{
+              var pages = this.calculateNumberOfPages((this.totalBlogs/8));
               if(this.page < pages){
                 this.page++;
                 this.loadBlog()
@@ -82,7 +93,11 @@ class Blog extends Component{
        </div>
        <div style={{
            height: this.blogs.length > 0 ? "100px" : "300px",
-          }} className="spacerfooter"></div>
+          }} className="spacerfooter"></div> 
+        </div> : <div style={{
+            'height': '250px'
+          }} className="loading-l">
+          <center><CircularProgress /></center></div> }
        <Footer/>
     </section>
     }

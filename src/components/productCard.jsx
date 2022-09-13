@@ -6,6 +6,7 @@ import $ from "jquery";
 import { createCookie, getCookie } from "../js/cookies";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../js/myStore";
+import trackFB from "../js/fbtrack";
 
 
 const ProductCard = (props) => {
@@ -21,10 +22,24 @@ const ProductCard = (props) => {
       productId: props.id,
     };
 
+    trackFB('AddToCart', {
+      content_category: props.category,
+      content_ids: [props.id],
+      currency: "INR",
+      value: parseInt(props.price)
+    })
+
     var made = await addToCart(map);
     if (made["success"]) {
-      dispatch(getData(parseInt(data)+1));
       toast.success("Product added to cart.");
+      if (!made.message.includes("quantity")) {
+        var cn = 0;
+        if (getCookie("cartNumber") !== "") {
+          cn = parseInt(getCookie("cartNumber"));
+        }
+        createCookie("cartNumber", cn + 1, 1);
+        dispatch(getData(parseInt(data) + 1));
+      }
     } else {
       if (made.message === "Please Login for access this resource") {
         var cartList = [];
@@ -59,7 +74,12 @@ const ProductCard = (props) => {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
-          dispatch(getData(parseInt(data)+1));
+          var cn = 0;
+          if (getCookie("cartNumber") !== "") {
+            cn = parseInt(getCookie("cartNumber"));
+          }
+          createCookie("cartNumber", cn + 1, 1);
+          dispatch(getData(parseInt(data) + 1));
         } else {
           // Cart Scratch
           if (getCookie("dimensions") != "") {
@@ -80,7 +100,12 @@ const ProductCard = (props) => {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
-          dispatch(getData(parseInt(data)+1));
+          var cn = 0;
+          if (getCookie("cartNumber") !== "") {
+            cn = parseInt(getCookie("cartNumber"));
+          }
+          createCookie("cartNumber", cn + 1, 1);
+          dispatch(getData(parseInt(data) + 1));
         }
       } else {
         toast.error("Something went wrong");

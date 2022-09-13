@@ -13,89 +13,99 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { getData } from "../js/myStore";
-import { getCookie } from "../js/cookies";
+import { createCookie, getCookie } from "../js/cookies";
 
 
 var called = false; 
 var calledM = false; 
 
 const CartNumber = () => {
-  const [cartNumber, setCartNumber] = useState(0);
   var dispatch = useDispatch();
+
   async function getN() {
     called = true;
     const cart = await getCartItem();
     if (cart.success) {
-      setCartNumber(cart.cartData.length);
+      createCookie("cartNumber", cart.cartData.length, 1);
     } else {
       if (cart.message === "Please Login for access this resource") {
         if (getCookie("cartList") != "") {
           var carts = JSON.parse(getCookie("cartList"));
-          setCartNumber(carts.length);
+          createCookie("cartNumber", carts.length, 1);
         } else {
-          setCartNumber(0);
+          createCookie("cartNumber", 0, 1);
         }
       } else {
-        setCartNumber(0);
+        createCookie("cartNumber", 0, 1);
       }
     }
     
   }
+
   const data = useSelector((state) => state.theStore.value);
   useEffect(() => {
    if(called === false){
     getN();
    }
-    dispatch(getData(cartNumber));
+   if(getCookie("cartNumber") != ""){
+    createCookie("cartNumber", getCookie("cartNumber"), 1);
+   }
+   else{
+    createCookie("cartNumber", 0, 1);
+   }
+   var cn = getCookie("cartNumber");
+    dispatch(getData(cn));
   });
   return (
     <NavLink to="/cart">
       <MdOutlineShoppingCart className="cart-icon cart-icons" />
-      <span id="cart-count">{data}</span>
+      <span id="cart-count">{isNaN(data) || data == '' ? 0 : data > 20 ? '20+' : data}</span>
     </NavLink>
   );
 };
 
 const CartNumberMobile = () => {
-  const [cartNumber, setCartNumber] = useState(0);
   var dispatch = useDispatch();
 
   async function getN() {
     calledM = true;
     const cart = await getCartItem();
-
     if (cart.success) {
-      setCartNumber(cart.cartData.length);
+      createCookie("cartNumber", cart.cartData.length, 1);
     } else {
       if (cart.message === "Please Login for access this resource") {
         if (getCookie("cartList") != "") {
           var carts = JSON.parse(getCookie("cartList"));
-
-          setCartNumber(carts.length);
+          createCookie("cartNumber", carts.length, 1);
         } else {
-          setCartNumber(0);
+          createCookie("cartNumber", 0, 1);
         }
       } else {
-        setCartNumber(0);
+        createCookie("cartNumber", 0, 1);
       }
     }
     
   }
 
   const data = useSelector((state) => state.theStore.value);
-
   useEffect(() => {
-    if (calledM === false) {
-      getN();
-    }
-    dispatch(getData(cartNumber));
+   if(calledM === false){
+    getN();
+   }
+   if(getCookie("cartNumber") != ""){
+    createCookie("cartNumber", getCookie("cartNumber"), 1);
+   }
+   else{
+    createCookie("cartNumber", 0, 1);
+   }
+   var cn = getCookie("cartNumber");
+    dispatch(getData(cn));
   });
-
   return (
     <NavLink to="/cart" id="cart-icon-mob">
       <div className="s">
         <MdOutlineShoppingCart className="nav-menu-btn" />
-        <span id="cart-count-mob">{data}</span>
+        <span id="cart-count-mob">{isNaN(data) || data == '' ? 0 : data > 20 ? '20+' : data}</span>
       </div>
     </NavLink>
   );

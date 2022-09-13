@@ -6,6 +6,7 @@ import $ from "jquery";
 import { getUserDetail } from "../../js/auth";
 import ShopProductCard from "./ShopProductCard";
 import uuid from "react-uuid";
+import CircularProgress from '@mui/material/CircularProgress';
 
 class ShopPage extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class ShopPage extends Component {
     this.page =1;
     this.totalProducts = 0;
     this.paginationRow = [];
+    this.loading = true;
   }
 
    calculateNumberOfPages(totalItems, itemsPerPage) {
@@ -37,6 +39,7 @@ class ShopPage extends Component {
         var id = product["id"];
         var name = product["name"];
         var price = product["price"];
+        var cat = product["category"];
         this.products.push(
           <ShopProductCard
             key={uuid()}
@@ -69,11 +72,12 @@ class ShopPage extends Component {
             images={this.images[i]}
             title={name}
             price={price}
+            productOtherDet={product}
           />
         );
       }
     }
-    
+    this.loading = false;
     this.setState({})
   }
   async componentDidMount() {
@@ -81,7 +85,6 @@ class ShopPage extends Component {
     this.isLoggedIn = data["success"];
     this.setState({});
     this.loadProducts();
-    
     this.setState({})
   }
 
@@ -93,6 +96,7 @@ class ShopPage extends Component {
           <div className="shop-header">
             <h1>Shop</h1>
           </div>
+         { !this.loading ? <div className="shop-loaded">
           <br />
           <h1 className="avaih1">Available Products - {this.totalProducts}</h1>
           <div className="shop-products">{this.products}</div>
@@ -118,6 +122,10 @@ class ShopPage extends Component {
           </div>
           </div>
           <br />
+          </div> : <div style={{
+            'height': '400px'
+          }} className="loading-l">
+          <center><CircularProgress /></center></div>}
         </section>
         <Footer />
       </div>

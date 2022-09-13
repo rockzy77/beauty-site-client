@@ -172,12 +172,12 @@ class AdminDiscountEditPanel extends Component {
 
         <button
           onClick={() => {
-            if (Object.keys(this.thingsToUpdate).length === 0) {
+            if (Object.keys(this.thingstoUpdate).length === 0) {
               alert("Nothing to update");
             }
             else{
-              for (var key in this.thingsToUpdate) {
-                if (this.thingsToUpdate[key] === "") {
+              for (var key in this.thingstoUpdate) {
+                if (this.thingstoUpdate[key] === "") {
                   alert("Please fill all fields");
                   return;
                 }

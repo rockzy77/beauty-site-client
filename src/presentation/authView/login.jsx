@@ -255,17 +255,7 @@ class LoginScreenCont extends Component {
                   Not a user?<span> </span>
                   <NavLink
                     state={{
-                      checkout_data: {
-                        amount: this.props.checkout_data.amount,
-                        totalAmount: this.props.checkout_data.totalAmount,
-                        cart_data: this.props.checkout_data.cart_data,
-                        totalHeight: this.props.checkout_data.totalHeight,
-                        totalLength: this.props.checkout_data.totalLength,
-                        totalBreadth: this.props.checkout_data.totalBreadth,
-                        totalWeight: this.props.checkout_data.totalWeight,
-                        morethanthree: this.props.checkout_data.morethanthree,
-                        backupamount: this.props.checkout_data.backupamount,
-                      },
+                      checkout_data: this.props.checkout_data,
                     }}
                     className="singuplink"
                     to="/signup"

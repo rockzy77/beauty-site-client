@@ -4,13 +4,13 @@ import { createCookie, getCookie } from "../../js/cookies";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../js/myStore";
+import trackFB from "../../js/fbtrack";
 
 const ShopProductCard = (props) => {
   var dispatch = useDispatch();
-    const data = useSelector((state) => state.theStore.value);
+  const data = useSelector((state) => state.theStore.value);
   async function addToCartReady() {
-    
-    console.log(props.productOtherDet)
+    console.log(props.productOtherDet);
     var map = {
       productName: props.title,
       productPrice: parseInt(props.price),
@@ -18,10 +18,25 @@ const ShopProductCard = (props) => {
       quantity: 1,
       productId: props.pid,
     };
+    
+    trackFB('AddToCart', {
+      content_category: props.productOtherDet.category,
+      content_ids: [props.id],
+      currency: "INR",
+      value: parseInt(props.price)
+    })
+
     var made = await addToCart(map);
     if (made["success"]) {
       toast.success("Product added to cart.");
-      dispatch(getData(parseInt(data)+1));
+      if (!made.message.includes("quantity")) {
+        var cn = 0;
+        if (getCookie("cartNumber") !== "") {
+          cn = parseInt(getCookie("cartNumber"));
+        }
+        createCookie("cartNumber", cn + 1, 1);
+        dispatch(getData(parseInt(data) + 1));
+      }
     } else {
       if (made.message === "Please Login for access this resource") {
         var cartList = [];
@@ -56,7 +71,12 @@ const ShopProductCard = (props) => {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
-          dispatch(getData(parseInt(data)+1));
+          var cn = 0;
+          if (getCookie("cartNumber") !== "") {
+            cn = parseInt(getCookie("cartNumber"));
+          }
+          createCookie("cartNumber", cn + 1, 1);
+          dispatch(getData(parseInt(data) + 1));
         } else {
           // Cart Scratch
           if (getCookie("dimensions") != "") {
@@ -77,7 +97,12 @@ const ShopProductCard = (props) => {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
-          dispatch(getData(parseInt(data)+1));
+          var cn = 0;
+          if (getCookie("cartNumber") !== "") {
+            cn = parseInt(getCookie("cartNumber"));
+          }
+          createCookie("cartNumber", cn + 1, 1);
+          dispatch(getData(parseInt(data) + 1));
         }
       } else {
         toast.error("Something went wrong");

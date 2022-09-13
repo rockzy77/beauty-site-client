@@ -518,6 +518,13 @@
     border-radius: 5px;
 }
 
+.progress-bar{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 
 /* Disocunt */
 
@@ -557,6 +564,15 @@
 .comment-det{
     font-size: 1.1em !important; 
 }
+.pop-cont{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.267);
+}
+
+
+
 @media screen and (min-width: 300px) {
     .product-tag-img-cont{
         justify-content: center;

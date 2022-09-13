@@ -18,9 +18,12 @@ class AllProducts extends Component {
     this.products = [];
     this.productrow = [];
     this.backupProductsRow = [];
+    this.loading = true;
   }
 
   deleteRow(index){
+    this.loading = true;
+    this.setState({});
     if(index === 0){
       this.products.shift();
     }
@@ -57,8 +60,9 @@ class AllProducts extends Component {
           dlt={this.deleteRow.bind(this)}
         />
       );
-      this.setState({});
     }
+    this.loading = false;
+    this.setState({});
   }
 
 
@@ -95,14 +99,15 @@ class AllProducts extends Component {
             dlt={this.deleteRow.bind(this)}
           />
         );
-        this.setState({});
       }
+      this.loading = false;
+      this.setState({})
     }
   }
 
   render() {
     return (
-      <div className="all-products">
+      !this.loading ? <div className="all-products">
         <div>
           <input
             onChange={() => {
@@ -150,7 +155,7 @@ class AllProducts extends Component {
             </table>
           </div>
         </div>
-      </div>
+      </div> : <div className="progress-bar">Fetching Data...</div>
     );
   }
 }

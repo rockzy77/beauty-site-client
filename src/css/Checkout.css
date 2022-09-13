@@ -245,6 +245,7 @@
 
 .succ p{
     font-weight: 400;
+    padding: 0 45px;
 }
 
 .succ img{
@@ -254,10 +255,13 @@
 }
 
 .succlink{
-    color: #ffffff;
+    color: #ffffff !important;
     background-color: #777fa8;
     font-family: 'Medium';
-    padding: 8px 26px;
+    padding: 12px 26px;
+    border-radius: 8px;
+    text-decoration: none;
+    outline: none;
 }
 
 /* Fail */
@@ -326,4 +330,13 @@
         padding: 15px;
         height: fit-content;
     }
+}
+
+
+@media screen and (max-width: 776px) {
+    
+.succ p{
+    font-weight: 400;
+    padding: 0 15px;
+}
 }

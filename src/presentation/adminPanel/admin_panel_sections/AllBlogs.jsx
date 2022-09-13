@@ -21,10 +21,13 @@ class AllBlogs extends Component {
     this.blogsrow = [];
     this.backupBlogsRow = [];
     this.searchMethod = "Author";
+    this.loading = true;
   }
 
   
   deleteRow(index){
+    this.loading = true;
+    this.setState({});
     if(index === 0){
       this.blogsrow.shift();
     }
@@ -64,8 +67,9 @@ class AllBlogs extends Component {
           dlt={this.deleteRow.bind(this)}
         />
       );
-      this.setState({});
     }
+    this.loading = false;
+    this.setState({})
   }
 
 
@@ -105,13 +109,14 @@ class AllBlogs extends Component {
             dlt={this.deleteRow.bind(this)}
           />
         );
-        this.setState({});
       }
+      this.loading = false;
+      this.setState({});
     }
   }
   render() {
     return (
-      <section className="all-users">
+     !this.loading ? <section className="all-users">
         <input
           onChange={() => {
             var backupList = this.backupBlogsRow;
@@ -182,7 +187,7 @@ class AllBlogs extends Component {
             <tbody>{this.blogsrow}</tbody>
           </table>
         </div>
-      </section>
+      </section> : <div className="progress-bar">Fetching Data...</div>
     );
   }
 }

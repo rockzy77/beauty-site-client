@@ -1,10 +1,9 @@
 import { Component } from "react";
 import { MdDelete, MdModeEdit } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { getAllOrdersAdmin } from "../../../js/adminProduct";
 import { deleteOrder } from "../../../js/payment";
-import { toast } from 'react-toastify';
-
+import { toast } from "react-toastify";
 
 class AllOrders extends Component {
   constructor(props) {
@@ -14,45 +13,94 @@ class AllOrders extends Component {
     this.orderDet = [];
     this.orderImages = [];
     this.backupordersRow = [];
-    this.searchMethod = "Name";
+    this.searchMethod = "Order Id";
+    this.loading = true;
+    this.popOrder = [];
+    this.finalOrder = [];
   }
 
-  deleteRow(orderid) {
+  changePopOrder(orders){
+    this.popOrder = orders;
+    this.setState({});
+  }
+
+  deleteRow(torderid) {
+    this.loading = true;
+    this.setState({})
     this.ordersrow = [];
     this.backupordersRow = [];
+    var orderids = [];
     for (var i = 0; i < this.orders.length; i++) {
-      var order = this.orders[i];
-      var orderDet = {};
-      for (var j = 0; j < this.orderDet.length; j++) {
-        if (this.orderDet[j].order_id === orderid) {
-          this.orderDet[j].current_status = "CANCELLED";
-        }
-        if (this.orderDet[j].order_id === this.orders[i].order_id) {
-          orderDet = this.orderDet[j];
-        }
-      }
-      this.ordersrow.push(
-        <OrdersRow
-          key={i}
-          si={i + 1}
-          order={order}
-          orderDet={orderDet}
-          orderImage={this.orderImages[i]}
-          dlt={this.deleteRow.bind(this)}
-        />
-      );
-      this.backupordersRow.push(
-        <OrdersRow
-          key={i}
-          si={i + 1}
-          order={order}
-          orderDet={orderDet}
-          orderImage={this.orderImages[i]}
-          dlt={this.deleteRow.bind(this)}
-        />
-      );
-      this.setState({});
+      orderids.push(this.orders[i].order_id);
     }
+    console.log(this.orders)
+    // filter unique order ids
+    orderids = orderids.filter((v, i, a) => a.indexOf(v) === i);
+  
+    for (var j = 0; j < orderids.length; j++) {
+      if(orderids[j] !== torderid){
+        var orderid = orderids[j];
+        var indexes = [];
+        var sameOrders = [];
+        var snames = "";
+        var sprice = 0;
+        var sunits = 0;
+        for (var x = 0; x < this.orders.length; x++) {
+          if (this.orders[x].order_id === orderid) {
+            indexes.push(x);
+          }
+        }
+  
+        for (var y = 0; y < indexes.length; y++) {
+          sameOrders.push(this.orders[indexes[y]]);
+          snames =snames + this.orders[indexes[y]].name + ", ";
+          sprice =
+            sprice +
+            parseInt(this.orders[indexes[y]].selling_price) *
+              parseInt(this.orders[indexes[y]].units);
+         sunits = sunits + parseInt(this.orders[indexes[y]].units);
+        }
+  
+        var orderDet = {};
+        for (var k = 0; k < this.orderDet.length; k++) {
+          if (this.orderDet[k].order_id === orderid) {
+            orderDet = this.orderDet[k];
+          }
+        }
+  
+        const torder = JSON.stringify(this.orders[indexes[0]]);
+        const order = JSON.parse(torder);
+        order.name = snames;
+        order.selling_price = sprice;
+        order.units = sunits;
+        this.finalOrder.push(order);
+  
+        this.ordersrow.push(
+          <OrdersRow
+          key={j+1}
+            si={j+1}
+            order={order}
+            orderDet={orderDet}
+            sameOrders={sameOrders}
+            dlt={this.deleteRow.bind(this)}
+            changePopOrder={this.changePopOrder.bind(this)}
+          />
+        );
+        this.backupordersRow.push(
+          <OrdersRow
+            key={j+1}
+            si={j+1}
+            order={order}
+            orderDet={orderDet}
+            sameOrders={sameOrders}
+            dlt={this.deleteRow.bind(this)}
+            changePopOrder={this.changePopOrder.bind(this)}
+          />
+        );
+      }
+    }
+  this.loading = false;
+  this.setState({});
   }
 
   async componentDidMount() {
@@ -61,41 +109,89 @@ class AllOrders extends Component {
       this.orders = d["order_items"];
       this.orderDet = d["orders_details"];
       this.setState({});
-      var prev_order_id = '';
+      var orderids = [];
       for (var i = 0; i < this.orders.length; i++) {
-        var order = this.orders[i];
-        prev_order_id = order.order_id;
-        var orderDet = {};
-        for (var j = 0; j < this.orderDet.length; j++) {
-          if (this.orderDet[j].order_id === this.orders[i].order_id) {
-            orderDet = this.orderDet[j];
+        orderids.push(this.orders[i].order_id);
+      }
+      console.log(this.orders)
+      // filter unique order ids
+      orderids = orderids.filter((v, i, a) => a.indexOf(v) === i);
+    
+      for (var j = 0; j < orderids.length; j++) {
+        var orderid = orderids[j];
+        var indexes = [];
+        var sameOrders = [];
+        var snames = "";
+        var sprice = 0;
+        var sunits = 0;
+        for (var x = 0; x < this.orders.length; x++) {
+          if (this.orders[x].order_id === orderid) {
+            indexes.push(x);
           }
         }
+
+        for (var y = 0; y < indexes.length; y++) {
+          sameOrders.push(this.orders[indexes[y]]);
+          snames =snames + this.orders[indexes[y]].name + ", ";
+          sprice =
+            sprice +
+            parseInt(this.orders[indexes[y]].selling_price) *
+              parseInt(this.orders[indexes[y]].units);
+         sunits = sunits + parseInt(this.orders[indexes[y]].units);
+        }
+
+        var orderDet = {};
+        for (var k = 0; k < this.orderDet.length; k++) {
+          if (this.orderDet[k].order_id === orderid) {
+            orderDet = this.orderDet[k];
+          }
+        }
+
+        const torder = JSON.stringify(this.orders[indexes[0]]);
+        const order = JSON.parse(torder);
+        order.name = snames;
+        order.selling_price = sprice;
+        order.units = sunits;
+        console.log('order==========>')
+        console.log(order)
+        this.finalOrder.push(order);
+        
+
         this.ordersrow.push(
           <OrdersRow
-            key={i}
-            si={i + 1}
+          key={j+1}
+            si={j+1}
             order={order}
             orderDet={orderDet}
+            sameOrders={sameOrders}
             dlt={this.deleteRow.bind(this)}
+            changePopOrder={this.changePopOrder.bind(this)}
           />
         );
         this.backupordersRow.push(
           <OrdersRow
-            key={i}
-            si={i + 1}
+          key={j+1}
+            si={j+1}
             order={order}
             orderDet={orderDet}
+            sameOrders={sameOrders}
             dlt={this.deleteRow.bind(this)}
+            changePopOrder={this.changePopOrder.bind(this)}
           />
         );
-        this.setState({});
       }
     }
+    console.log(this.finalOrder)
+    this.loading = false;
+    this.setState({});
   }
   render() {
-    return (
+    return !this.loading ? (
       <section className="all-users">
+        <div style={{'display': 'none'}} className="pop-cont">
+          
+        
+        </div>
         <input
           onChange={() => {
             var backupList = this.backupordersRow;
@@ -105,23 +201,32 @@ class AllOrders extends Component {
             search = search.toLowerCase();
 
             if (search !== "") {
-              for (var i = 0; i < this.orders.length; i++) {
-                if (this.searchMethod === "Name") {
-                  if (this.orders[i]["name"].toLowerCase().includes(search)) {
-                    tempList.push(this.ordersrow[i]);
+              if(this.searchMethod !== 'Discount Used'){
+                for (var i = 0; i < this.finalOrder.length; i++) {
+                  if (this.searchMethod === "Name") {
+                    if (this.finalOrder[i]["name"].toLowerCase().includes(search)) {
+                      tempList.push(this.ordersrow[i]);
+                    }
+                  } else if (this.searchMethod === "Date Created") {
+                    if (
+                      this.finalOrder[i]["updatedAt"].toLowerCase().includes(search)
+                    ) {
+                      tempList.push(this.ordersrow[i]);
+                    }
+                  } else if (this.searchMethod === "Order Id") {
+                    if (
+                      this.finalOrder[i]["order_id"].toLowerCase().includes(search)
+                    ) {
+                      tempList.push(this.ordersrow[i]);
+                    }
                   }
-                } else if (this.searchMethod === "Date Created") {
-                  if (
-                    this.orders[i]["updatedAt"].toLowerCase().includes(search)
-                  ) {
-                    tempList.push(this.ordersrow[i]);
-                  }
-                } else if (this.searchMethod === "OrderId") {
-                  if (
-                    this.orders[i]["order_id"].toLowerCase().includes(search)
-                  ) {
-                    tempList.push(this.ordersrow[i]);
-                  }
+                }
+              }
+              else{
+                  for (var k = 0; k < this.orderDet.length; k++) {
+                    if (this.orderDet[k].discountCode.toLowerCase().includes(search)) {
+                      tempList.push(this.ordersrow[k]);
+                    }
                 }
               }
 
@@ -147,8 +252,9 @@ class AllOrders extends Component {
           name="searchusing"
           id="searchusing"
         >
+          <option value="Order Id">Order Id</option>
           <option value="Name">Name</option>
-          <option value="OrderId">Order Id</option>
+          <option value="Discount Used">Discount Used</option>
           <option value="Date Created">Date Created</option>
         </select>
         <br />
@@ -162,6 +268,9 @@ class AllOrders extends Component {
                 <th>Name</th>
                 <th>Units</th>
                 <th>Price</th>
+                <th>Shipping</th>
+                <th>Discount Used</th>
+                <th>Discount Amount</th>
                 <th>SubTotal</th>
                 <th>Billing Name</th>
                 <th>Billing Address</th>
@@ -176,25 +285,55 @@ class AllOrders extends Component {
             <tbody>{this.ordersrow}</tbody>
           </table>
         </div>
+        
       </section>
+    ) : (
+      <div className="progress-bar">Fetching Data...</div>
     );
   }
 }
 
 const OrdersRow = (props) => {
+  console.log(props.orderDet)
   var date = props.order.updatedAt.slice(0, 10);
   var time = props.order.updatedAt.slice(11, 16);
   var navigate = useNavigate();
+  var name = props.order.name;
+  if(name.length > 20){
+    name = name.slice(0, 20) + "...";
+  }
   return (
     <tr>
       <td>{props.si}</td>
       <td>{props.order.order_id}</td>
-      <td>{props.order.name}</td>
+      <td><NavLink style={{
+        'color': 'black'
+      }} state={{
+        orders: props.sameOrders,
+        order_id: props.order.order_id
+      }} to='/admin_panel/viewOrders'id="toView">{name}</NavLink></td>
       <td>{props.order.units}</td>
-      <td>{props.order.selling_price}</td>
-      <td>{props.orderDet.sub_total}</td>
-      <td>{props.orderDet.billing_customer_name+' '+props.orderDet.billing_last_name}</td>
-      <td>{props.orderDet.billing_address+', '+props.orderDet.billing_city+', '+props.orderDet.billing_state+', '+props.orderDet.billing_country+', '+props.orderDet.billing_pincode}</td>
+      <td>{"Rs "+props.order.selling_price}</td>
+      <td>{"Rs "+props.orderDet.deliveryCharge}</td>
+      <td>{props.orderDet.discountCode !== '' ? props.orderDet.discountCode : 'Nill'}</td>
+      <td>{props.orderDet.discountCode !== '' ? 'Rs '+props.orderDet.discountAmount : 'Nill'}</td>
+      <td>{"Rs "+props.orderDet.sub_total}</td>
+      <td>
+        {props.orderDet.billing_customer_name +
+          " " +
+          props.orderDet.billing_last_name}
+      </td>
+      <td>
+        {props.orderDet.billing_address +
+          ", " +
+          props.orderDet.billing_city +
+          ", " +
+          props.orderDet.billing_state +
+          ", " +
+          props.orderDet.billing_country +
+          ", " +
+          props.orderDet.billing_pincode}
+      </td>
       <td>{props.orderDet.billing_phone}</td>
       <td>{props.orderDet.billing_email}</td>
       <td>{props.orderDet.current_status}</td>
@@ -215,9 +354,9 @@ const OrdersRow = (props) => {
               var made = await deleteOrder(props.order.order_id);
               if (made["success"]) {
                 props.dlt(props.order.order_id);
-                toast.success("Order was deleted")
+                toast.success("Order was deleted");
               } else {
-                toast.error("Error: " + made["message"])
+                toast.error("Error: " + made["message"]);
               }
             }
           }}

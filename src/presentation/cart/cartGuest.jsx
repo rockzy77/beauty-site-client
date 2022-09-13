@@ -18,10 +18,20 @@ const CartGuest = () =>{
   const data = useSelector((state) => state.theStore.value);
   function changeCartNumber(){
     if(parseInt(data) !== 0){
-      dispatch(getData(parseInt(data)+1));
+      var cn = 0;
+      if(getCookie("cartNumber") != ""){
+        cn = parseInt(getCookie("cartNumber"));
+      }
+      createCookie("cartNumber", (cn - 1), 1);
+      dispatch(getData(parseInt(data)-1));
     }
   }
-  return <CartGuestDiv toLogin={toLoginPage} changeCartNumber={changeCartNumber}/>;
+
+  function resetCart(){
+    createCookie("cartNumber", 0, 1);
+      dispatch(getData(0));
+  }
+  return <CartGuestDiv toLogin={toLoginPage} resetCart={resetCart} changeCartNumber={changeCartNumber}/>;
 }
 
 class CartGuestDiv extends Component {
@@ -325,6 +335,7 @@ class CartGuestDiv extends Component {
                   <button
                   onClick={()=>{
                     alert('Please login to checkout.')
+                    this.props.resetCart();
                     document.getElementById('toLogin').click();
                   }}
                     className="checkoutbtns"

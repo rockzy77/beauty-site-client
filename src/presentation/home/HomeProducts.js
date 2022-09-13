@@ -24,7 +24,8 @@ class HomeProducts extends Component {
       var img = image.url;
       var name = product.name;
       var price = product.price;
-      this.products.push(<ProductCard id={id} si={i+1} key={i} imageurl={img} title={name} price={price} productOtherDet={product}/>)
+      var cat = product.category;
+      this.products.push(<ProductCard id={id} si={i+1} key={i} category={cat} imageurl={img} title={name} price={price} productOtherDet={product}/>)
     this.setState({});
   }
 }

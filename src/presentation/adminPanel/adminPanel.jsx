@@ -176,7 +176,7 @@ const AdminPanel = () => {
       <div className="adminPanelContent">
         <br />
         <h1 id="section-title" className="section-title">
-          Admin Panel/ Dashboard
+          Admin Panel
         </h1>
         <Outlet />
       </div>

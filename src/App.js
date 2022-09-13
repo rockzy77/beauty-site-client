@@ -54,6 +54,7 @@ import {initializeFirebase} from "./js/config/firebaseConfig";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NavBar from "./components/NavBar";
+import AdminOrderView from "./presentation/adminPanel/compo/AdminOrderView";
 
 
 const App = () => {
@@ -144,6 +145,7 @@ const App = () => {
           <Route path="updateDiscount/:name" element={<AdminDiscountEdit />} />
           <Route path="allOrders" element={<AllOrders />} />
           <Route path="updateOrder/:orderId" element={<AdminOrderEdit />} />
+          <Route path="viewOrders" element={<AdminOrderView />} />
         </Route>
         <Route
           path="/checkout"

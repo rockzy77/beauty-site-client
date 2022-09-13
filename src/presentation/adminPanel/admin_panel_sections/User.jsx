@@ -14,10 +14,13 @@ class AllUsers extends Component {
     this.users = [];
     this.usersrow = [];
     this.backupUsersRow = [];
-    this.searchMethod = "Name";
+    this.searchMethod = "User ID";
+    this.loading = true;
   }
 
   deleteRow(index){
+    this.loading = true;
+    this.setState({});
     this.users.splice(index, 1);
     this.usersrow = [];
     this.backupUsersRow = [];
@@ -28,6 +31,7 @@ class AllUsers extends Component {
       var email = user["email"];
       var role = user["role"];
       var created = user["createdAt"];
+      var isGoogleUser = user["isGoogleUser"];
       this.usersrow.push(
         <UserRow
           key={i}
@@ -35,6 +39,7 @@ class AllUsers extends Component {
           id={id}
           uname={name}
           email={email}
+          isGoogleUser={isGoogleUser}
           role={role}
           created={created}
           dlt={this.deleteRow.bind(this)}
@@ -47,13 +52,15 @@ class AllUsers extends Component {
           id={id}
           uname={name}
           email={email}
+          isGoogleUser={isGoogleUser}
           role={role}
           created={created}
           dlt={this.deleteRow.bind(this)}
         />
       );
-      this.setState({});
     }
+    this.loading = false;
+    this.setState({});
   }
 
 
@@ -70,11 +77,13 @@ class AllUsers extends Component {
         var email = user["email"];
         var role = user["role"];
         var created = user["createdAt"];
+        var isGoogleUser = user["isGoogleUser"];
         this.usersrow.push(
           <UserRow
             key={i}
             si={i + 1}
             id={id}
+            isGoogleUser={isGoogleUser}
             uname={name}
             email={email}
             role={role}
@@ -89,18 +98,20 @@ class AllUsers extends Component {
             id={id}
             uname={name}
             email={email}
+            isGoogleUser={isGoogleUser}
             role={role}
             created={created}
             dlt={this.deleteRow.bind(this)}
           />
         );
-        this.setState({});
       }
+      this.loading = false;
+      this.setState({});
     }
   }
   render() {
     return (
-      <section className="all-users">
+      !this.loading ? <section className="all-users">
         <input
           onChange={() => {
             var backupList = this.backupUsersRow;
@@ -123,7 +134,13 @@ class AllUsers extends Component {
                   if (this.users[i]["role"].toLowerCase().includes(search)) {
                     tempList.push(this.usersrow[i]);
                   }
-                } else if (this.searchMethod === "Date Created") {
+                } 
+                else if (this.searchMethod === "User ID") {
+                  if (this.users[i]["id"].toLowerCase().includes(search)) {
+                    tempList.push(this.usersrow[i]);
+                  }
+                }
+                else if (this.searchMethod === "Date Created") {
                   if (
                     this.users[i]["createdAt"].toLowerCase().includes(search)
                   ) {
@@ -153,6 +170,7 @@ class AllUsers extends Component {
           name="searchusing"
           id="searchusing"
         >
+          <option value="User ID">User ID</option>
           <option value="Name">Name</option>
           <option value="Email">Email</option>
           <option value="Role">Role</option>
@@ -165,10 +183,12 @@ class AllUsers extends Component {
             <thead>
               <tr>
                 <th>SI NO</th>
+                <th>User Id</th>
                 <th>Name</th>
-                <th>Date Created</th>
+                <th>Social Login</th>
                 <th>Role</th>
                 <th>Email</th>
+                <th>Date Created</th>
                 <th>Actions</th>
                 <th></th>
               </tr>
@@ -176,23 +196,25 @@ class AllUsers extends Component {
             <tbody>{this.usersrow}</tbody>
           </table>
         </div>
-      </section>
+      </section> : <div className="progress-bar">Fetching Data...</div>
     );
   }
 }
 
 const UserRow = (props) => {
+  console.log(props)
   var date = props.created.slice(0, 10);
   var time = props.created.slice(11, 16);
   var navigate = useNavigate();
   return (
     <tr>
       <td>{props.si}</td>
+      <td>{props.id}</td>
       <td>{props.uname}</td>
-      <td>{date + " " + time}</td>
-
+      <td>{props.isGoogleUser}</td>
       <td>{props.role}</td>
       <td>{props.email}</td>
+      <td>{date + " " + time}</td>
       <td>
         <MdModeEdit
           className="allusersredirect"

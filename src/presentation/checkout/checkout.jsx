@@ -11,9 +11,14 @@ import {
 import { sendMail } from "../../js/sendMail";
 import { toast } from "react-toastify";
 import $ from "jquery";
+import { createCookie } from "../../js/cookies";
+import { useDispatch } from "react-redux";
+import { getData } from "../../js/myStore";
+import trackFB from "../../js/fbtrack";
 
 const Checkout = (props) => {
   const location = useLocation();
+  var dispatch = useDispatch();
   const data = location.state;
   console.log(data);
   const amount = data.amount;
@@ -37,6 +42,10 @@ const Checkout = (props) => {
   var total = data.totalAmount;
   var backupTotalAmount = data.totalAmount;
   var totalAmount = data.totalAmount;
+  var inbuiltoffer = morethanthree ? true : false;
+  console.log('here==================>')
+  console.log(inbuiltoffer);
+  console.log(morethanthree);
 
   async function completeOrder(orderMethod) {
     var idone = Math.floor(100000 + Math.random() * 900000);
@@ -57,6 +66,24 @@ const Checkout = (props) => {
       };
       console.log(item);
       o_items.push(item);
+    }
+    var whichOffer = '';
+    var whichOfferAmount = 0;
+    if(promotionApplied !== ''){
+      if(inbuiltoffer){
+        whichOffer = 'reapDefault';
+        whichOfferAmount = backupamount * 0.1;
+      }
+      else{
+        whichOffer = promotionApplied;
+        whichOfferAmount = discountglobal;
+      }
+    }
+    else{
+      if(morethanthree){
+        whichOffer = 'reapDefault';
+        whichOfferAmount = backupamount * 0.1;
+      }
     }
     var orderMap = {
       order_id: idone.toString() + idtwo.toString() + idthree.toString(),
@@ -79,6 +106,9 @@ const Checkout = (props) => {
       breadth: totalBreadth.toString(),
       height: totalHeight.toString(),
       weight: totalWeight.toString(),
+      deliveryCharge: delivery.toString(),
+      discountCode: whichOffer,
+      discountAmount: whichOfferAmount.toString()
     };
 
     if (document.getElementById("shippingisbilling").checked) {
@@ -133,6 +163,8 @@ const Checkout = (props) => {
       Please visit our website to track your order.\n
       Thank you for shopping with us.`;
       await sendMail(subject, body);
+      createCookie("cartNumber", 0, 1);
+      dispatch(getData(0));
       navigate("/succ");
     } else {
       navigate("/fail/order");
@@ -183,6 +215,24 @@ const Checkout = (props) => {
           };
           o_items.push(item);
         }
+        var whichOffer = '';
+        var whichOfferAmount = 0;
+        if(promotionApplied !== ''){
+          if(inbuiltoffer){
+            whichOffer = 'reapDefault';
+            whichOfferAmount = backupamount * 0.1;
+          }
+          else{
+            whichOffer = promotionApplied;
+            whichOfferAmount = discountglobal;
+          }
+        }
+        else{
+          if(morethanthree){
+            whichOffer = 'reapDefault';
+            whichOfferAmount = backupamount * 0.1;
+          }
+        }
         var orderMap = {
           order_id: idone.toString() + idtwo.toString() + idthree.toString(),
           order_date: dformat,
@@ -204,6 +254,9 @@ const Checkout = (props) => {
           breadth: totalBreadth.toString(),
           height: totalHeight.toString(),
           weight: totalWeight.toString(),
+          deliveryCharge: delivery.toString(),
+          discountCode: whichOffer,
+          discountAmount: whichOfferAmount.toString()
         };
         if (document.getElementById("shippingisbilling").checked) {
           orderMap.shipping_is_billing = 1;
@@ -264,6 +317,8 @@ const Checkout = (props) => {
       Please visit our website to track your order.\n
       Thank you for shopping with us.`;
           await sendMail(subject, body);
+          createCookie("cartNumber", 0, 1);
+          dispatch(getData(0));
           navigate("/succ");
         } else {
           if (
@@ -312,6 +367,8 @@ const Checkout = (props) => {
             <input
               type="text"
               name="country"
+              defaultValue={'India'}
+              disabled
               placeholder="Country/Region"
               id="billing-country"
             />{" "}
@@ -565,6 +622,8 @@ const Checkout = (props) => {
                 type="text"
                 name="country"
                 placeholder="Country/Region"
+                defaultValue={'India'}
+                disabled
                 id="shipping-country"
               />{" "}
               <br />
@@ -730,6 +789,7 @@ const Checkout = (props) => {
               if (promotionApplied !== "") {
                 var made = await applyDiscount(promotionApplied);
                 if (made["success"]) {
+                  inbuiltoffer = false;
                   if (morethanthree) {
                     $("#disc-l-c").css("display", "block");
                     $("#disc-l-i").css("display", "block");
@@ -738,10 +798,10 @@ const Checkout = (props) => {
                   isPromotionApplied = true;
                   promotionApplied = discount.name;
                   totalAmount = backupamount;
-                  totalAmount += delivery;
                   if (discount.is_percent === 0) {
                     discountglobal = discount.discount_amount;
                     totalAmount -= discountglobal;
+                    totalAmount += delivery;
                     document.getElementById("discountSpan").innerHTML =
                       "Rs " + discount.discount_amount;
                     document.getElementById("totalAmount").innerHTML =
@@ -754,6 +814,7 @@ const Checkout = (props) => {
                     );
                     discountglobal = discountmade;
                     totalAmount -= discountglobal;
+                    totalAmount += delivery;
                     document.getElementById("discountSpan").innerHTML =
                       "Rs " + discountmade;
                     document.getElementById("totalAmount").innerHTML =
@@ -762,6 +823,7 @@ const Checkout = (props) => {
                     toast.success("Discount added.");
                   }
                 } else {
+                  totalAmount += delivery;
                   document.getElementById("discountSpan").innerHTML = "Rs 0";
                   document.getElementById("totalAmount").innerHTML =
                     "Rs " + parseInt(totalAmount);
@@ -830,6 +892,7 @@ const Checkout = (props) => {
                 if (promotionApplied !== "") {
                   var made = await applyDiscount(promotionApplied);
                   if (made["success"]) {
+                    inbuiltoffer = false;
                     var discount = made["discount"];
                     isPromotionApplied = true;
                     promotionApplied = discount.name;
@@ -882,6 +945,7 @@ const Checkout = (props) => {
           >
             <input
               onChange={() => {
+                inbuiltoffer = true;
                 totalAmount = backupTotalAmount;
                 totalAmount += delivery;
                 document.getElementById("discountSpan").innerHTML = `Rs ${
@@ -894,7 +958,7 @@ const Checkout = (props) => {
               name="discount-radio"
               id="discount-radio-i"
             />
-            <span> </span> Use Inbuilt Offer
+            <span> </span> Use Reap Default Offer
             <br />
             <br />
           </label>
@@ -1004,6 +1068,16 @@ const Checkout = (props) => {
           <button
             id="completeOrder"
             onClick={() => {
+
+              trackFB('AddPaymentInfo', {
+                content_ids: [cart_items[0].productId],
+                content_name: cart_items[0].productName,
+                content_type: 'product',
+                currency: 'INR',
+                value: cart_items[0].productPrice
+              });
+
+
               if (
                 document.getElementById("billing-country").value !== "" &&
                 document.getElementById("billing-pincode").value !== "" &&
@@ -1098,6 +1172,13 @@ const Checkout = (props) => {
           <button
             id="checkpayment"
             onClick={() => {
+              trackFB('AddPaymentInfo', {
+                content_ids: [cart_items[0].productId],
+                content_name: cart_items[0].productName,
+                content_type: 'product',
+                currency: 'INR',
+                value: cart_items[0].productPrice
+              });
               if (
                 document.getElementById("billing-country").value !== "" &&
                 document.getElementById("billing-pincode").value !== "" &&

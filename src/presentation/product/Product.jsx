@@ -6,7 +6,7 @@ import Ing1 from "./ing1";
 import Htu1 from "./htu1";
 import { AiFillStar } from "react-icons/ai";
 import { getUserDetail } from "../../js/auth";
-import ImageGallery from 'react-image-gallery';
+import ImageGallery from "react-image-gallery";
 import { createCookie, getCookie } from "../../js/cookies";
 import {
   addToCart,
@@ -17,28 +17,35 @@ import {
 } from "../../js/products";
 import { Link, useLocation, useParams } from "react-router-dom";
 import public_url from "../../js/publicurl";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import ReactImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/scss/image-gallery.scss";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../js/myStore";
-
+import trackFB from "../../js/fbtrack";
 
 const Product = () => {
   var dispatch = useDispatch();
   const datas = useSelector((state) => state.theStore.value);
-  function changeCartNumber(){
-    dispatch(getData(datas+1));
+  function changeCartNumber() {
+    dispatch(getData(datas + 1));
   }
   var { productId } = useParams();
   const location = useLocation();
   const data = location.state != undefined ? location.state : {};
   var page = 1;
-  if('page' in data){
+  if ("page" in data) {
     page = data.page;
   }
-  return <ProductDet changeCartNumber={changeCartNumber} key={productId} page={page} productId={productId} />;
+  return (
+    <ProductDet
+      changeCartNumber={changeCartNumber}
+      key={productId}
+      page={page}
+      productId={productId}
+    />
+  );
 };
 
 class ProductDet extends Component {
@@ -71,17 +78,17 @@ class ProductDet extends Component {
       var index = 1;
       for (var i = 0; i < images.length; i++) {
         var mkey = images[i].name;
-       
+
         this.product[mkey] = images[i]["url"];
-        if(mkey.includes('productImage')){
+        if (mkey.includes("productImage")) {
           this.imagesToSlide.push({
             original: this.product[mkey],
-            thumbnail: this.product[mkey]
-          })
+            thumbnail: this.product[mkey],
+          });
           index++;
         }
       }
-      console.log(this.imagesToSlide)
+      console.log(this.imagesToSlide);
       if ("tagImage1" in this.product) {
         this.tags.push({
           tagImage: this.product.tagImage1,
@@ -141,53 +148,65 @@ class ProductDet extends Component {
     }
     this.setState({});
     var det3 = await getAllProducts(this.props.page);
-    if(det3['success']){
-      var productsp = det3['result'];
-      for(var j=0;j<productsp.length;j++){
-        if(this.recommendedProducts.length !== 3){
-          if(productsp[j].id !== this.props.productId){
+    if (det3["success"]) {
+      var productsp = det3["result"];
+      for (var j = 0; j < productsp.length; j++) {
+        if (this.recommendedProducts.length !== 3) {
+          if (productsp[j].id !== this.props.productId) {
             this.recommendedProducts.push(productsp[j]);
           }
-        }
-        else{
+        } else {
           continue;
         }
       }
-      var pimages = det3['images'];
-      console.log(pimages)
-      for(var x=0;x<pimages.length;x++){
-        if(this.recommendedPImages.length !== 3){
-          for(var k=0;k<pimages[x].length;k++){
-            if(pimages[x][k].ProductId !== this.props.productId){
-              if(pimages[x][k].name === 'productImage1'){
+      var pimages = det3["images"];
+      console.log(pimages);
+      for (var x = 0; x < pimages.length; x++) {
+        if (this.recommendedPImages.length !== 3) {
+          for (var k = 0; k < pimages[x].length; k++) {
+            if (pimages[x][k].ProductId !== this.props.productId) {
+              if (pimages[x][k].name === "productImage1") {
                 this.recommendedPImages.push(pimages[x][k].url);
               }
             }
           }
+        } else {
+          continue;
+        }
       }
-      else{
-        continue;
-      }
+      this.setState({});
     }
-    this.setState({});
   }
-}
 
-  async addToCartReady(){
+  async addToCartReady() {
     var map = {
       productName: this.product.name,
       productPrice: parseInt(this.product.price),
       productImage: this.product.productImage1,
       quantity: 1,
-      productId: this.product.id
-    }
-    console.log(map)
+      productId: this.product.id,
+    };
+
+    trackFB('AddToCart', {
+      content_category: this.product.category,
+      content_ids: [this.product.id],
+      currency: "INR",
+      value: parseInt(this.product.price)
+    })
+
+    console.log(map);
     var made = await addToCart(map);
-    if(made['success']){
-      toast.success('Product added to cart');
-      this.props.changeCartNumber();
-    }
-    else{
+    if (made["success"]) {
+      toast.success("Product added to cart");
+      if (!made.message.includes("quantity")) {
+        var cn = 0;
+        if (getCookie("cartNumber") !== "") {
+          cn = parseInt(getCookie("cartNumber"));
+        }
+        createCookie("cartNumber", cn + 1, 1);
+        this.props.changeCartNumber();
+      }
+    } else {
       if (made.message === "Please Login for access this resource") {
         var cartList = [];
         var dimensions = [];
@@ -221,6 +240,11 @@ class ProductDet extends Component {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
+          var cn = 0;
+          if (getCookie("cartNumber") !== "") {
+            cn = parseInt(getCookie("cartNumber"));
+          }
+          createCookie("cartNumber", cn + 1, 1);
           this.props.changeCartNumber();
         } else {
           // Cart Scratch
@@ -242,6 +266,11 @@ class ProductDet extends Component {
           createCookie("dimensions", JSON.stringify(dimensions), 1);
           createCookie("stocks", JSON.stringify(stocks), 1);
           toast.success("Product added to cart.");
+          var cn = 0;
+          if (getCookie("cartNumber") !== "") {
+            cn = parseInt(getCookie("cartNumber"));
+          }
+          createCookie("cartNumber", cn + 1, 1);
           this.props.changeCartNumber();
         }
       } else {
@@ -280,7 +309,6 @@ class ProductDet extends Component {
 
     return row;
   }
-  
 
   render() {
     return (
@@ -292,11 +320,19 @@ class ProductDet extends Component {
 
         <div className="prow">
           <div className="prow-img-cont">
-            <ImageGallery showFullscreenButton={false} showPlayButton={false} id='productMainImage' items={this.imagesToSlide}/>
-           <br />
-     
+            <ImageGallery
+              showFullscreenButton={false}
+              showPlayButton={false}
+              id="productMainImage"
+              items={this.imagesToSlide}
+            />
+            <br />
+
             <div className="issue-span">
-            <span>The colour and font on the product may differ due to print technicality issue</span>
+              <span>
+                The colour and font on the product may differ due to print
+                technicality issue
+              </span>
             </div>
           </div>
 
@@ -318,7 +354,12 @@ class ProductDet extends Component {
 
             <div className="priceandcart-desk">
               <p className="prdctPrice">Rs {this.product.price}</p>
-              <button onClick={this.addToCartReady.bind(this)} className="prdctCartBtn">Add to Cart</button>
+              <button
+                onClick={this.addToCartReady.bind(this)}
+                className="prdctCartBtn"
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
@@ -337,7 +378,12 @@ class ProductDet extends Component {
 
         <div className="priceandcart-mob">
           <p className="prdctPrice">Rs {this.product.price}</p>
-          <button onClick={this.addToCartReady.bind(this)}  className="prdctCartBtn">Add to Cart</button>
+          <button
+            onClick={this.addToCartReady.bind(this)}
+            className="prdctCartBtn"
+          >
+            Add to Cart
+          </button>
         </div>
 
         <br />
@@ -347,7 +393,7 @@ class ProductDet extends Component {
               <span
                 onClick={() => {
                   this.detpage = "facts";
-                  this.setState({})
+                  this.setState({});
                   $(".factsline").css("background-color", "#777fa8");
                   $(".ingline").css("background-color", "transparent");
                   $(".htuline").css("background-color", "transparent");
@@ -359,7 +405,7 @@ class ProductDet extends Component {
               <span
                 onClick={() => {
                   this.detpage = "ing";
-                  this.setState({})
+                  this.setState({});
                   $(".factsline").css("background-color", "transparent");
                   $(".ingline").css("background-color", "#777fa8");
                   $(".htuline").css("background-color", "transparent");
@@ -371,7 +417,7 @@ class ProductDet extends Component {
               <span
                 onClick={() => {
                   this.detpage = "htu";
-                  this.setState({})
+                  this.setState({});
                   $(".factsline").css("background-color", "transparent");
                   $(".ingline").css("background-color", "transparent");
                   $(".htuline").css("background-color", "#777fa8");
@@ -409,49 +455,144 @@ class ProductDet extends Component {
         <br />
 
         <div className="product-card-row">
-          {this.recommendedProducts !== [] ? this.recommendedProducts.map(function(item,i){
-            return  <div className="productcard">
-            <Link className="navlinks" state={{
-          page: 1
-        }} to={"/product/"+item.id}>
-              <div className="productcard-top">
-                <div className="productcard-header">
-                  <img
-                    src={this.recommendedPImages[i]}
-                    alt="productImage"
-                  />
-                </div>
+          {this.recommendedProducts !== [] ? (
+            this.recommendedProducts.map(
+              function (item, i) {
+                return (
+                  <div className="productcard">
+                    <Link
+                      className="navlinks"
+                      state={{
+                        page: 1,
+                      }}
+                      to={"/product/" + item.id}
+                    >
+                      <div className="productcard-top">
+                        <div className="productcard-header">
+                          <img
+                            src={this.recommendedPImages[i]}
+                            alt="productImage"
+                          />
+                        </div>
 
-                <div className="productcard-det">
-                  <h5>{item.name}</h5>
-                  <span>Rs {item.price}</span>
-                </div>
-              </div>
-            </Link>
-            <div className="productcard-bottom">
-              <div onClick={async function(){
-                var map = {
-                  productName: item.name,
-                  productPrice: parseInt(item.price),
-                  productImage: this.recommendedPImages[i],
-                  quantity: 1,
-                  productId: item.id
-                }
-                console.log(map)
-                var made = await addToCart(map);
-                if(made['success']){
-                  toast.success('Product added to cart.');
-                }
-                else{
-                  toast.error('Something went wrong')
-                }
-              }.bind(this)} className="productcard-footer">
-                <span>Add to Cart</span>
-              </div>
-            </div>
-          </div>
-          }.bind(this)): <div></div>}
-      
+                        <div className="productcard-det">
+                          <h5>{item.name}</h5>
+                          <span>Rs {item.price}</span>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className="productcard-bottom">
+                      <div
+                        onClick={async function () {
+                          var map = {
+                            productName: item.name,
+                            productPrice: parseInt(item.price),
+                            productImage: this.recommendedPImages[i],
+                            quantity: 1,
+                            productId: item.id,
+                          };
+                          trackFB('AddToCart', {
+                            content_category: item.category,
+                            content_ids: [item.id],
+                            currency: "INR",
+                            value: parseInt(item.price)
+                          })
+                          var made = await addToCart(map);
+                          if (made["success"]) {
+                            toast.success("Product added to cart");
+                            if (!made.message.includes("quantity")) {
+                              var cn = 0;
+                              if (getCookie("cartNumber") !== "") {
+                                cn = parseInt(getCookie("cartNumber"));
+                              }
+                              createCookie("cartNumber", cn + 1, 1);
+                              this.props.changeCartNumber();
+                            }
+                          } else {
+                            if (made.message === "Please Login for access this resource") {
+                              var cartList = [];
+                              var dimensions = [];
+                              var stocks = [];
+                              if (getCookie("cartList") != "") {
+                                cartList = JSON.parse(getCookie("cartList"));
+                                for (var x = 0; x < cartList.length; x++) {
+                                  if (cartList[x].productId == item.id) {
+                                    cartList[x].quantity = cartList[x].quantity + 1;
+                                    createCookie("cartList", JSON.stringify(cartList), 1);
+                                    toast.success("Product added to cart.");
+                                    return;
+                                  }
+                                }
+                      
+                                if (getCookie("dimensions") != "") {
+                                  dimensions = JSON.parse(getCookie("dimensions"));
+                                }
+                                if (getCookie("stocks") != "") {
+                                  stocks = JSON.parse(getCookie("stocks"));
+                                }
+                                cartList.push(map);
+                                dimensions.push({
+                                  length: item.length,
+                                  breadth: item.breadth,
+                                  height: item.height,
+                                  weight: item.weight,
+                                });
+                                stocks.push(item.stock);
+                                createCookie("cartList", JSON.stringify(cartList), 1);
+                                createCookie("dimensions", JSON.stringify(dimensions), 1);
+                                createCookie("stocks", JSON.stringify(stocks), 1);
+                                toast.success("Product added to cart.");
+                                var cn = 0;
+                                if (getCookie("cartNumber") !== "") {
+                                  cn = parseInt(getCookie("cartNumber"));
+                                }
+                                createCookie("cartNumber", cn + 1, 1);
+                                this.props.changeCartNumber();
+                              } else {
+                                // Cart Scratch
+                                if (getCookie("dimensions") != "") {
+                                  dimensions = JSON.parse(getCookie("cartList"));
+                                }
+                                if (getCookie("stocks") != "") {
+                                  stocks = JSON.parse(getCookie("cartList"));
+                                }
+                                cartList.push(map);
+                                dimensions.push({
+                                  length: item.length,
+                                  breadth: item.breadth,
+                                  height: item.height,
+                                  weight: item.weight,
+                                });
+                                stocks.push(item.stock);
+                                createCookie("cartList", JSON.stringify(cartList), 1);
+                                createCookie("dimensions", JSON.stringify(dimensions), 1);
+                                createCookie("stocks", JSON.stringify(stocks), 1);
+                                toast.success("Product added to cart.");
+                                var cn = 0;
+                                if (getCookie("cartNumber") !== "") {
+                                  cn = parseInt(getCookie("cartNumber"));
+                                }
+                                createCookie("cartNumber", cn + 1, 1);
+                                this.props.changeCartNumber();
+                              }
+                            } else {
+                              toast.error("Something went wrong");
+                            }
+                          }
+                        
+                        }.bind(this)}
+                        className="productcard-footer"
+                      >
+                        <span>Add to Cart</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }.bind(this)
+            )
+          ) : (
+            <div></div>
+          )}
         </div>
 
         <br />
@@ -474,7 +615,10 @@ class ProductDet extends Component {
                     <div className="comment-box">
                       <div className="comment-box-head">
                         <div className="com-profile-img">
-                          <img src={public_url + "userp.png"} alt="User_Profile" />
+                          <img
+                            src={public_url + "userp.png"}
+                            alt="User_Profile"
+                          />
                         </div>
                         <div className="com-profile-name">
                           <h5>{item.name}</h5>
@@ -494,105 +638,112 @@ class ProductDet extends Component {
               }.bind(this)
             )
           ) : (
-             <div><p>{this.isLoggedIn ? 'Be first to post comment on this product' : 'Log In to post comment'}</p></div>
+            <div>
+              <p>
+                {this.isLoggedIn
+                  ? "Be first to post comment on this product"
+                  : "Log In to post comment"}
+              </p>
+            </div>
           )}
 
           {/* New Comment */}
-          { this.isLoggedIn ? (<div>
-          <div className="new-comment-cont">
-            <div className="com-profile-img">
-              <img src={public_url + "userp.png"} alt="User_Profile" />
-            </div>
-            <div className="com-profile-name">
-              <h5>{this.user.name}</h5>
-            </div>
-          </div>
-          <div className="new-review-cont">
-            <AiFillStar
-              onClick={() => {
-                this.addRating(1);
-              }}
-              className="new-star ns1"
-            />
-            <AiFillStar
-              onClick={() => {
-                this.addRating(2);
-              }}
-              className="new-star ns2"
-            />
-            <AiFillStar
-              onClick={() => {
-                this.addRating(3);
-              }}
-              className="new-star ns3"
-            />
-            <AiFillStar
-              onClick={() => {
-                this.addRating(4);
-              }}
-              className="new-star ns4"
-            />
-            <AiFillStar
-              onClick={() => {
-                this.addRating(5);
-              }}
-              className="new-star ns5"
-            />
-          </div>
-         
-            <div className="commnew">
-              <div className="new-comment-box">
-                <textarea
-                  placeholder={
-                    this.isAlreadyCommented
-                      ? "Update your thoughts"
-                      : "Post your thoughts"
-                  }
-                  name="newcomment"
-                  id="newcomment"
-                  rows="8"
-                ></textarea>
+          {this.isLoggedIn ? (
+            <div>
+              <div className="new-comment-cont">
+                <div className="com-profile-img">
+                  <img src={public_url + "userp.png"} alt="User_Profile" />
+                </div>
+                <div className="com-profile-name">
+                  <h5>{this.user.name}</h5>
+                </div>
+              </div>
+              <div className="new-review-cont">
+                <AiFillStar
+                  onClick={() => {
+                    this.addRating(1);
+                  }}
+                  className="new-star ns1"
+                />
+                <AiFillStar
+                  onClick={() => {
+                    this.addRating(2);
+                  }}
+                  className="new-star ns2"
+                />
+                <AiFillStar
+                  onClick={() => {
+                    this.addRating(3);
+                  }}
+                  className="new-star ns3"
+                />
+                <AiFillStar
+                  onClick={() => {
+                    this.addRating(4);
+                  }}
+                  className="new-star ns4"
+                />
+                <AiFillStar
+                  onClick={() => {
+                    this.addRating(5);
+                  }}
+                  className="new-star ns5"
+                />
+              </div>
+
+              <div className="commnew">
+                <div className="new-comment-box">
+                  <textarea
+                    placeholder={
+                      this.isAlreadyCommented
+                        ? "Update your thoughts"
+                        : "Post your thoughts"
+                    }
+                    name="newcomment"
+                    id="newcomment"
+                    rows="8"
+                  ></textarea>
+                  <br />
+                </div>
+                <button
+                  onClick={async function () {
+                    var comment = document.getElementById("newcomment").value;
+                    var rating = this.rating;
+                    var made = await createReview(
+                      this.product.id,
+                      comment,
+                      rating
+                    );
+                    if (made["success"]) {
+                      var urevs = made["updatedReviews"];
+                      this.comments = urevs;
+                      document.getElementById("newcomment").value = "";
+                      this.rating = 0;
+                      var stars = document.getElementsByClassName("new-star");
+                      for (var i = 0; i < stars.length; i++) {
+                        stars[i].classList.remove("checked");
+                      }
+                      this.setState({});
+                      toast.success("Comment posted successfully");
+                    } else {
+                      toast.error("Something went wrong");
+                      document.getElementById("newcomment").value = "";
+                      this.rating = 0;
+                      var stars = document.getElementsByClassName("new-star");
+                      for (var i = 0; i < stars.length; i++) {
+                        stars[i].classList.remove("checked");
+                      }
+                      this.setState({});
+                    }
+                  }.bind(this)}
+                  id="newcommpost"
+                >
+                  {this.isAlreadyCommented ? "Update" : "Post"}
+                </button>
+                <br />
                 <br />
               </div>
-              <button
-                onClick={async function () {
-                  var comment = document.getElementById("newcomment").value;
-                  var rating = this.rating;
-                  var made = await createReview(
-                    this.product.id,
-                    comment,
-                    rating
-                  );
-                  if (made["success"]) {
-                    var urevs = made["updatedReviews"];
-                    this.comments = urevs;
-                    document.getElementById("newcomment").value = "";
-                    this.rating = 0;
-                    var stars = document.getElementsByClassName("new-star");
-                    for (var i = 0; i < stars.length; i++) {
-                      stars[i].classList.remove("checked");
-                    }
-                    this.setState({});
-                    toast.success('Comment posted successfully');
-                  } else {
-                    toast.error('Something went wrong');
-                    document.getElementById("newcomment").value = "";
-                    this.rating = 0;
-                    var stars = document.getElementsByClassName("new-star");
-                    for (var i = 0; i < stars.length; i++) {
-                      stars[i].classList.remove("checked");
-                    }
-                    this.setState({});
-                  }
-                }.bind(this)}
-                id="newcommpost"
-              >
-                {this.isAlreadyCommented ? "Update" : "Post"}
-              </button>
-              <br />
-              <br />
             </div>
-          </div>
           ) : (
             <div></div>
           )}

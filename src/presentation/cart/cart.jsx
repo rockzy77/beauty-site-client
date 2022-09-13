@@ -5,16 +5,22 @@ import { Component } from "react";
 import { MdDelete } from "react-icons/md";
 import { addToCart, deleteCart, getCartItem, updateCart } from "../../js/products";
 import { toast } from 'react-toastify';
-import { deleteCookie, getCookie } from "../../js/cookies";
+import { createCookie, deleteCookie, getCookie } from "../../js/cookies";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../js/myStore";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Cart = () => {
   var dispatch = useDispatch();
   const data = useSelector((state) => state.theStore.value);
   function changeCartNumber(){
     if(parseInt(data) !== 0){
-      dispatch(getData(parseInt(data)+1));
+      var cn = 0;
+      if(getCookie("cartNumber") != ""){
+        cn = parseInt(getCookie("cartNumber"));
+      }
+      createCookie("cartNumber", (cn - 1), 1);
+      dispatch(getData(parseInt(data)-1));
     }
   }
   return <CartDet changeCartNumber={changeCartNumber}/>;
@@ -35,6 +41,7 @@ class CartDet extends Component {
     this.length = 0;
     this.breadth = 0;
     this.weight = 0;
+    this.loading = true;
     this.map = {
       totalAmount: 100,
     };
@@ -123,6 +130,7 @@ class CartDet extends Component {
     } else {
       this.morethanthree = false;
     }
+    this.loading = false;
     this.setState({});
   }
 
@@ -155,7 +163,7 @@ class CartDet extends Component {
         <br />
         <div className="wrapper">
           <h1>Cart</h1>
-          <center>
+          { !this.loading ? <center>
             {this.cartItems.length !== 0 ? (
               <div className="project">
                 <div className="shops">
@@ -350,7 +358,10 @@ class CartDet extends Component {
                 <h6>You havn't added anything to your cart</h6>
               </div>
             )}
-          </center>
+          </center> :<div style={{
+            'height': '200px'
+          }} className="loading-l">
+          <center><CircularProgress /></center></div>}
           <br />
         </div>
         <div className="cartFooter">

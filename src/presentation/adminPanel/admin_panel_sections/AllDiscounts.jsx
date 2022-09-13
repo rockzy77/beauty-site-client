@@ -12,9 +12,12 @@ class AllDiscounts extends Component {
     this.discountsrow = [];
     this.backupDiscountsRow = [];
     this.searchMethod = "Name";
+    this.loading = true;
   }
 
   deleteRow(index) {
+    this.loading = true;
+    this.setState({});
     if(index === 0){
       this.discounts.shift();
     }
@@ -57,8 +60,9 @@ class AllDiscounts extends Component {
             dlt={this.deleteRow.bind(this)}
           />
         );
-        this.setState({});
       }
+      this.loading = false;
+      this.setState({});
   }
 
   async componentDidMount() {
@@ -100,8 +104,9 @@ class AllDiscounts extends Component {
             dlt={this.deleteRow.bind(this)}
           />
         );
-        this.setState({});
       }
+      this.loading = false;
+      this.setState({});
     }
   }
   render() {
