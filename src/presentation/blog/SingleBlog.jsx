@@ -37,7 +37,6 @@ class SingleBlogDet extends Component{
         <div className="sblog-cont">
         <div className="sblog-left">
         <h1>{this.blog.title}</h1>
-        <p className="sblogauthor">Authored by: {this.blog.author}</p>
         <div className="sblog-img-cont">
             <div className="sblogimg">
                 <img src={this.blog.image_url} alt="" />
@@ -57,14 +56,14 @@ class SingleBlogDet extends Component{
             <br />
             <h3>Other Posts</h3>
             <br />
-            {this.blogs.length !== 0 ? this.blogs.map(function(item, i){
+            {this.blogs.length !== 1 ? this.blogs.map(function(item, i){
             if(item.id !== this.blog.id){
                 return <div>
                  <div className="other-post">
                 <img src={item.image_url} alt="" />
                 <div className="op-texts">
                 <h3>{item.title}</h3>
-                <p>Authored by: {item.author}</p>
+                <br />
                 <NavLink className='other-post-nav' to={'learn/'+item.id}>Learn More</NavLink>
                 </div>
                 
@@ -75,7 +74,7 @@ class SingleBlogDet extends Component{
             <br />
             </div>
             }
-           }.bind(this)) : <div></div>}
+           }.bind(this)) : <div><center><span>No Other Posts Found</span></center></div>}
 
            
            

@@ -77,7 +77,7 @@ class Dashboard extends Component{
                 <div className="d-grid-item">
 
                 <h6>Total Profit</h6>
-                    <p>Rs {this.totalProfit}</p>
+                    <p>Rs {parseFloat(this.totalProfit).toFixed(2)}</p>
                 </div>
                 <div className="d-grid-item">
                 <h6>Total Orders</h6>

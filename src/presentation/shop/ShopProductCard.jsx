@@ -4,7 +4,7 @@ import { createCookie, getCookie } from "../../js/cookies";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../js/myStore";
-import trackFB from "../../js/fbtrack";
+import trackFB from "../../js/trackFB";
 
 const ShopProductCard = (props) => {
   var dispatch = useDispatch();
@@ -21,7 +21,8 @@ const ShopProductCard = (props) => {
     
     trackFB('AddToCart', {
       content_category: props.productOtherDet.category,
-      content_ids: [props.id],
+      content_ids: [props.pid],
+      content_type: 'product',
       currency: "INR",
       value: parseInt(props.price)
     })

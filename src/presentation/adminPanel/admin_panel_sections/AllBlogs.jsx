@@ -20,7 +20,7 @@ class AllBlogs extends Component {
     this.blogs = [];
     this.blogsrow = [];
     this.backupBlogsRow = [];
-    this.searchMethod = "Author";
+    this.searchMethod = "Title";
     this.loading = true;
   }
 
@@ -39,7 +39,6 @@ class AllBlogs extends Component {
     for (var i = 0; i < this.blogs.length; i++) {
       var blog = this.blogs[i];
       var id = blog["id"];
-      var author = blog["author"];
       var title = blog["title"];
       var subtitle = blog["subtitle"];
       var created = blog["createdAt"];
@@ -50,7 +49,6 @@ class AllBlogs extends Component {
           bid={id}
           title={title}
           subtitle={subtitle}
-          author={author}
           created={created}
           dlt={this.deleteRow.bind(this)}
         />
@@ -62,7 +60,6 @@ class AllBlogs extends Component {
           bid={id}
           title={title}
           subtitle={subtitle}
-          author={author}
           created={created}
           dlt={this.deleteRow.bind(this)}
         />
@@ -81,7 +78,6 @@ class AllBlogs extends Component {
       for (var i = 0; i < this.blogs.length; i++) {
         var blog = this.blogs[i];
         var id = blog["id"];
-        var author = blog["author"];
         var title = blog["title"];
         var subtitle = blog["subtitle"];
         var created = blog["createdAt"];
@@ -92,7 +88,6 @@ class AllBlogs extends Component {
             bid={id}
             title={title}
             subtitle={subtitle}
-            author={author}
             created={created}
             dlt={this.deleteRow.bind(this)}
           />
@@ -104,7 +99,6 @@ class AllBlogs extends Component {
             bid={id}
             title={title}
             subtitle={subtitle}
-            author={author}
             created={created}
             dlt={this.deleteRow.bind(this)}
           />
@@ -127,11 +121,7 @@ class AllBlogs extends Component {
 
             if (search !== "") {
               for (var i = 0; i < this.blogs.length; i++) {
-                if (this.searchMethod === "Author") {
-                  if (this.blogs[i]["author"].toLowerCase().includes(search)) {
-                    tempList.push(this.blogsrow[i]);
-                  }
-                } else if (this.searchMethod === "Title") {
+                if (this.searchMethod === "Title") {
                   if (this.blogs[i]["title"].toLowerCase().includes(search)) {
                     tempList.push(this.blogsrow[i]);
                   }
@@ -165,7 +155,6 @@ class AllBlogs extends Component {
           name="searchusing"
           id="searchusing"
         >
-          <option value="Author">Author</option>
           <option value="Title">Title</option>
           <option value="Date Created">Date Created</option>
         </select>
@@ -176,7 +165,6 @@ class AllBlogs extends Component {
             <thead>
               <tr>
                 <th>SI NO</th>
-                <th>Author</th>
                 <th>Title</th>
                 <th>Subtitle</th>
                 <th>Created At</th>
@@ -199,7 +187,6 @@ const BlogRow = (props) => {
   return (
     <tr>
       <td>{props.si}</td>
-      <td>{props.author}</td>
       <td>{props.title}</td>
 
       <td>{props.subtitle}</td>

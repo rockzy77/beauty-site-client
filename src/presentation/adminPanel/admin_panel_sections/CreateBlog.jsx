@@ -83,20 +83,6 @@ class CreateBlog extends Component {
         </div>
         <br />
         <br />
-        <p>Blog Author: </p>
-        <input
-          name="blogauthor"
-          id="blogauthor"
-          cols="30"
-          rows="10"
-          onChange={() => {
-            this.thingstoCreate.author =
-              document.getElementById("blogauthor").value;
-            // this.setState({});
-          }}
-        />
-        <br />
-        <br />
         <p>Blog Title: </p>
         <input
           type="text"
@@ -142,8 +128,6 @@ class CreateBlog extends Component {
           onClick={() => {
             if (this.thingstoCreate.image === undefined) {
               alert("Please upload an image.");
-            } else if (this.thingstoCreate.author === undefined || this.thingstoCreate.author === '') {
-              alert("Please enter an author.");
             } else if (this.thingstoCreate.title === undefined || this.thingstoCreate.title === '') {
               alert("Please enter a title.");
             } else if (this.thingstoCreate.subtitle === undefined || this.thingstoCreate.subtitle === '') {

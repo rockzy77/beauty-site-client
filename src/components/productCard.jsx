@@ -6,7 +6,7 @@ import $ from "jquery";
 import { createCookie, getCookie } from "../js/cookies";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../js/myStore";
-import trackFB from "../js/fbtrack";
+import trackFB from "../js/trackFB";
 
 
 const ProductCard = (props) => {
@@ -24,6 +24,7 @@ const ProductCard = (props) => {
 
     trackFB('AddToCart', {
       content_category: props.category,
+      content_type: 'product',
       content_ids: [props.id],
       currency: "INR",
       value: parseInt(props.price)

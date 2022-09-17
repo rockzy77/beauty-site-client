@@ -4,6 +4,7 @@ import { getUserDetail } from "../../js/auth";
 import { sendContactMail } from "../../js/sendMail";
 import Footer from "../home/Footer";
 import { toast } from 'react-toastify';
+import trackFB from "../../js/trackFB";
 
 
 class ContactUs extends Component {
@@ -31,6 +32,7 @@ class ContactUs extends Component {
             <div className="center">
               <input
                 onClick={async function () {
+                  trackFB("Contact", {});
                   var udet = await getUserDetail();
                   if (udet.success) {
                     var query = document.getElementById("cquery").value;

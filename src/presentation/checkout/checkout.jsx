@@ -14,7 +14,7 @@ import $ from "jquery";
 import { createCookie } from "../../js/cookies";
 import { useDispatch } from "react-redux";
 import { getData } from "../../js/myStore";
-import trackFB from "../../js/fbtrack";
+import trackFB from "../../js/trackFB";
 
 const Checkout = (props) => {
   const location = useLocation();
@@ -1179,6 +1179,8 @@ const Checkout = (props) => {
                 currency: 'INR',
                 value: cart_items[0].productPrice
               });
+
+               trackFB('InitiateCheckout', {});
               if (
                 document.getElementById("billing-country").value !== "" &&
                 document.getElementById("billing-pincode").value !== "" &&

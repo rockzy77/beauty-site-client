@@ -23,7 +23,7 @@ import "react-image-gallery/styles/scss/image-gallery.scss";
 import "react-image-gallery/styles/css/image-gallery.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getData } from "../../js/myStore";
-import trackFB from "../../js/fbtrack";
+import trackFB from "../../js/trackFB";
 
 const Product = () => {
   var dispatch = useDispatch();
@@ -187,9 +187,10 @@ class ProductDet extends Component {
       productId: this.product.id,
     };
 
-    trackFB('AddToCart', {
+   trackFB('AddToCart', {
       content_category: this.product.category,
       content_ids: [this.product.id],
+      content_type: 'product',
       currency: "INR",
       value: parseInt(this.product.price)
     })
@@ -494,6 +495,7 @@ class ProductDet extends Component {
                           trackFB('AddToCart', {
                             content_category: item.category,
                             content_ids: [item.id],
+                            content_type: 'product',
                             currency: "INR",
                             value: parseInt(item.price)
                           })

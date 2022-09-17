@@ -7,6 +7,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-toastify";
 import { BsFacebook } from "react-icons/bs";
 import { deleteCookie } from "../../js/cookies";
+import trackFB from "../../js/trackFB";
 
 const SingupScreen = (props) => {
   const { referrerCode } = useParams();
@@ -42,6 +43,7 @@ class SingupScreenCont extends Component {
   }
 
   async register() {
+    trackFB("Lead", {});
     var email = document.getElementById("regemail").value;
     var password = document.getElementById("regpass").value;
     var cpassword = document.getElementById("regcpass").value;

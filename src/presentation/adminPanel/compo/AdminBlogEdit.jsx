@@ -32,7 +32,6 @@ class AdminBlogEditPanel extends Component {
     if(det['success']){
       var blog = det['blog'];
       this.blog.bid = blog['id'];
-      this.blog.author = blog['author'];
       this.blog.image = blog['image_url'];
       this.blog.title = blog['title'];
       this.blog.subtitle = blog['subtitle'];
@@ -86,21 +85,6 @@ class AdminBlogEditPanel extends Component {
           </div>
           <br />
           <br />
-          <p>Blog Author: </p>
-          <input
-            name="blogauthor"
-            id="blogauthor"
-            cols="30"
-            defaultValue={this.blog.author !== undefined ? this.blog.author : ''}
-            rows="10"
-            onChange={() => {
-              this.thingstoUpdate.author =
-                document.getElementById("blogauthor").value;
-              // this.setState({});
-            }}
-          />
-          <br />
-          <br />
           <p>Blog Title: </p>
           <input
             type="text"
@@ -147,7 +131,7 @@ class AdminBlogEditPanel extends Component {
   
           <button
             onClick={() => {
-              if (Object.keys(this.thingsToUpdate).length === 0) {
+              if (Object.keys(this.thingstoUpdate).length === 0) {
                 alert("Nothing to update");
               }
               else{

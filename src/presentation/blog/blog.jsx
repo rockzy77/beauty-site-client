@@ -58,8 +58,7 @@ class Blog extends Component{
                 <div className="blog-texts">
                     <h3>{item.title}</h3>
                     <p>{item.subtitle}</p>
-                    
-                    <span>By {item.author}</span> <br />
+                    <br />
                     <NavLink className='learnlink' to={'/learn/'+item.id}>Learn More</NavLink>
                     
                 </div>
