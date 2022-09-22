@@ -44,7 +44,7 @@ class AccountView extends Component {
     var udet = await getUserDetail();
     this.isLoggedIn = udet["success"];
     if (this.isLoggedIn) {
-      console.log(udet);
+      
       this.isAdmin = udet.user.role === "admin";
     }
     this.userinfo = udet["user"];
@@ -67,7 +67,7 @@ class AccountView extends Component {
   };
 
   handleClick = () => {
-    console.log(this.setting);
+    
   };
 
   render() {

@@ -17,10 +17,8 @@ async function createProduct(map) {
   try {
     var response = await axios.post(url, formData, config);
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
-    console.log(e)
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -31,10 +29,8 @@ async function deleteProduct(pid) {
   try {
     var response = await axios.delete(url, config);
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
-    console.log(e);
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -42,7 +38,6 @@ async function deleteProduct(pid) {
 
 async function updateProduct(updates, pid) {
   var url = url_head + "product/" + pid;
-  console.log(updates)
   const formData = new FormData();
   Object.entries(updates).map((item) => {
     formData.append(item[0], item[1]);
@@ -50,10 +45,8 @@ async function updateProduct(updates, pid) {
   try {
     var response = await axios.put(url, formData, { headers: { "Content-Type": "multipart/form-data" } });
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
-    console.log(e);
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -79,7 +72,6 @@ async function getAlluser() {
     var response = await axios.get(url, config);
 
     var data = await response.data;
-    console.log(data);
     return data;
   } catch (e) {
     var d = await e.response.data;
@@ -94,7 +86,6 @@ async function getAllOrders() {
     var response = await axios.get(url, config);
 
     var data = await response.data;
-    console.log(data);
     return data;
   } catch (e) {
     var d = await e.response.data;
@@ -109,7 +100,6 @@ async function getSingleuser(uid) {
     var response = await axios.get(url, config);
 
     var data = await response.data;
-    console.log(data);
     return data;
   } catch (e) {
     var d = await e.response.data;
@@ -128,10 +118,8 @@ async function updateuserInfo(id, name, email) {
     var response = await axios.put(url, JSON.stringify(map), config);
 
     var data = await response.data;
-    console.log(data);
     return data;
   } catch (e) {
-    console.log(e);
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -144,10 +132,8 @@ async function deleteUser(id) {
     var response = await axios.delete(url, config);
 
     var data = await response.data;
-    console.log(data);
     return data;
   } catch (e) {
-    console.log(e);
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -162,24 +148,52 @@ async function createBlog(blog) {
   try {
     var response = await axios.post(url, formData, config);
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
-    console.log(e);
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
 }
+
+
+
+async function blogImages(image){
+  var url = url_head + "admin/blgimg";
+  const formData = new FormData();
+  formData.append('image', image);
+  try {
+    var response = await axios.post(url, formData, config);
+    var body = await response.data;
+    console.log(body)
+    return body;
+  } catch (e) {
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
+async function dltBImage(imageid){
+  var url = url_head + "admin/dltimg/" + imageid;
+  try {
+    var response = await axios.delete(url, config);
+    var body = await response.data;
+    console.log(body)
+    return body;
+  } catch (e) {
+    var d = await e.response.data;
+    return { success: false, message: d["message"] };
+  }
+}
+
 
 async function getAllBlogs() {
   var url = url_head + "admin/blogs";
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -190,10 +204,10 @@ async function getSingleBlog(bid) {
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -209,17 +223,17 @@ async function updateBlog(updates, bid) {
       });
       var response = await axios.put(url, formData, config);
       var body = await response.data;
-      console.log(body);
+      
       return body;
     }
     else{
       var response = await axios.put(url, JSON.stringify(updates), config);
       var body = await response.data;
-      console.log(body);
+      
       return body;
     }
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -230,10 +244,10 @@ async function deleteBlog(bid) {
   try {
     var response = await axios.delete(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -244,10 +258,10 @@ async function createDiscount(map) {
   try {
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -258,10 +272,10 @@ async function getAllDiscounts() {
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -273,10 +287,10 @@ async function getSingleDiscount(name) {
     var map = { name: name };
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -286,13 +300,13 @@ async function updateDiscount(updates, name) {
   var url = url_head + "admin/discount/update";
   try {
     updates.name = name;
-    console.log(updates);
+    
     var response = await axios.post(url, JSON.stringify(updates), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -306,10 +320,10 @@ async function deleteDiscount(name) {
     };
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -321,10 +335,10 @@ async function getAllOrdersAdmin() {
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -336,10 +350,10 @@ async function updateOrder(map){
   try {
     var response = await axios.post(url, JSON.stringify(map),config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -354,11 +368,11 @@ async function getTotalOrderDetails(year){
   try{
     var response = await axios.post(url, JSON.stringify(map) ,config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   }
   catch(e){
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -375,6 +389,8 @@ export {
   updateuserInfo,
   getAllOrders,
   createBlog,
+  blogImages,
+  dltBImage,
   getAllBlogs,
   deleteUser,
   deleteBlog,

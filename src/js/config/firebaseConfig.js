@@ -16,7 +16,7 @@ function initializeFirebase(){
       
     firebase_app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(firebase_app);
-      console.log('Firebase Initilized');
+      
       
 }
 

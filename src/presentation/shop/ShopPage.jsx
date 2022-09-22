@@ -26,10 +26,10 @@ class ShopPage extends Component {
 }
 
   async loadProducts(){
-    console.log(this.page)
+    
     if (this.props.filter === undefined) {
       var det = await getAllProducts(this.page);
-      console.log(det)
+      
       this.totalProducts = det["total_products"];
       this.data = det["result"];
       this.images = det["images"];

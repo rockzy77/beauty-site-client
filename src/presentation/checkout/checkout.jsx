@@ -20,7 +20,7 @@ const Checkout = (props) => {
   const location = useLocation();
   var dispatch = useDispatch();
   const data = location.state;
-  console.log(data);
+  
   const amount = data.amount;
   const cart_items = data.cart_data;
   const totalHeight = data.totalHeight;
@@ -43,9 +43,9 @@ const Checkout = (props) => {
   var backupTotalAmount = data.totalAmount;
   var totalAmount = data.totalAmount;
   var inbuiltoffer = morethanthree ? true : false;
-  console.log('here==================>')
-  console.log(inbuiltoffer);
-  console.log(morethanthree);
+  
+  
+  
 
   async function completeOrder(orderMethod) {
     var idone = Math.floor(100000 + Math.random() * 900000);
@@ -64,7 +64,7 @@ const Checkout = (props) => {
         selling_price: cart_items[i].productPrice.toString(),
         units: cart_items[i].quantity.toString(),
       };
-      console.log(item);
+      
       o_items.push(item);
     }
     var whichOffer = '';
@@ -132,9 +132,9 @@ const Checkout = (props) => {
       orderMap.shipping_email = document.getElementById("shipping-email").value;
       orderMap.shipping_phone = document.getElementById("shipping-phone").value;
     }
-    console.log(orderMap);
+    
     var made = await createShipRocketOrder(orderMap);
-    console.log(made["success"]);
+    
     if (made["success"]) {
       if (promotionApplied !== "") {
         var madew = await discountUse(promotionApplied);
@@ -176,7 +176,7 @@ const Checkout = (props) => {
     if (orderStatus[0] === true) {
       orderId = orderStatus[1].id;
       totalAmount = parseInt(parseInt(orderStatus[1].amount) / 100);
-      console.log(totalAmount);
+      
       currency = orderStatus[1].currency;
     }
 
@@ -482,7 +482,7 @@ const Checkout = (props) => {
                         document.getElementById(
                           "completeOrder"
                         ).disabled = false;
-                        console.log(made.result);
+                        
                       } else {
                         if (
                           made.message ===
@@ -497,7 +497,7 @@ const Checkout = (props) => {
                             "completeOrder"
                           ).disabled = true;
                         }
-                        console.log(made.message);
+                        
                       }
                     }
                   }
@@ -552,7 +552,7 @@ const Checkout = (props) => {
                         "none";
                       document.getElementById("checkpayment").disabled = false;
                       document.getElementById("completeOrder").disabled = false;
-                      console.log(made.result);
+                      
                     } else {
                       if (
                         made.message ===
@@ -565,7 +565,7 @@ const Checkout = (props) => {
                           "completeOrder"
                         ).disabled = true;
                       }
-                      console.log(made.message);
+                      
                     }
                   } else {
                     document.getElementById("shipping").style.display = "block";
@@ -590,7 +590,7 @@ const Checkout = (props) => {
                         "none";
                       document.getElementById("checkpayment").disabled = false;
                       document.getElementById("completeOrder").disabled = false;
-                      console.log(made.result);
+                      
                     } else {
                       if (
                         made.message ===
@@ -603,7 +603,7 @@ const Checkout = (props) => {
                           "completeOrder"
                         ).disabled = true;
                       }
-                      console.log(made.message);
+                      
                     }
                   }
                 }}
@@ -736,7 +736,7 @@ const Checkout = (props) => {
                         document.getElementById(
                           "completeOrder"
                         ).disabled = false;
-                        console.log(made.result);
+                        
                       } else {
                         if (
                           made.message ===
@@ -751,7 +751,7 @@ const Checkout = (props) => {
                             "completeOrder"
                           ).disabled = true;
                         }
-                        console.log(made.message);
+                        
                       }
                     }
                   }}
@@ -1003,7 +1003,7 @@ const Checkout = (props) => {
                   document.getElementById("notavail").style.display = "none";
                   document.getElementById("checkpayment").disabled = false;
                   document.getElementById("completeOrder").disabled = false;
-                  console.log(made.result);
+                  
                 } else {
                   if (
                     made.message ===
@@ -1013,7 +1013,7 @@ const Checkout = (props) => {
                     document.getElementById("checkpayment").disabled = true;
                     document.getElementById("completeOrder").disabled = true;
                   }
-                  console.log(made.message);
+                  
                 }
 
                 //
@@ -1041,7 +1041,7 @@ const Checkout = (props) => {
                   document.getElementById("notavail").style.display = "none";
                   document.getElementById("checkpayment").disabled = false;
                   document.getElementById("completeOrder").disabled = false;
-                  console.log(made.result);
+                  
                 } else {
                   if (
                     made.message ===
@@ -1051,7 +1051,7 @@ const Checkout = (props) => {
                     document.getElementById("checkpayment").disabled = true;
                     document.getElementById("completeOrder").disabled = true;
                   }
-                  console.log(made.message);
+                  
                 }
                 //
                 document.getElementById("completeOrder").style.display = "none";

@@ -1,25 +1,25 @@
 import { Component } from "react";
-import { createBlog } from "../../../js/adminProduct";
+import { blogImages, createBlog, dltBImage } from "../../../js/adminProduct";
 import public_url from "../../../js/publicurl";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import Compressor from "compressorjs";
-
 
 class CreateBlog extends Component {
   constructor(props) {
     super(props);
     this.thingstoCreate = {};
+    this.imgsToUpload = [];
+    this.imgToUpload = '';
     this.maxheight = 2000;
     this.maxwidth = 2000;
   }
 
   async createBlogReady() {
-    console.log(this.thingstoCreate);
     var made = await createBlog(this.thingstoCreate);
     if (made["success"]) {
-      toast.success('Blog created successfully.')
+      toast.success("Blog created successfully.");
     } else {
-      toast.error('Error: '+made.message)
+      toast.error("Error: " + made.message);
     }
   }
 
@@ -57,10 +57,9 @@ class CreateBlog extends Component {
                 const file = new File([result], result.name, {
                   type: "image/jpeg",
                 });
-                console.log(file)
+
                 reader.readAsDataURL(file);
                 this.thingstoCreate.image = file;
-                console.log(this.thingstoCreate)
               },
             });
           }}
@@ -111,12 +110,16 @@ class CreateBlog extends Component {
 
         <br />
         <br />
+
         <p>Blog Content: </p>
         <textarea
           name="blogcontent"
           id="blogcontent"
           cols="30"
           rows="10"
+          style={{
+            height: "500px",
+          }}
           onChange={() => {
             this.thingstoCreate.content =
               document.getElementById("blogcontent").value;
@@ -125,14 +128,23 @@ class CreateBlog extends Component {
         />
 
         <button
-          onClick={() => {
+          onClick={async() => {
             if (this.thingstoCreate.image === undefined) {
               alert("Please upload an image.");
-            } else if (this.thingstoCreate.title === undefined || this.thingstoCreate.title === '') {
+            } else if (
+              this.thingstoCreate.title === undefined ||
+              this.thingstoCreate.title === ""
+            ) {
               alert("Please enter a title.");
-            } else if (this.thingstoCreate.subtitle === undefined || this.thingstoCreate.subtitle === '') {
+            } else if (
+              this.thingstoCreate.subtitle === undefined ||
+              this.thingstoCreate.subtitle === ""
+            ) {
               alert("Please enter a subtitle.");
-            } else if (this.thingstoCreate.content === undefined || this.thingstoCreate.content === '') {
+            } else if (
+              this.thingstoCreate.content === undefined ||
+              this.thingstoCreate.content === ""
+            ) {
               alert("Please enter a content.");
             } else {
               this.createBlogReady();

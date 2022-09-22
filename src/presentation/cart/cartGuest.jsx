@@ -54,9 +54,9 @@ class CartGuestDiv extends Component {
     };
   }
   async componentDidMount() {
-    console.log("sssssssss");
+    
     if (getCookie("cartList") !== "") {
-      console.log("sssssssss");
+      
       this.cartItems = JSON.parse(getCookie("cartList"));
       this.dimensions = JSON.parse(getCookie("dimensions"));
       this.stocks = JSON.parse(getCookie("stocks"));
@@ -81,7 +81,7 @@ class CartGuestDiv extends Component {
       totalQuantity = totalQuantity + this.cartItems[i].quantity;
     }
     for (var j = 0; j < this.dimensions.length; j++) {
-      console.log(this.dimensions);
+      
       this.weight = parseFloat(
         (
           parseFloat(this.weight) +
@@ -126,8 +126,8 @@ class CartGuestDiv extends Component {
     }
     this.totalAmount = parseInt(this.amount);
     this.backupamount = this.totalAmount;
-    console.log(this.cartItems);
-    console.log(this.weight);
+    
+    
 
     if (totalQuantity > 3) {
       // 10% discount on cart items more than 3

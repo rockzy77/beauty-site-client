@@ -21,7 +21,7 @@ async function getFeaturedProducts(){
     var response = await axios.get(url, config);
 
     var data = await response.data;
-    console.log(data)
+    
     return data;
   } catch (e) {
     return { success: false };
@@ -61,10 +61,10 @@ async function getFilterProducts(filter, page) {
     var response = await axios.get(url, config);
 
     var data = await response.data;
-    console.log(data);
+    
     return data;
   } catch (e) {
-    console.log(e);
+    
     return { success: false };
   }
 }
@@ -75,10 +75,10 @@ async function getReviews(pid) {
 
     var response = await axios.get(url,config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -96,10 +96,10 @@ async function createReview(pid, comment, rating) {
 
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -112,10 +112,10 @@ async function deleteReview(pid,uid){
   try {
     var response = await axios.delete(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data.message;
     return { success: false, message: d["message"] };
   }
@@ -129,7 +129,7 @@ async function getCartItem(pid, comment, rating) {
     var body = await response.data;
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -141,10 +141,8 @@ async function addToCart(map) {
   try {
     var response = await axios.post(url, JSON.stringify(map),config);
     var body = await response.data;
-    console.log(body);
     return body;
   } catch (e) {
-    console.log(e);
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -160,10 +158,10 @@ async function updateCart(cid, quanity){
     }
     var response = await axios.put(url, JSON.stringify(map),config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -175,10 +173,10 @@ async function deleteCart(cid){
   try {
     var response = await axios.delete(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -190,10 +188,10 @@ async function getOrders(){
     try {
       var response = await axios.get(url, config);
       var body = await response.data;
-      console.log(body);
+      
       return body;
     } catch (e) {
-      console.log(e);
+      
       var d = await e.response.data;
       return { success: false, message: d["message"] };
   }
@@ -206,10 +204,10 @@ async function getSingleOrder(order_id){
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }

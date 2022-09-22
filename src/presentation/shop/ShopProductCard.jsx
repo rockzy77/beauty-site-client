@@ -10,7 +10,7 @@ const ShopProductCard = (props) => {
   var dispatch = useDispatch();
   const data = useSelector((state) => state.theStore.value);
   async function addToCartReady() {
-    console.log(props.productOtherDet);
+    
     var map = {
       productName: props.title,
       productPrice: parseInt(props.price),

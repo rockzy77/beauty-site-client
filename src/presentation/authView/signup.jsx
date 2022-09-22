@@ -19,9 +19,9 @@ const SingupScreen = (props) => {
       : {
           checkout_data: {},
         };
-  console.log(data);
+  
   checkout_data = data.checkout_data;
-  console.log(checkout_data);
+  
   return (
     <SingupScreenCont
       referrerCode={referrerCode}
@@ -38,7 +38,7 @@ class SingupScreenCont extends Component {
   async componentDidMount() {
     var udet = await getUserDetail();
     this.isLoggedIn = udet["success"];
-    console.log(this.isLoggedIn);
+    
     this.setState({});
   }
 

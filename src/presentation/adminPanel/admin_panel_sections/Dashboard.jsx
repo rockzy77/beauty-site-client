@@ -59,7 +59,7 @@ class Dashboard extends Component{
         this.totalProfit = det4.grandTotalExpense;
         this.monthlyExpense = monthlye;
         this.monthlyProducts = monthlyp;
-        console.log(monthlyp)
+        
         this.setState({})
     }
 

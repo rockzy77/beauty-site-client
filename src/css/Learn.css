@@ -1,7 +1,7 @@
 #learn{
     min-height: 100vh;
     width: 100%;
-   
+    white-space: pre-line;
     background-color: #227fbd2a;
 }
 
@@ -88,10 +88,13 @@
     font-family: "Medium";
 }
 
-.sblog-left p{
+.sblog-content{
     white-space: pre-line;
-    font-family: "Medium";
     font-size: 1.1em;
+}
+
+.sblog-content img{
+    width: 50%;
 }
 
 

@@ -18,7 +18,7 @@ async function loginUser(email, password) {
       var body = await response.data;
       return body;
   } catch (e) {
-    console.log(e);
+    
     var error = await e.response.data.message;
     return { success: false, message: error };
   }
@@ -26,7 +26,7 @@ async function loginUser(email, password) {
 
 async function googleLoginUser(email) {
   var url = url_head + "googleSignin";
-  console.log(url)
+  
 
   try {
       var data = {
@@ -36,7 +36,7 @@ async function googleLoginUser(email) {
       var body = await response.data;
       return body;
   } catch (e) {
-    console.log(e);
+    
     var error = await e.response.data.message;
     return { success: false, message: error };
   }
@@ -50,7 +50,7 @@ async function registerUser(data) {
     var body = await response.data;
     return body;
   } catch (e) {
-    console.log(e);
+    
     var error = await e.response.data.message;
     return { success: false, message: error };
   }
@@ -64,7 +64,7 @@ async function googleRegisterUser(data) {
     var body = await response.data;
     return body;
   } catch (e) {
-    console.log(e);
+    
     var error = await e.response.data.message;
     return { success: false, message: error };
   }
@@ -108,7 +108,7 @@ async function updatePassword(oldpass, newpass, cnewpass) {
   };
   var response = await axios.put(url, JSON.stringify(data), config);
   const body = await response.data;
-  console.log(body);
+  
   window.location.replace("/account");
 }
 
@@ -120,7 +120,7 @@ async function forgotPassword(email) {
     };
     var response = await axios.post(url, JSON.stringify(data), config);
     const body = await response.data;
-    console.log(body);
+    
     return body["success"];
   } catch (e) {
     return false;
@@ -136,7 +136,7 @@ async function resetForgotPassword(pass, cpass, token) {
     };
     var response = await axios.put(url, JSON.stringify(data), config);
     const body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
     var error = await e.response.data;
@@ -149,10 +149,10 @@ async function getReferralLink() {
   try {
     var response = await axios.get(url, config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }

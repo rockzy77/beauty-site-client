@@ -17,10 +17,10 @@ async function getOrderId(amount) {
     };
     var response = await axios.post(url, JSON.stringify(data), config);
     var body = await response.data;
-    console.log(body);
+    
     return [body.success, body.sub];
   } catch (e) {
-    console.log(e);
+    
     return [false];
   }
 }
@@ -39,13 +39,13 @@ async function verifyOrder(
       razorpay_signature: razorpay_signature,
     };
     var map = { ...orderMap, ...data };
-    console.log(map);
+    
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return {success: body.success};
   } catch (e) {
-    console.log(e);
+    
     return { success: false, message: e.response.data["message"] };
   }
 }
@@ -55,10 +55,10 @@ async function checkShippingCharge(map){
   try {
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["error"] };
   }
@@ -69,10 +69,10 @@ async function createShipRocketOrder(map) {
   try {
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -86,10 +86,10 @@ async function deleteOrder(id) {
     }
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -103,10 +103,10 @@ async function applyDiscount(code) {
     };
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -120,10 +120,10 @@ async function discountUse(code) {
     };
     var response = await axios.post(url, JSON.stringify(map), config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }
@@ -135,10 +135,10 @@ async function generateReferralDiscount(){
   try {
     var response = await axios.get(url,  config);
     var body = await response.data;
-    console.log(body);
+    
     return body;
   } catch (e) {
-    console.log(e);
+    
     var d = await e.response.data;
     return { success: false, message: d["message"] };
   }

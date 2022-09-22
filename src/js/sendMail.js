@@ -21,7 +21,7 @@ async function sendContactMail(subject, message){
         return body;
     }
     catch(e){
-        console.log(e);
+        
         var error = await e.response.data.message;
         return { success: false, message: error };
     }
@@ -39,7 +39,7 @@ async function sendMail(subject, message){
         return body;
     }
     catch(e){
-        console.log(e);
+        
         var error = await e.response.data.message;
         return { success: false, message: error };
     }

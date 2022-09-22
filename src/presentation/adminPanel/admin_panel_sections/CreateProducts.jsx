@@ -13,7 +13,7 @@ class CreateProducts extends Component {
   }
 
   async createProductReady() {
-    console.log(this.thingsToCreate);
+    
     var made = await createProduct(this.thingsToCreate);
     if (made["success"]) {
       toast.success("Product successfully created.");
@@ -199,7 +199,7 @@ class CreateProducts extends Component {
                  const file = new File([result], result.name, {
                    type: "image/jpeg",
                  });
-                 console.log(file);
+                 
                  reader.readAsDataURL(file);
                  this.thingsToCreate.productImage5 = file;
                },
@@ -1072,7 +1072,7 @@ class CreateProducts extends Component {
 
         <button
           onClick={() => {
-            console.log(this.thingsToCreate);
+            
             if (this.thingsToCreate.productImage1 === undefined) {
               alert("Please upload a product image");
               return;

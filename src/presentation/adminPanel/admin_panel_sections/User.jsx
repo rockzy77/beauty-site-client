@@ -202,7 +202,7 @@ class AllUsers extends Component {
 }
 
 const UserRow = (props) => {
-  console.log(props)
+  
   var date = props.created.slice(0, 10);
   var time = props.created.slice(11, 16);
   var navigate = useNavigate();

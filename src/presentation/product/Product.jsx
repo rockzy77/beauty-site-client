@@ -88,7 +88,7 @@ class ProductDet extends Component {
           index++;
         }
       }
-      console.log(this.imagesToSlide);
+      
       if ("tagImage1" in this.product) {
         this.tags.push({
           tagImage: this.product.tagImage1,
@@ -160,7 +160,7 @@ class ProductDet extends Component {
         }
       }
       var pimages = det3["images"];
-      console.log(pimages);
+      
       for (var x = 0; x < pimages.length; x++) {
         if (this.recommendedPImages.length !== 3) {
           for (var k = 0; k < pimages[x].length; k++) {
@@ -195,7 +195,7 @@ class ProductDet extends Component {
       value: parseInt(this.product.price)
     })
 
-    console.log(map);
+    
     var made = await addToCart(map);
     if (made["success"]) {
       toast.success("Product added to cart");

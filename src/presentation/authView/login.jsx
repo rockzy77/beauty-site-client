@@ -22,9 +22,9 @@ const LoginScreen = (props) => {
       : {
           checkout_data: {},
         };
-  console.log(data);
+  
   checkout_data = data.checkout_data;
-  console.log(checkout_data);
+  
   return <LoginScreenCont checkout_data={checkout_data} />;
 };
 
@@ -43,11 +43,11 @@ class LoginScreenCont extends Component {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
+        
         var made = await googleLoginUser(user.email);
         if (made.success) {
           toast.success("Successfully logged in");
-          console.log(this.props.checkout_data);
+          
           
           // check if object is empty
           if (Object.keys(this.props.checkout_data).length === 0) {
@@ -107,7 +107,7 @@ class LoginScreenCont extends Component {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
+        
         var made = await googleLoginUser(user.email);
         if (made.success) {
           toast.success("Successfully logged in");

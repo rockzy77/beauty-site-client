@@ -74,7 +74,7 @@ class CartDet extends Component {
       totalQuantity = totalQuantity + this.cartItems[i].quantity;
     }
     for (var j = 0; j < this.dimensions.length; j++) {
-      console.log(this.dimensions);
+      
       this.weight = parseFloat(
         (
           parseFloat(this.weight) +
@@ -119,8 +119,8 @@ class CartDet extends Component {
     }
     this.totalAmount = parseInt(this.amount);
     this.backupamount = this.totalAmount;
-    console.log(this.cartItems);
-    console.log(this.weight);
+    
+    
 
 
     if (totalQuantity > 3) {

@@ -33,7 +33,7 @@ class AllOrders extends Component {
     for (var i = 0; i < this.orders.length; i++) {
       orderids.push(this.orders[i].order_id);
     }
-    console.log(this.orders)
+    
     // filter unique order ids
     orderids = orderids.filter((v, i, a) => a.indexOf(v) === i);
   
@@ -113,7 +113,7 @@ class AllOrders extends Component {
       for (var i = 0; i < this.orders.length; i++) {
         orderids.push(this.orders[i].order_id);
       }
-      console.log(this.orders)
+      
       // filter unique order ids
       orderids = orderids.filter((v, i, a) => a.indexOf(v) === i);
     
@@ -152,8 +152,8 @@ class AllOrders extends Component {
         order.name = snames;
         order.selling_price = sprice;
         order.units = sunits;
-        console.log('order==========>')
-        console.log(order)
+        
+        
         this.finalOrder.push(order);
         
 
@@ -181,7 +181,7 @@ class AllOrders extends Component {
         );
       }
     }
-    console.log(this.finalOrder)
+    
     this.loading = false;
     this.setState({});
   }
@@ -294,7 +294,7 @@ class AllOrders extends Component {
 }
 
 const OrdersRow = (props) => {
-  console.log(props.orderDet)
+  
   var date = props.order.updatedAt.slice(0, 10);
   var time = props.order.updatedAt.slice(11, 16);
   var navigate = useNavigate();

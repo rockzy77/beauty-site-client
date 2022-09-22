@@ -22,7 +22,7 @@ class AdminProductEditPanel extends Component {
   }
 
   async updateProductsReady() {
-    console.log(this.thingsToUpdate)
+    
     var made = await updateProduct(this.thingsToUpdate, this.props.pid);
     if(made['success']){
       toast.success('Product info updated successfully.')
@@ -382,7 +382,7 @@ class AdminProductEditPanel extends Component {
               onChange={() => {
                 this.thingsToUpdate.productTagText1 =
                   document.getElementById("producttagspan1").value;
-                console.log(this.thingsToUpdate)
+                
               }}
               id="producttagspan1"
               defaultValue={

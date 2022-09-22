@@ -27,7 +27,7 @@ class Blog extends Component{
         var det = await getBlogs(this.page);
         if(det.success){
             this.blogs = det.result;
-            console.log(this.blogs);
+            
             this.loading = false;
             this.setState({})
         }

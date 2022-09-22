@@ -120,6 +120,9 @@ class AdminBlogEditPanel extends Component {
             name="blogcontent"
             id="blogcontent"
             cols="30"
+            style={{
+              'height': '500px'
+            }}
             rows="10"
             defaultValue={this.blog.content !== undefined ? this.blog.content : ''}
             onChange={() => {

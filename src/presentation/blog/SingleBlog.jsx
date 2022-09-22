@@ -42,9 +42,9 @@ class SingleBlogDet extends Component{
                 <img src={this.blog.image_url} alt="" />
             </div>
         </div>
-        <p className="sblog-content">
-            {this.blog.content}
-        </p>
+            <div className="sblog-content" dangerouslySetInnerHTML={{
+                __html: this.blog.content
+            }} />
 
         <center><div className="underline"></div></center>
         <br />
