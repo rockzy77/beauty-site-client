@@ -208,7 +208,7 @@ class ProductDet extends Component {
         this.props.changeCartNumber();
       }
     } else {
-      if (made.message === "Please Login for access this resource") {
+      if (made.message.includes("Please Login")) {
         var cartList = [];
         var dimensions = [];
         var stocks = [];
@@ -511,7 +511,7 @@ class ProductDet extends Component {
                               this.props.changeCartNumber();
                             }
                           } else {
-                            if (made.message === "Please Login for access this resource") {
+                            if (made.message.includes("Please Login")) {
                               var cartList = [];
                               var dimensions = [];
                               var stocks = [];

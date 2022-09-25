@@ -39,7 +39,7 @@ const ShopProductCard = (props) => {
         dispatch(getData(parseInt(data) + 1));
       }
     } else {
-      if (made.message === "Please Login for access this resource") {
+      if (made.message.includes("Please Login")) {
         var cartList = [];
         var dimensions = [];
         var stocks = [];
